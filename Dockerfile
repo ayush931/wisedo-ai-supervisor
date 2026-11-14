@@ -15,7 +15,7 @@ RUN go mod download
 COPY internal ./internal
 COPY cmd ./cmd
 RUN CGO_ENABLED=0 go build -trimpath -o /supervisor ./cmd/supervisor
-FROM ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852 AS cpsat-build
+FROM ubuntu:25.10@sha256:7cc5e35f6567ee8c66d2abb4aab0fd866669e6207c237c3a8f0947a5c7f17092 AS cpsat-build
 ARG TARGETARCH
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential ca-certificates cmake curl nlohmann-json3-dev && rm -rf /var/lib/apt/lists/*
@@ -28,7 +28,7 @@ RUN curl --fail --location --silent --show-error https://github.com/google/or-to
  && cmake -S /src -B /build -DCMAKE_BUILD_TYPE=Release -DWORKSTATION_CPSAT_BUILD_TESTING=ON -DCMAKE_PREFIX_PATH=/opt/ortools -DCMAKE_BUILD_RPATH=/opt/ortools/lib \
  && cmake --build /build --parallel 2 \
  && ctest --test-dir /build --output-on-failure
-FROM ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852
+FROM ubuntu:25.10@sha256:7cc5e35f6567ee8c66d2abb4aab0fd866669e6207c237c3a8f0947a5c7f17092
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates libabsl20220623t64 libprotobuf32t64 tzdata zlib1g && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
