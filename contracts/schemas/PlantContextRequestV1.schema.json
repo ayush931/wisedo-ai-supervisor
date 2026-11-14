@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "process_snapshot_id": {
+      "type": "string"
+    },
+    "window_end": {
+      "type": "string"
+    },
+    "window_start": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "asset_id",
+    "order_id",
+    "process_snapshot_id",
+    "window_end",
+    "window_start"
+  ],
+  "type": "object"
+}

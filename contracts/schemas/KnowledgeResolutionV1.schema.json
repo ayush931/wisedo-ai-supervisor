@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "authenticated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "authority_decision_id": {
+      "type": "string"
+    },
+    "authority_revision": {
+      "type": "integer"
+    },
+    "authority_source_id": {
+      "type": "string"
+    },
+    "authority_source_revision": {
+      "type": "integer"
+    },
+    "conflict_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "decision": {
+      "type": "string"
+    },
+    "left": {
+      "additionalProperties": false,
+      "properties": {
+        "claim_id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "claim_id",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "resolution_eligible": {
+      "type": "boolean"
+    },
+    "resolution_id": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "right": {
+      "additionalProperties": false,
+      "properties": {
+        "claim_id": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "claim_id",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "actor_issuer",
+    "actor_subject",
+    "authenticated_at",
+    "conflict_id",
+    "created_at",
+    "current_revision",
+    "decision",
+    "left",
+    "reason",
+    "resolution_eligible",
+    "resolution_id",
+    "revision",
+    "right",
+    "schema_version"
+  ],
+  "type": "object"
+}

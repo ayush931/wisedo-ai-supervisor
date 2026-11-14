@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "integer"
+    },
+    "station_profile_line_validation_enabled": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "schema_version",
+    "station_profile_line_validation_enabled"
+  ],
+  "type": "object"
+}

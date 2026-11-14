@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "availability": {
+      "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+      "type": "string"
+    },
+    "dataset_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "evidence_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "oee": {
+      "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+      "type": "string"
+    },
+    "performance": {
+      "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+      "type": "string"
+    },
+    "policy_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "quality": {
+      "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "enum": [
+          "AVAILABILITY_OVERSHOOT",
+          "CANCELLED",
+          "CONFLICTING_FACT",
+          "DEADLINE_EXCEEDED",
+          "EXCEEDS_THEORETICAL_BOUNDS",
+          "INVALID_QUALITY_COUNTS",
+          "MISSING_DATA",
+          "MISSING_IDEAL_CYCLE",
+          "MISSING_POLICY",
+          "NEGATIVE_COUNTER_DELTA",
+          "PERFORMANCE_OVERSHOOT",
+          "STALE_SOURCE",
+          "UNSUPPORTED_RULE",
+          "ZERO_DENOMINATOR"
+        ],
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "run_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "sealed_at_utc": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "READY",
+        "LIMITED",
+        "NOT_READY",
+        "INVALID"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "dataset_digest",
+    "evidence_id",
+    "policy_digest",
+    "reason_codes",
+    "run_id",
+    "sealed_at_utc",
+    "status"
+  ],
+  "type": "object"
+}

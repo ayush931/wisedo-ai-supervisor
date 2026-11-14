@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_decision_id": {
+      "type": "string"
+    },
+    "authority_revision": {
+      "type": "integer"
+    },
+    "expected_source_state_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "source_revision": {
+      "type": "integer"
+    },
+    "verdict": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "authority_decision_id",
+    "authority_revision",
+    "expected_source_state_revision",
+    "reason",
+    "source_revision",
+    "verdict"
+  ],
+  "type": "object"
+}

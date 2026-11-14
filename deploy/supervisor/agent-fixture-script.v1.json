@@ -1,0 +1,317 @@
+{
+  "schema_version": 1,
+  "purposes": [
+    {
+      "purpose": "interview",
+      "steps": [
+        {
+          "tool_calls": [
+            {
+              "id": "read-evidence",
+              "name": "evidence.get",
+              "arguments": {
+                "evidence_id": {
+                  "$fixture": "first_required_evidence_ref"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "content": {
+            "schema_version": 1,
+            "run_id": {
+              "$fixture": "run_id"
+            },
+            "role": "discovery/mapping",
+            "questions": [
+              {
+                "requirement_id": {
+                  "$fixture": "first_requirement_id"
+                },
+                "prompt": "What is the objective of this process?",
+                "source_span_ids": {
+                  "$fixture": "previous_evidence_span_ids",
+                  "count": 1
+                }
+              }
+            ],
+            "claims": []
+          }
+        }
+      ]
+    },
+    {
+      "purpose": "configuration_draft",
+      "steps": [
+        {
+          "tool_calls": [
+            {
+              "id": "read-evidence",
+              "name": "evidence.get",
+              "arguments": {
+                "evidence_id": {
+                  "$fixture": "first_required_evidence_ref"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "content": {
+            "schema_version": 1,
+            "run_id": {
+              "$fixture": "run_id"
+            },
+            "role": "discovery/mapping",
+            "drafts": [
+              {
+                "kind": {
+                  "$fixture": "first_requested_kind"
+                },
+                "body": {
+                  "schema_version": 1,
+                  "display_name": "Fixture line",
+                  "active": true
+                },
+                "field_spans": [
+                  {
+                    "path": "/display_name",
+                    "span_ids": {
+                      "$fixture": "previous_evidence_span_ids",
+                      "count": 1
+                    }
+                  },
+                  {
+                    "path": "/active",
+                    "span_ids": {
+                      "$fixture": "previous_evidence_span_ids",
+                      "count": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "purpose": "investigation",
+      "steps": [
+        {
+          "tool_calls": [
+            {
+              "id": "read-measurements",
+              "name": "measurements.get",
+              "arguments": {}
+            }
+          ]
+        },
+        {
+          "tool_calls": [
+            {
+              "id": "read-context",
+              "name": "context.get",
+              "arguments": {
+                "context_id": {
+                  "$fixture": "brief",
+                  "path": "context_id"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "content": {
+            "result": {
+              "schema_version": 1,
+              "run_id": {
+                "$fixture": "brief",
+                "path": "run_id"
+              },
+              "role": {
+                "$fixture": "brief",
+                "path": "role"
+              },
+              "status": "success",
+              "artifact_ref": null,
+              "cited_evidence_ids": [
+                {
+                  "$fixture": "tool_result",
+                  "tool": "measurements.get",
+                  "path": "measurements[5].measurement_id"
+                },
+                {
+                  "$fixture": "tool_result",
+                  "tool": "measurements.get",
+                  "path": "machine_stoppages[0].evidence_id"
+                }
+              ],
+              "missing_required_fields": [],
+              "contradictions": [],
+              "concise_rationale": "The line fell short of plan while it was stopped without a stated reason.",
+              "failure_code": null
+            },
+            "proposal": {
+              "proposal_id": {
+                "$fixture": "brief",
+                "path": "run_id"
+              },
+              "case_id": {
+                "$fixture": "brief",
+                "path": "case_id"
+              },
+              "case_revision": {
+                "$fixture": "brief",
+                "path": "case_revision"
+              },
+              "context_id": {
+                "$fixture": "brief",
+                "path": "context_id"
+              },
+              "context_revision": {
+                "$fixture": "brief",
+                "path": "context_revision"
+              },
+              "observations": [
+                {
+                  "measurement_id": {
+                    "$fixture": "tool_result",
+                    "tool": "measurements.get",
+                    "path": "measurements[5].measurement_id"
+                  },
+                  "evidence_ids": [
+                    {
+                      "$fixture": "tool_result",
+                      "tool": "measurements.get",
+                      "path": "measurements[5].measurement_id"
+                    }
+                  ],
+                  "metric_name": {
+                    "$fixture": "tool_result",
+                    "tool": "measurements.get",
+                    "path": "measurements[5].metric_name"
+                  },
+                  "value_decimal": {
+                    "$fixture": "tool_result",
+                    "tool": "measurements.get",
+                    "path": "measurements[5].value_decimal"
+                  },
+                  "unit": {
+                    "$fixture": "tool_result",
+                    "tool": "measurements.get",
+                    "path": "measurements[5].unit"
+                  },
+                  "window_start": {
+                    "$fixture": "tool_result",
+                    "tool": "measurements.get",
+                    "path": "measurements[5].window_start"
+                  },
+                  "window_end": {
+                    "$fixture": "tool_result",
+                    "tool": "measurements.get",
+                    "path": "measurements[5].window_end"
+                  }
+                }
+              ],
+              "hypotheses": [
+                {
+                  "text": "An unexplained machine stoppage during the window may explain the shortfall.",
+                  "evidence_ids": [
+                    {
+                      "$fixture": "tool_result",
+                      "tool": "measurements.get",
+                      "path": "machine_stoppages[0].evidence_id"
+                    },
+                    {
+                      "$fixture": "tool_result",
+                      "tool": "measurements.get",
+                      "path": "measurements[5].measurement_id"
+                    }
+                  ],
+                  "contradicting_evidence_ids": []
+                }
+              ],
+              "unknowns": [],
+              "options": [
+                {
+                  "kind": "maintenance_investigation",
+                  "text": "Inspect the stopped line and report what caused the stoppage.",
+                  "evidence_ids": [
+                    {
+                      "$fixture": "tool_result",
+                      "tool": "measurements.get",
+                      "path": "machine_stoppages[0].evidence_id"
+                    }
+                  ]
+                }
+              ],
+              "selected_option": "maintenance_investigation",
+              "task_payload": {
+                "kind": "maintenance_investigation.create",
+                "asset_id": {
+                  "$fixture": "tool_result",
+                  "tool": "context.get",
+                  "path": "asset_id"
+                },
+                "line_id": {
+                  "$fixture": "tool_result",
+                  "tool": "context.get",
+                  "path": "asset_id"
+                },
+                "order_id": {
+                  "$fixture": "tool_result",
+                  "tool": "context.get",
+                  "path": "order_id"
+                },
+                "assignee_id": {
+                  "$fixture": "brief",
+                  "path": "confirmed_assignees[0]"
+                },
+                "template": "inspect_report_only",
+                "description": "Inspect the line where it stopped during the short window and report the cause under site procedures.",
+                "due_at": {
+                  "$fixture": "now",
+                  "offset_seconds": 14400
+                }
+              },
+              "versions": {
+                "policy_revision": {
+                  "$fixture": "brief",
+                  "path": "policy_revision"
+                },
+                "plan_revision": {
+                  "$fixture": "brief",
+                  "path": "plan_revision"
+                },
+                "graph_revision": {
+                  "$fixture": "brief",
+                  "path": "graph_revision"
+                },
+                "model_version": "fixture-model",
+                "prompt_version": {
+                  "$fixture": "brief",
+                  "path": "prompt_version"
+                },
+                "tool_version": {
+                  "$fixture": "brief",
+                  "path": "tool_version"
+                }
+              },
+              "generated_at": {
+                "$fixture": "now",
+                "offset_seconds": -60
+              },
+              "expires_at": {
+                "$fixture": "now",
+                "offset_seconds": 1200
+              },
+              "rationale": "Output fell short of plan in consecutive windows while the line was stopped without a stated reason."
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

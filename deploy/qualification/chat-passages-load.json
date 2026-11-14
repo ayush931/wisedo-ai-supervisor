@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "kind": "chat-passages",
+  "issue": "WIS-626",
+  "description": "Chat passage capture at the documented snapshot bound: 500 approved claims and 10,000 spans in one site. Every claim is a valid approved-claim shape (ClaimInput.Validate: at most 20 spans), so at this bound every claim cites exactly 20 spans and none fits the 8-passage limit: the run must select no passage at all, and selecting any fails. A foreign tenant's spans are cited by one more claim. As the restricted runtime role, each question is answered twice through chat.SelectPassagesUsing: with the WIS-620 on-the-fly ranking (before) and with the WIS-626 indexed ranking (after). Both must select identical passages, and no foreign span may appear in either ranking query's rows. Non-empty selection is measured by selection_companion (chat-passages-load-mixed.json), which the same command runs next; the harness refuses a non-selecting fixture without one. Each question's ranking rows (span, source, revision, size, matched words) must also be identical before and after, so equivalence is checked at the bound where nothing is selected. Thresholds were frozen here before the first measured run; never edit them to make a run pass. Basis: a chat question must start its run well inside the 1 s it may take a person to notice delay, alongside the snapshot and capture reads, so passage capture gets a quarter of it (p95 250 ms) on the reference host. Mismatches, foreign spans ranked and errors have zero tolerance.",
+  "seed": 626,
+  "claims": 500,
+  "small_claim_spans": 20,
+  "large_claim_spans": 20,
+  "foreign_tenant_spans": 8,
+  "queries": 200,
+  "selection_companion": "chat-passages-load-mixed.json",
+  "questions": [
+    "What temperature does the curing oven run at?",
+    "How often is the conveyor inspected?",
+    "Which supplier delivers steel coil and where is it stored?",
+    "What torque is used for the press bolts?",
+    "How is a batch sample taken before dispatch?",
+    "What is the setup time for the stamping press each shift?"
+  ],
+  "thresholds": {
+    "indexed_p95_ms": 250,
+    "selection_mismatches_max": 0,
+    "cross_tenant_ranked_max": 0,
+    "errors_max": 0
+  },
+  "reference_host": {
+    "description": "4 vCPU / 8 GiB test host: GOMAXPROCS=4 for the load client and the PostgreSQL container limited to 4 CPUs and 8 GiB",
+    "gomaxprocs": 4,
+    "postgres_limits_attestation": "cpus=4,memory=8g"
+  }
+}

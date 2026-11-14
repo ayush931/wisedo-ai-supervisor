@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "type": "integer"
+        },
+        "station_profile_line_validation_enabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "schema_version",
+        "station_profile_line_validation_enabled"
+      ],
+      "type": "object"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "replayed_revision": {
+      "type": "integer"
+    },
+    "revisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "additionalProperties": false,
+            "properties": {
+              "schema_version": {
+                "type": "integer"
+              },
+              "station_profile_line_validation_enabled": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "schema_version",
+              "station_profile_line_validation_enabled"
+            ],
+            "type": "object"
+          },
+          "canonical_payload_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "digest_schema_version": {
+            "type": "integer"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "submitted_by": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "body",
+          "canonical_payload_digest",
+          "created_at",
+          "digest_schema_version",
+          "revision",
+          "submitted_by"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "body",
+    "current_revision",
+    "replayed",
+    "revisions"
+  ],
+  "type": "object"
+}

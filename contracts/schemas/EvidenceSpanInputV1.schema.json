@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "end_char": {
+      "type": "integer"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "start_char": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "end_char",
+    "revision",
+    "start_char"
+  ],
+  "type": "object"
+}

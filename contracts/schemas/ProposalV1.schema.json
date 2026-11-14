@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "canonical_payload": {
+      "description": "Any JSON value"
+    },
+    "canonical_payload_sha256": {
+      "type": "string"
+    },
+    "case_id": {
+      "type": "string"
+    },
+    "case_revision": {
+      "type": "integer"
+    },
+    "decisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "authenticated_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "canonical_payload_sha256": {
+            "type": "string"
+          },
+          "decided_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "decision": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "proposal_revision": {
+            "type": "integer"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "reviewer": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "authenticated_at",
+          "canonical_payload_sha256",
+          "decided_at",
+          "decision",
+          "id",
+          "proposal_revision",
+          "reason",
+          "reviewer",
+          "revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "issued_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "policy_revision": {
+      "type": "integer"
+    },
+    "proposal_revision": {
+      "type": "integer"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "state": {
+      "type": "string"
+    },
+    "submitted_by": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "issuer": {
+              "type": "string"
+            },
+            "subject": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "issuer",
+            "subject"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "canonical_payload",
+    "canonical_payload_sha256",
+    "case_id",
+    "case_revision",
+    "decisions",
+    "expires_at",
+    "id",
+    "issued_at",
+    "policy_revision",
+    "proposal_revision",
+    "replayed",
+    "revision",
+    "state",
+    "submitted_by"
+  ],
+  "type": "object"
+}

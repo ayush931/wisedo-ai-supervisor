@@ -1,0 +1,20 @@
+# WIS-709 measured synthetic-plant runs against the existing shared local service.
+# This overlay never starts or changes model containers.
+x-local-model: &local-model
+  SUPERVISOR_AGENT_PROVIDER: local
+  SUPERVISOR_AGENT_FIXTURE_SCRIPT: ""
+  SUPERVISOR_AGENT_BASE_URL: http://127.0.0.1:64601
+  SUPERVISOR_AGENT_ENDPOINT_ADDRS: 127.0.0.1:64601
+  SUPERVISOR_AGENT_MODEL: unsloth/Qwen3.5-9B-GGUF:Q4_K_M
+  SUPERVISOR_AGENT_MODEL_REVISION: sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8
+  SUPERVISOR_AGENT_REASONING_EFFORT: none
+  SUPERVISOR_AGENT_TIMEOUT: 120s
+  SUPERVISOR_AGENT_MAX_CONCURRENT: "1"
+  SUPERVISOR_AGENT_MAX_QUEUED: "8"
+  # Keep the same word retrieval as the fixture run; it requires no embedding calls.
+  SUPERVISOR_EMBEDDINGS_ENABLED: "false"
+services:
+  api:
+    environment: *local-model
+  worker:
+    environment: *local-model

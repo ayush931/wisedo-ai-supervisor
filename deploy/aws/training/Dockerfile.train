@@ -1,0 +1,39 @@
+# OEE domain LLM training image (SageMaker BYOC, ADR 0004 Sec. 5).
+#
+# Build from deploy/aws (context root) + push (URI feeds TRAINING_IMAGE_URI):
+#   cd deploy/aws
+#   aws ecr get-login-password --region ap-south-1 | \
+#     docker login --username AWS --password-stdin <account>.dkr.ecr.ap-south-1.amazonaws.com
+#   docker build -f training/Dockerfile.train -t <training_ecr_uri>:v1.0.0 .
+#   docker push <training_ecr_uri>:v1.0.0
+#
+# Pin by digest for release reproducibility; pass the digest-tagged URI to the
+# launcher. Base CUDA image must be re-pinned on each release review.
+
+ARG CUDA_BASE=nvidia/cuda:12.1.1-runtime-ubuntu22.04
+FROM ${CUDA_BASE}
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+WORKDIR /opt/program
+
+# Ubuntu 22.04 ships Python 3.10 — Python 3.12 comes from deadsnakes.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        software-properties-common gpg-agent \
+    && add-apt-repository -y ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y --no-install-recommends \
+        python3.12 python3.12-venv python3-pip \
+    && rm -rf /var/lib/apt/lists/* \
+    && python3.12 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+COPY training/requirements-train.txt ./
+RUN pip install --no-cache-dir -r requirements-train.txt
+
+COPY training/train.py ./train.py
+
+# SageMaker container contract: executable train entrypoint.
+RUN chmod +x ./train.py
+ENTRYPOINT ["python3", "/opt/program/train.py"]

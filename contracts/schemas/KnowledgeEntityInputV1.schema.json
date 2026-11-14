@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "aliases": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "asset_kind": {
+      "type": "string"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "entity_id": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "source_revision": {
+      "type": "integer"
+    },
+    "type": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "display_name",
+    "entity_id",
+    "source_id",
+    "source_revision",
+    "type"
+  ],
+  "type": "object"
+}

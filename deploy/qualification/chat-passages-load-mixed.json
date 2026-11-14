@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "chat-passages",
+  "issue": "WIS-626",
+  "description": "Companion to chat-passages-load.json, for non-empty selection: 500 valid approved claims in one site alternating between 2 spans (selectable within the 8-passage limit) and 20 spans (the ClaimInput.Validate maximum), 5,500 spans in all, plus a foreign tenant's spans cited by one more claim. Run by the bound manifest as its selection_companion. The same before/after comparison of selections and of each question's ranking rows, the same thresholds frozen in chat-passages-load.json (never edit them to make a run pass), and a run that selects no passage at all fails (the comparison would be vacuous).",
+  "seed": 626,
+  "claims": 500,
+  "small_claim_spans": 2,
+  "large_claim_spans": 20,
+  "foreign_tenant_spans": 8,
+  "queries": 200,
+  "questions": [
+    "What temperature does the curing oven run at?",
+    "How often is the conveyor inspected?",
+    "Which supplier delivers steel coil and where is it stored?",
+    "What torque is used for the press bolts?",
+    "How is a batch sample taken before dispatch?",
+    "What is the setup time for the stamping press each shift?"
+  ],
+  "thresholds": {
+    "indexed_p95_ms": 250,
+    "selection_mismatches_max": 0,
+    "cross_tenant_ranked_max": 0,
+    "errors_max": 0
+  },
+  "reference_host": {
+    "description": "4 vCPU / 8 GiB test host: GOMAXPROCS=4 for the load client and the PostgreSQL container limited to 4 CPUs and 8 GiB",
+    "gomaxprocs": 4,
+    "postgres_limits_attestation": "cpus=4,memory=8g"
+  }
+}

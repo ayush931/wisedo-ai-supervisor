@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "completion_note": {
+      "maxLength": 4000,
+      "type": "string"
+    },
+    "evidence_ids": {
+      "format": "uuid",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "expected_revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "completion_note",
+    "evidence_ids",
+    "expected_revision"
+  ],
+  "type": "object"
+}

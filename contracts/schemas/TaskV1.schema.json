@@ -1,0 +1,431 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "acknowledged_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "action_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "asset_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "assignee_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "assignee_subject": {
+      "maxLength": 255,
+      "type": "string"
+    },
+    "case_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "completion_evidence_ids": {
+      "format": "uuid",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "completions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "completion_note": {
+            "maxLength": 4000,
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "epoch": {
+            "type": "integer"
+          },
+          "evidence": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "revision": {
+                  "type": "integer"
+                },
+                "source_id": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "revision",
+                "source_id"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "task_revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "actor",
+          "completion_note",
+          "created_at",
+          "epoch",
+          "evidence",
+          "task_revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "description": {
+      "maxLength": 4000,
+      "type": "string"
+    },
+    "due_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "events": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "event": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "from_state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "to_state": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor",
+          "created_at",
+          "event",
+          "from_state",
+          "reason",
+          "revision",
+          "to_state"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "line_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "order_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "outcome": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "baseline_context_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "case_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "completed_at": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "epoch": {
+              "type": "integer"
+            },
+            "interpretation": {
+              "type": "string"
+            },
+            "observed_at": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rule_version": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            },
+            "windows": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "actual_good_units_exact": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "context_digest": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "deficit_good_units_exact": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "end": {
+                    "type": "string"
+                  },
+                  "expected_good_units_exact": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "plan_revision_id": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "readiness": {
+                    "type": "string"
+                  },
+                  "reason_codes": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "record_ids": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "start": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "actual_good_units_exact",
+                  "context_digest",
+                  "deficit_good_units_exact",
+                  "end",
+                  "expected_good_units_exact",
+                  "plan_revision_id",
+                  "readiness",
+                  "reason_codes",
+                  "record_ids",
+                  "start",
+                  "unit"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "baseline_context_id",
+            "case_id",
+            "completed_at",
+            "epoch",
+            "interpretation",
+            "observed_at",
+            "rule_version",
+            "status",
+            "windows"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "started_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "state": {
+      "type": "string"
+    },
+    "template": {
+      "maxLength": 64,
+      "type": "string"
+    }
+  },
+  "required": [
+    "acknowledged_at",
+    "action_id",
+    "asset_id",
+    "assignee_id",
+    "assignee_subject",
+    "case_id",
+    "completed_at",
+    "completion_evidence_ids",
+    "completions",
+    "created_at",
+    "description",
+    "due_at",
+    "events",
+    "id",
+    "line_id",
+    "order_id",
+    "outcome",
+    "replayed",
+    "revision",
+    "started_at",
+    "state",
+    "template"
+  ],
+  "type": "object"
+}

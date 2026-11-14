@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "conflicts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "effective_from": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "effective_to": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "left": {
+            "additionalProperties": false,
+            "properties": {
+              "claim_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "claim_id",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "right": {
+            "additionalProperties": false,
+            "properties": {
+              "claim_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "claim_id",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "schema_version": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "created_at",
+          "effective_from",
+          "id",
+          "kind",
+          "left",
+          "right",
+          "schema_version"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "next_cursor": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "conflicts"
+  ],
+  "type": "object"
+}

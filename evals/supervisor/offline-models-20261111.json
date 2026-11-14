@@ -1,0 +1,2282 @@
+{
+  "schema_version": 1,
+  "issue": "WIS-708",
+  "mode": "actual",
+  "qualified": false,
+  "git_sha": "3706703af4f362ed7c12d50143c953c8834858cc",
+  "started_at": "2026-11-11T13:53:56.314842419Z",
+  "corpus_sha256": "9970e4a4b300596c0b504d0ed42b8c06c0d0204ef0c7024c70ffd79e96adb62b",
+  "environment": {
+    "endpoint": "http://10.253.181.2:8080",
+    "hardware": "Intel Core Ultra 7 270K Plus; 24 logical CPUs; 4 llama.cpp CPU threads; no GPU devices; shared host",
+    "model": "Qwen3.5-9B",
+    "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+    "prompt_sha256": "44305d575db515948076b4329cd199bc4fb177609a0d4de3318854fcd53975cd",
+    "prompt_version": "wis625-ocr-1",
+    "tool_version": "wis614-tools-6",
+    "vision_model": "Qwen3.5-9B",
+    "vision_model_revision": "sha256:853698ce7aa6c7ba732478bad280240969ddf7b0fcbf93900046f63903a83383",
+    "model_server_image": "ghcr.io/ggml-org/llama.cpp@sha256:5bb779a449a18d8f4333e9814e887746342fe555c528f5eabc92b2093e32673a",
+    "model_server_fingerprint": "b12169-3ed7284f2",
+    "network": "internal=true; 10.253.181.0/24; no external egress; no model host ports"
+  },
+  "notes": [
+    "Synthetic engineering-authored labels; zero independent reviews; measured evidence, not customer acceptance or WIS-280 qualification.",
+    "One run per case; no retries or cherry-picking. Exact field values after label/whitespace normalization; duplicate labels fail.",
+    "Handwritten-style pages use deterministic italic glyphs and baseline jitter, not human handwriting.",
+    "In-process authenticated HTTP API and real Runtime.ExtractScan on disposable PostgreSQL; no browser, OIDC round trip or Temporal transport.",
+    "Measurement ran before the issue placeholder was renamed to WIS-708. The live compiled test retained TestWISNEWOfflineScans; only names and report metadata changed afterward. The regenerated corpus is byte-identical.",
+    "The initial free-text hardware description mistakenly named a Ryzen CPU. Corrected against saved lscpu output; the raw report is retained in the artifact directory.",
+    "git_sha identifies the checked-out base; the harness was uncommitted. Compiled harness source hashes are recorded below. No production Go runtime/store files changed.",
+    "The host was shared. The last case overlapped the start of make supervisor-check; these times are not an isolated benchmark.",
+    "Only the six labelled fields are scored; OCRObserved.exact_text is not evaluated and retains its zero value.",
+    "Each case's run.observed block is the reused WIS-280 agent-run struct, which this OCR harness does not fill; its zero values are not measurements. Added after review; no measured value changed."
+  ],
+  "cases": [
+    {
+      "case_id": "offline-clean-01",
+      "style": "clean",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-001",
+          "observed": "INSP-001",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-01",
+          "observed": "PRESS-01",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2301",
+          "observed": "BATCH-2301",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "107",
+          "observed": "107",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "1",
+          "observed": "1",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-01",
+          "observed": "2026-11-01",
+          "correct": true
+        }
+      ],
+      "image_sha256": "097e56891aff9614d400f1133b244ca40fdf7ef4830b4e8915760d71008e2c85",
+      "route": "/source-scan-batches",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-001\nMachine: PRESS-01\nLot: BATCH-2301\nAccepted: 107\nRejected: 1\nDate: 2026-11-01",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "5258831a-d5b8-4b97-8c8e-89d541872fdc",
+          "site_id": "11e0cf09-cb6b-4bce-a1d2-9be67237e946",
+          "run_id": "3ca70191-ebef-4f89-b022-c1430372dfcc",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 447,
+          "output_tokens": 125,
+          "latency_ms": 38320
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-001\nMachine: PRESS-01\nLot: BATCH-2301\nAccepted: 107\nRejected: 1\nDate: 2026-11-01",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      },
+      "uploaded_pdf_sha256": "d17b2474846e847a63299f45a7bd72e48dd5beb80d0bbd3e929584f6b9467299"
+    },
+    {
+      "case_id": "offline-clean-02",
+      "style": "clean",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-002",
+          "observed": "INSP-002",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-02",
+          "observed": "PRESS-02",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2302",
+          "observed": "BATCH-2302",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "114",
+          "observed": "114",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "2",
+          "observed": "2",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-02",
+          "observed": "2026-11-02",
+          "correct": true
+        }
+      ],
+      "image_sha256": "920283f4c3e90cd38bc0e70739e74bba7512d4e1ccdacf22e647ab03e67582cf",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-002\nMachine: PRESS-02\nLot: BATCH-2302\nAccepted: 114\nRejected: 2\nDate: 2026-11-02",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "c7c4dfec-d36c-411f-8a4f-5a127bb8f8a2",
+          "site_id": "9041498c-5afc-4a57-b1cc-44d3b64de5bd",
+          "run_id": "42c375b5-262d-44c4-a9e6-71105de401e2",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 451,
+          "output_tokens": 129,
+          "latency_ms": 39081
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-002\nMachine: PRESS-02\nLot: BATCH-2302\nAccepted: 114\nRejected: 2\nDate: 2026-11-02",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-clean-03",
+      "style": "clean",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-003",
+          "observed": "INSP-003",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-03",
+          "observed": "PRESS-03",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2303",
+          "observed": "BATCH-2303",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "121",
+          "observed": "121",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "3",
+          "observed": "3",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-03",
+          "observed": "2026-11-03",
+          "correct": true
+        }
+      ],
+      "image_sha256": "8dced029848b69dd5a75213ba2ac97537be26625e734f0daedf61d9a795260f9",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-003\nMachine: PRESS-03\nLot: BATCH-2303\nAccepted: 121\nRejected: 3\nDate: 2026-11-03",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "9a5284b5-040f-4a14-901a-7a575364c69a",
+          "site_id": "de55fc69-86a4-4567-a17a-3919e047a448",
+          "run_id": "a05942bf-1c3a-4c6e-9551-106520309d39",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 112,
+          "latency_ms": 33487
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-003\nMachine: PRESS-03\nLot: BATCH-2303\nAccepted: 121\nRejected: 3\nDate: 2026-11-03",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-clean-04",
+      "style": "clean",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-004",
+          "observed": "INSP-004",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-04",
+          "observed": "PRESS-04",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2304",
+          "observed": "BATCH-2304",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "128",
+          "observed": "128",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "4",
+          "observed": "4",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-04",
+          "observed": "2026-11-04",
+          "correct": true
+        }
+      ],
+      "image_sha256": "0494cf5e83a5773d64876419462b2a650d765bd9e001f422974e52d7e03b3d5b",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-004\nMachine: PRESS-04\nLot: BATCH-2304\nAccepted: 128\nRejected: 4\nDate: 2026-11-04",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "b5544a8c-82c9-4557-b1d9-0a3e43bbbfe3",
+          "site_id": "e29b2112-befd-44b5-b377-c80def17d3e6",
+          "run_id": "9bc03f22-1bfb-4a03-af52-a15f0f449dfd",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 130,
+          "latency_ms": 39948
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-004\nMachine: PRESS-04\nLot: BATCH-2304\nAccepted: 128\nRejected: 4\nDate: 2026-11-04",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-skewed-01",
+      "style": "skewed",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-005",
+          "observed": "INSP-005",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-01",
+          "observed": "PRESS-01",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2305",
+          "observed": "BATCH-2305",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "135",
+          "observed": "135",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "0",
+          "observed": "0",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-05",
+          "observed": "2026-11-05",
+          "correct": true
+        }
+      ],
+      "image_sha256": "acba6d7e2dd76f65ea506cdfd967be5494c86ae59ec778ecd0a58241ac50f5c9",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-005\nMachine: PRESS-01\nLot: BATCH-2305\nAccepted: 135\nRejected: 0\nDate: 2026-11-05",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "1da78498-2343-4559-9a62-0edafa164739",
+          "site_id": "e0368941-1445-441f-932b-a2846b14508a",
+          "run_id": "a6688a6d-453f-4953-a693-3ec89bead46e",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 449,
+          "output_tokens": 109,
+          "latency_ms": 36653
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-005\nMachine: PRESS-01\nLot: BATCH-2305\nAccepted: 135\nRejected: 0\nDate: 2026-11-05",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-skewed-02",
+      "style": "skewed",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-006",
+          "observed": "INSP-006",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-02",
+          "observed": "PRESS-02",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2306",
+          "observed": "BATCH-2306",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "142",
+          "observed": "142",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "1",
+          "observed": "1",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-06",
+          "observed": "2026-11-06",
+          "correct": true
+        }
+      ],
+      "image_sha256": "fbd81c79bcf99ea48e2323c24aee0a3358d22c58fa3043512becee01904f5e73",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-006\nMachine: PRESS-02\nLot: BATCH-2306\nAccepted: 142\nRejected: 1\nDate: 2026-11-06",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "a975feb9-3c70-413c-abc1-68fc8f07a398",
+          "site_id": "d091ae67-3b9c-43b2-85e1-53cffda79a70",
+          "run_id": "5ecf2ea3-b407-4f77-85e4-2968ef3b732e",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 450,
+          "output_tokens": 110,
+          "latency_ms": 38413
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-006\nMachine: PRESS-02\nLot: BATCH-2306\nAccepted: 142\nRejected: 1\nDate: 2026-11-06",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-skewed-03",
+      "style": "skewed",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-007",
+          "observed": "INSP-007",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-03",
+          "observed": "PRESS-03",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2307",
+          "observed": "BATCH-2307",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "149",
+          "observed": "149",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "2",
+          "observed": "2",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-07",
+          "observed": "2026-11-07",
+          "correct": true
+        }
+      ],
+      "image_sha256": "228dcbb4b2b0727ec6eda7e8c99ba33dc4a6fb80c84190481ca199ddbd7587fe",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-007\nMachine: PRESS-03\nLot: BATCH-2307\nAccepted: 149\nRejected: 2\nDate: 2026-11-07",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "e9754e6b-9a09-4524-b63b-e29d2180fb5d",
+          "site_id": "5d65dbb3-80ad-49d3-9f63-e3146a3d33e9",
+          "run_id": "6257d6a4-0d83-4ce7-85e6-2b73b7ce2f18",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 112,
+          "latency_ms": 40049
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-007\nMachine: PRESS-03\nLot: BATCH-2307\nAccepted: 149\nRejected: 2\nDate: 2026-11-07",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-skewed-04",
+      "style": "skewed",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-008",
+          "observed": "INSP-008",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-04",
+          "observed": "PRESS-04",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2308",
+          "observed": "BATCH-2308",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "156",
+          "observed": "156",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "3",
+          "observed": "3",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-08",
+          "observed": "2026-11-08",
+          "correct": true
+        }
+      ],
+      "image_sha256": "867c38731d64aa14d24fd93d590983babffa0f9926502e308f23e06b09c6260a",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-008\nMachine: PRESS-04\nLot: BATCH-2308\nAccepted: 156\nRejected: 3\nDate: 2026-11-08",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "07f8cc6a-7488-43a1-8ae1-540ab10b36d1",
+          "site_id": "11179bd3-5b6d-48fc-8ab3-745e2c60c7df",
+          "run_id": "f85f0fc1-e4b8-4c91-962a-4f6fbb46a751",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 448,
+          "output_tokens": 108,
+          "latency_ms": 41527
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-008\nMachine: PRESS-04\nLot: BATCH-2308\nAccepted: 156\nRejected: 3\nDate: 2026-11-08",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-low_contrast-01",
+      "style": "low_contrast",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-009",
+          "observed": "INSP-009",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-01",
+          "observed": "PRESS-01",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2309",
+          "observed": "BATCH-2309",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "163",
+          "observed": "163",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "4",
+          "observed": "4",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-09",
+          "observed": "2026-11-09",
+          "correct": true
+        }
+      ],
+      "image_sha256": "b6ea86854e226d882f942f2c6459013f66614adbc271fd6ea02e569418b29534",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-009\nMachine: PRESS-01\nLot: BATCH-2309\nAccepted: 163\nRejected: 4\nDate: 2026-11-09",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "4a426f6e-0879-4fe1-a7cd-d2bd91f92088",
+          "site_id": "d1437a52-902a-4761-93a1-49d3db8f7a1a",
+          "run_id": "232a9172-65cd-4907-8724-04af415f2939",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 453,
+          "output_tokens": 131,
+          "latency_ms": 45679
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-009\nMachine: PRESS-01\nLot: BATCH-2309\nAccepted: 163\nRejected: 4\nDate: 2026-11-09",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-low_contrast-02",
+      "style": "low_contrast",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-010",
+          "observed": "INSP-010",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-02",
+          "observed": "PRESS-02",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2310",
+          "observed": "BATCH-2310",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "170",
+          "observed": "170",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "0",
+          "observed": "0",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-10",
+          "observed": "2026-11-10",
+          "correct": true
+        }
+      ],
+      "image_sha256": "c3cdf5b71e8eabf7f27827d57de2b065892a85d6c628e84918c0b1d68cbdac1a",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-010\nMachine: PRESS-02\nLot: BATCH-2310\nAccepted: 170\nRejected: 0\nDate: 2026-11-10",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "be20fc36-99d9-4da7-99c5-ae3fb4e628c2",
+          "site_id": "b497b6b7-80fb-490e-9856-28b822c48fdb",
+          "run_id": "de9f4f8c-c8cd-4fbe-a4b0-988424f1bb7c",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 450,
+          "output_tokens": 128,
+          "latency_ms": 40992
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-010\nMachine: PRESS-02\nLot: BATCH-2310\nAccepted: 170\nRejected: 0\nDate: 2026-11-10",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-low_contrast-03",
+      "style": "low_contrast",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-011",
+          "observed": "INSP-011",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-03",
+          "observed": "PRESS-03",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2311",
+          "observed": "BATCH-2311",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "177",
+          "observed": "177",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "1",
+          "observed": "1",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-11",
+          "observed": "2026-11-11",
+          "correct": true
+        }
+      ],
+      "image_sha256": "dc12bc3bb2b8087bfb539cc6a06d0dd84a5b2051f665191b49d23af5015d78a9",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-011\nMachine: PRESS-03\nLot: BATCH-2311\nAccepted: 177\nRejected: 1\nDate: 2026-11-11",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "77cf5125-794e-4ceb-815e-e38f16658fe6",
+          "site_id": "d7368846-c8b7-4370-b5b2-3d33464d7ad3",
+          "run_id": "5f5c9899-c08d-4704-aa13-bf2bb33fb642",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 130,
+          "latency_ms": 46567
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-011\nMachine: PRESS-03\nLot: BATCH-2311\nAccepted: 177\nRejected: 1\nDate: 2026-11-11",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-low_contrast-04",
+      "style": "low_contrast",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-012",
+          "observed": "INSP-012",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-04",
+          "observed": "PRESS-04",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2312",
+          "observed": "BATCH-2312",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "184",
+          "observed": "184",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "2",
+          "observed": "2",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-12",
+          "observed": "2026-11-12",
+          "correct": true
+        }
+      ],
+      "image_sha256": "8f0701ee5f852fda77f22e096b9cea2d259528f02242918ad4334bd3621e7903",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-012\nMachine: PRESS-04\nLot: BATCH-2312\nAccepted: 184\nRejected: 2\nDate: 2026-11-12",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "9c972dad-edfe-4e62-aa25-f6bcc50c3678",
+          "site_id": "84a863b9-4578-42e6-bda8-117507cee156",
+          "run_id": "b56b0cd4-bf71-4bb8-89fc-23c2e43f0d3a",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 130,
+          "latency_ms": 43923
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-012\nMachine: PRESS-04\nLot: BATCH-2312\nAccepted: 184\nRejected: 2\nDate: 2026-11-12",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-stamped-01",
+      "style": "stamped",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-013",
+          "observed": "INSP-013",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-01",
+          "observed": "PRESS-01",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2313",
+          "observed": "BATCH-2313",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "191",
+          "observed": "191",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "3",
+          "observed": "3",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-13",
+          "observed": "2026-11-13",
+          "correct": true
+        }
+      ],
+      "image_sha256": "0f8fd48344ec27e364c7d35a68af512a5406ee559ef6b166fb4c60f8434365a1",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-013\nMachine: PRESS-01\nLot: BATCH-2313\nAccepted: 191\nRejected: 3\nDate: 2026-11-13\nCHECKED",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "6032e5d3-c77c-42bb-b5d0-98580658cc42",
+          "site_id": "cf3b2701-2e81-473b-a9a9-1c497d9e0623",
+          "run_id": "67d46011-35b8-4abd-ab0f-6746999f4eb0",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 450,
+          "output_tokens": 113,
+          "latency_ms": 35300
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-013\nMachine: PRESS-01\nLot: BATCH-2313\nAccepted: 191\nRejected: 3\nDate: 2026-11-13\nCHECKED",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-stamped-02",
+      "style": "stamped",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-014",
+          "observed": "INSP-014",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-02",
+          "observed": "PRESS-02",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2314",
+          "observed": "BATCH-2314",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "198",
+          "observed": "198",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "4",
+          "observed": "4",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-14",
+          "observed": "2026-11-14",
+          "correct": true
+        }
+      ],
+      "image_sha256": "e3354ad3c63461719871d8bfd562d2589960ea574b9ce21f84f4984ce68919ef",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-014\nMachine: PRESS-02\nLot: BATCH-2314\nAccepted: 198\nRejected: 4\nDate: 2026-11-14\nCHECKED",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "514b3753-6040-4145-a96e-64fadba8b836",
+          "site_id": "8922082d-fff0-4371-9cb1-72e9e0b8fbae",
+          "run_id": "5fd1ab15-7796-417a-9d90-92a9bcfc47f8",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 450,
+          "output_tokens": 113,
+          "latency_ms": 37668
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-014\nMachine: PRESS-02\nLot: BATCH-2314\nAccepted: 198\nRejected: 4\nDate: 2026-11-14\nCHECKED",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-stamped-03",
+      "style": "stamped",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-015",
+          "observed": "INSP-015",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-03",
+          "observed": "PRESS-03",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2315",
+          "observed": "BATCH-2315",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "205",
+          "observed": "205",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "0",
+          "observed": "0",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-15",
+          "observed": "2026-11-15",
+          "correct": true
+        }
+      ],
+      "image_sha256": "3429cf0769a2f74d2515993fafa9373b155b4569abbd3d0682c09470dca8776c",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-015\nMachine: PRESS-03\nLot: BATCH-2315\nAccepted: 205\nRejected: 0\nDate: 2026-11-15\n\n[CHECKED]",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "adc3b0be-7909-4125-81b1-8f0005fc3f11",
+          "site_id": "a6ae090a-1a9f-4610-8261-20b999bc6486",
+          "run_id": "dca35a92-a2c3-47f7-a28c-6a0383e9af93",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 454,
+          "output_tokens": 137,
+          "latency_ms": 45066
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-015\nMachine: PRESS-03\nLot: BATCH-2315\nAccepted: 205\nRejected: 0\nDate: 2026-11-15\n\n[CHECKED]",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-stamped-04",
+      "style": "stamped",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-016",
+          "observed": "INSP-016",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-04",
+          "observed": "PRESS-04",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2316",
+          "observed": "BATCH-2316",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "212",
+          "observed": "212",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "1",
+          "observed": "1",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-16",
+          "observed": "2026-11-16",
+          "correct": true
+        }
+      ],
+      "image_sha256": "0218474fc10e8b5a8cd5cbdfa0bba8efc7df16b84a3f24444a6d19faf76f8aad",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-016\nMachine: PRESS-04\nLot: BATCH-2316\nAccepted: 212\nRejected: 1\nDate: 2026-11-16\nCHECKED",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "1d18070c-a30c-4fb4-a4af-dcef11279df9",
+          "site_id": "b48be726-f7b8-46ca-8a64-0675af6d9bee",
+          "run_id": "94b6c8e9-b997-447f-8305-94ed0f629290",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 115,
+          "latency_ms": 36554
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-016\nMachine: PRESS-04\nLot: BATCH-2316\nAccepted: 212\nRejected: 1\nDate: 2026-11-16\nCHECKED",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-handwritten_style-01",
+      "style": "handwritten_style",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-017",
+          "observed": "INSP-017",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-01",
+          "observed": "PRESS-01",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2317",
+          "observed": "BATCH-2317",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "219",
+          "observed": "219",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "2",
+          "observed": "2",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-17",
+          "observed": "2026-11-17",
+          "correct": true
+        }
+      ],
+      "image_sha256": "4cac21d9833e60b6086b01ad975470b677ef546a856005e8cdf381079cfa078d",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-017\nMachine: PRESS-01\nLot: BATCH-2317\nAccepted: 219\nRejected: 2\nDate: 2026-11-17",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "39d786bf-29b8-4ebf-aceb-018826d86c0c",
+          "site_id": "aab8bf04-65e3-4049-b436-c631cb46efac",
+          "run_id": "d310f74f-b2dd-4e3f-a8ed-900f5df8812e",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 130,
+          "latency_ms": 39038
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-017\nMachine: PRESS-01\nLot: BATCH-2317\nAccepted: 219\nRejected: 2\nDate: 2026-11-17",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-handwritten_style-02",
+      "style": "handwritten_style",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-018",
+          "observed": "INSP-018",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-02",
+          "observed": "PRESS-02",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2318",
+          "observed": "BATCH-2318",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "226",
+          "observed": "226",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "3",
+          "observed": "3",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-18",
+          "observed": "2026-11-18",
+          "correct": true
+        }
+      ],
+      "image_sha256": "4027d761d7ac277f5e9ea16967fe460ac447738c28bb3ed0bf1fac853e2b5922",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-018\nMachine: PRESS-02\nLot: BATCH-2318\nAccepted: 226\nRejected: 3\nDate: 2026-11-18",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "3d17d0a9-cb7b-4eb6-8bf2-0ccbb829a1f1",
+          "site_id": "850c0888-e6e4-4f25-bc47-085241be6a0a",
+          "run_id": "307ae92c-b362-42fc-afff-5944810aed6a",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 112,
+          "latency_ms": 34641
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-018\nMachine: PRESS-02\nLot: BATCH-2318\nAccepted: 226\nRejected: 3\nDate: 2026-11-18",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-handwritten_style-03",
+      "style": "handwritten_style",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-019",
+          "observed": "INSP-019",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-03",
+          "observed": "PRESS-03",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2319",
+          "observed": "BATCH-2319",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "233",
+          "observed": "233",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "4",
+          "observed": "4",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-19",
+          "observed": "2026-11-19",
+          "correct": true
+        }
+      ],
+      "image_sha256": "a168e3bc74e62eb101867242bfc22ebd531a0b9b5c3d83329b7609823d6daf5a",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-019\nMachine: PRESS-03\nLot: BATCH-2319\nAccepted: 233\nRejected: 4\nDate: 2026-11-19",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "b282b349-5aaf-4eb6-a217-ad686a12e78e",
+          "site_id": "05277a4f-5fff-4242-9703-4b2216b8783e",
+          "run_id": "aa9dea2e-0ff9-4ba2-9eb6-fc9809daa98c",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 453,
+          "output_tokens": 113,
+          "latency_ms": 33641
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-019\nMachine: PRESS-03\nLot: BATCH-2319\nAccepted: 233\nRejected: 4\nDate: 2026-11-19",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    },
+    {
+      "case_id": "offline-handwritten_style-04",
+      "style": "handwritten_style",
+      "fields": [
+        {
+          "name": "Record",
+          "expected": "INSP-020",
+          "observed": "INSP-020",
+          "correct": true
+        },
+        {
+          "name": "Machine",
+          "expected": "PRESS-04",
+          "observed": "PRESS-04",
+          "correct": true
+        },
+        {
+          "name": "Lot",
+          "expected": "BATCH-2320",
+          "observed": "BATCH-2320",
+          "correct": true
+        },
+        {
+          "name": "Accepted",
+          "expected": "240",
+          "observed": "240",
+          "correct": true
+        },
+        {
+          "name": "Rejected",
+          "expected": "0",
+          "observed": "0",
+          "correct": true
+        },
+        {
+          "name": "Date",
+          "expected": "2026-11-20",
+          "observed": "2026-11-20",
+          "correct": true
+        }
+      ],
+      "image_sha256": "f54ab72cc65df58bbf5146893e46909c518eaa5b679dc645de245875c7b03d92",
+      "route": "/source-scans",
+      "observation": {
+        "job_state": "completed",
+        "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-020\nMachine: PRESS-04\nLot: BATCH-2320\nAccepted: 240\nRejected: 0\nDate: 2026-11-20",
+        "extraction_method": "model_ocr",
+        "image_cleared": true,
+        "run_provider": "local-openai-compatible",
+        "finish_reason": "stop",
+        "exact_text": false
+      },
+      "run": {
+        "run": 1,
+        "observed": {
+          "tenant_id": "",
+          "site_id": "",
+          "run_id": "",
+          "trace_id": "",
+          "state": "",
+          "outcome_status": "",
+          "outcome_reasons": null,
+          "artifact_stored": false,
+          "provider_actual": false,
+          "provider_calls": 0,
+          "tool_codes": null,
+          "tools_returning_data": null,
+          "artifact_citations": null,
+          "run_refs": null,
+          "foreign_tenant_agent_reads": 0,
+          "agent_read_sources": null,
+          "context_readiness": "",
+          "source_revisions": null,
+          "plan_revision": 0,
+          "policy_revision": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "latency_ms": 0
+        },
+        "knowledge": {
+          "tenant_id": "08d280c4-f51f-4bf0-aa55-3d19dfa05330",
+          "site_id": "0df8b7c8-cae5-481c-9fc8-0fcdadbee963",
+          "run_id": "3b616a30-72b6-4e4a-8cea-8536dcdb9340",
+          "state": "completed",
+          "outcome_status": "proposed",
+          "outcome_reasons": [],
+          "provider_actual": true,
+          "provider_calls": 1,
+          "tool_codes": [],
+          "tools_returning_data": [],
+          "foreign_tenant_agent_reads": 0,
+          "reviews_of_run_facts": 0,
+          "snapshots_by_model": 0,
+          "input_tokens": 452,
+          "output_tokens": 112,
+          "latency_ms": 38353
+        },
+        "ocr": {
+          "job_state": "completed",
+          "stored_text": "SYNTHETIC INSPECTION LOG\nRecord: INSP-020\nMachine: PRESS-04\nLot: BATCH-2320\nAccepted: 240\nRejected: 0\nDate: 2026-11-20",
+          "extraction_method": "model_ocr",
+          "image_cleared": true,
+          "run_provider": "local-openai-compatible",
+          "finish_reason": "stop",
+          "exact_text": false
+        },
+        "failures": null,
+        "breaches": null
+      }
+    }
+  ],
+  "git_dirty": true,
+  "command_actual": "go test -count=1 -tags=offline -run '^TestWISNEWOfflineScans$' -timeout=60m -v ./cmd/supervisor-eval",
+  "harness_source_sha256": {
+    "offline_evidence_test.go": "f1b4c10f73986a198ad0d0d9af06da46c0de73735f41680289d0844c16ac01c2",
+    "offline_pages_test.go": "a0fd96eb8ccf126b137e1d10682c826b5ab1a5fcabcee0a6b40fc9287c1efeba"
+  },
+  "summary": {
+    "cases": 20,
+    "completed": 20,
+    "fields_correct": 120,
+    "fields_total": 120,
+    "by_field": {
+      "Record": {
+        "correct": 20,
+        "total": 20
+      },
+      "Machine": {
+        "correct": 20,
+        "total": 20
+      },
+      "Lot": {
+        "correct": 20,
+        "total": 20
+      },
+      "Accepted": {
+        "correct": 20,
+        "total": 20
+      },
+      "Rejected": {
+        "correct": 20,
+        "total": 20
+      },
+      "Date": {
+        "correct": 20,
+        "total": 20
+      }
+    },
+    "latency_ms": {
+      "min": 33487,
+      "median": 38725.5,
+      "max": 46567
+    },
+    "boundary_breaches": 0
+  }
+}

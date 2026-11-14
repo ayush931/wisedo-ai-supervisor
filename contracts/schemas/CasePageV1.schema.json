@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "detected_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "episode": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "string"
+          },
+          "latest_window_end": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "line_id": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "detected_at",
+          "episode",
+          "id",
+          "latest_window_end",
+          "line_id",
+          "order_id",
+          "revision",
+          "state"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "next_cursor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "items",
+    "next_cursor"
+  ],
+  "type": "object"
+}

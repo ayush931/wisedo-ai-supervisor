@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "next_cursor": {
+      "type": "string"
+    },
+    "questions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "answer_state": {
+            "enum": [
+              "answered",
+              "dismissed",
+              "unanswered"
+            ],
+            "type": "string"
+          },
+          "prompt": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "prompt_origin": {
+            "enum": [
+              "agent",
+              "template"
+            ],
+            "type": "string"
+          },
+          "question_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "conflict",
+              "missing",
+              "stale"
+            ],
+            "type": "string"
+          },
+          "requirement_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "role": {
+            "enum": [
+              "owner",
+              "supervisor",
+              "operator"
+            ],
+            "type": "string"
+          },
+          "snoozed_until": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "source_span_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "answer_state",
+          "prompt",
+          "prompt_origin",
+          "question_id",
+          "reason",
+          "requirement_id",
+          "revision",
+          "role",
+          "source_span_ids"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "questions"
+  ],
+  "type": "object"
+}

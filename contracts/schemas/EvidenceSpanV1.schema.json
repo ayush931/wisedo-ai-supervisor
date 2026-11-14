@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "access_epoch": {
+      "type": "integer"
+    },
+    "end_char": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "source_sha256": {
+      "type": "string"
+    },
+    "start_char": {
+      "type": "integer"
+    },
+    "text": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "access_epoch",
+    "end_char",
+    "id",
+    "revision",
+    "source_id",
+    "source_sha256",
+    "start_char",
+    "text"
+  ],
+  "type": "object"
+}

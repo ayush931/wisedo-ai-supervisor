@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "claim_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "claim_revision",
+    "reason",
+    "verdict"
+  ],
+  "type": "object"
+}

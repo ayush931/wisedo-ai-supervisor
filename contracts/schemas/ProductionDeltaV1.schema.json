@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "good_units": {
+      "type": "string"
+    },
+    "interval_end": {
+      "type": "string"
+    },
+    "interval_start": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "asset_id",
+    "good_units",
+    "interval_end",
+    "interval_start",
+    "order_id",
+    "unit"
+  ],
+  "type": "object"
+}

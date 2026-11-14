@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "confirm_model_extracted": {
+      "type": "boolean"
+    },
+    "expected_source_state_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "source_revision": {
+      "type": "integer"
+    },
+    "verdict": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "expected_source_state_revision",
+    "reason",
+    "source_revision",
+    "verdict"
+  ],
+  "type": "object"
+}

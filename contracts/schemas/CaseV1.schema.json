@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "clarifications": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "body": {
+            "type": "string"
+          },
+          "body_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "case_revision": {
+            "type": "integer"
+          },
+          "context_snapshot_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor",
+          "body",
+          "body_sha256",
+          "case_revision",
+          "context_snapshot_id",
+          "created_at",
+          "id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "context_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "context_revision": {
+      "type": "integer"
+    },
+    "context_snapshot_id": {
+      "type": "string"
+    },
+    "detected_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "episode": {
+      "type": "integer"
+    },
+    "exception_kind": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "latest_window_end": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "line_id": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string"
+    },
+    "owner_user_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "previous_case_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "resolution_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "site_id": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "transitions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "event": {
+            "type": "string"
+          },
+          "from_state": {
+            "type": "string"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "to_state": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor",
+          "created_at",
+          "event",
+          "from_state",
+          "reason",
+          "revision",
+          "to_state"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "trigger_evidence_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "triggers": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "context_snapshot_id": {
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "opened": {
+            "type": "boolean"
+          },
+          "source_event_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor",
+          "context_snapshot_id",
+          "created_at",
+          "opened",
+          "source_event_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "workflow_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "clarifications",
+    "context_digest",
+    "context_revision",
+    "context_snapshot_id",
+    "detected_at",
+    "episode",
+    "exception_kind",
+    "id",
+    "latest_window_end",
+    "line_id",
+    "order_id",
+    "owner_user_id",
+    "previous_case_id",
+    "replayed",
+    "resolution_reason",
+    "revision",
+    "site_id",
+    "state",
+    "transitions",
+    "trigger_evidence_ids",
+    "triggers",
+    "workflow_id"
+  ],
+  "type": "object"
+}

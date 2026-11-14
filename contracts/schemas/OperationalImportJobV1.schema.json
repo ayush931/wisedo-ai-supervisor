@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "accepted_rows": {
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "duplicate_rows": {
+      "type": "integer"
+    },
+    "file_sha256": {
+      "type": "string"
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "format": {
+      "type": "string"
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "mapping_revision": {
+      "type": "integer"
+    },
+    "quarantined_rows": {
+      "type": "integer"
+    },
+    "rejected_rows": {
+      "type": "integer"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "row_count": {
+      "type": "integer"
+    },
+    "rows": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "type": "string"
+          },
+          "row_index": {
+            "type": "integer"
+          },
+          "source_sequence": {
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "accepted",
+              "duplicate",
+              "quarantined",
+              "rejected"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "row_index",
+          "status"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "source_revision": {
+      "type": "integer"
+    },
+    "start_sequence": {
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "running",
+        "completed",
+        "partial",
+        "cancelled"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "accepted_rows",
+    "created_at",
+    "duplicate_rows",
+    "file_sha256",
+    "finished_at",
+    "format",
+    "job_id",
+    "mapping_revision",
+    "quarantined_rows",
+    "rejected_rows",
+    "replayed",
+    "row_count",
+    "rows",
+    "source_id",
+    "source_revision",
+    "start_sequence",
+    "status"
+  ],
+  "type": "object"
+}

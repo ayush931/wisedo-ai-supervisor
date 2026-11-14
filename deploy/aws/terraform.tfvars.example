@@ -1,0 +1,58 @@
+# Staging example. Copy to terraform.tfvars (UNCOMMITTED) and adjust.
+# No secrets belong here — auth is via workload IAM roles / SSO.
+environment  = "staging"
+aws_region   = "ap-south-1"
+project      = "wisedo-oee-ai-training"
+
+# s3_bucket_name = ""  # empty => wisedo-oee-ai-training-<account>-<region>-datasets
+kms_alias = "alias/wisedo-oee-ai-training-cmk"
+
+sagemaker_instance_type  = "ml.g5.2xlarge"
+sagemaker_instance_count = 1
+volume_size_gb           = 150
+
+# Which machines operators may choose from (launcher validates against this):
+# allowed_instance_types = ["ml.g5.xlarge", "ml.g5.2xlarge", "ml.g5.12xlarge"]
+# Job-behavior defaults (overridable per run by launcher env/CLI):
+# default_use_spot_training = false
+# default_max_run_seconds   = 86400
+# default_max_wait_seconds  = 108000
+
+# --- IAM mode (pick one) ---
+# A) Bootstrap (default): broad managed policy, fastest to stand up.
+# sagemaker_managed_policy_arns = ["arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"]
+# B) Production least-privilege: empty the managed list, supply custom JSON,
+#    optionally with a permissions boundary.
+# sagemaker_managed_policy_arns      = []
+# sagemaker_custom_policy_json       = ""  # paste least-privilege policy JSON
+# sagemaker_permissions_boundary_arn = "arn:aws:iam::<account>:policy/<boundary>"
+
+# --- Optional components (disable what you don't need) ---
+# enable_model_registry = true
+# model_package_group_name = ""  # empty => wisedo-oee-ai-training-<env>-llm
+# enable_experiment     = true
+# experiment_name       = ""     # empty => wisedo-oee-ai-training-<env>-finetune
+# enable_ecr_repo       = true
+# ecr_image_keep_count  = 20
+
+base_model_id   = "Qwen/Qwen2.5-7B-Instruct"
+dataset_format  = "qwen"
+dataset_version = "v1.0.0"
+
+# Production training inside a VPC (zero-egress; Terraform validates coherence).
+# Launcher resolves both automatically: OEE_SSM_PREFIX=<project>-<env> + --vpc flag.
+# vpc_id                 = "vpc-0example00000000000"
+# private_subnet_ids     = ["subnet-0aaa", "subnet-0bbb"]
+# create_vpc_endpoints   = true
+
+# Monthly SageMaker cost guard (0 = disabled; email needs SNS confirmation).
+# budget_monthly_limit_usd = 500
+# budget_alert_email       = "ai-platform@example.com"
+
+# CI job submission via GitHub OIDC:
+# enable_github_oidc = true
+# github_repo        = "Wisedo-Technology/plantops-oee-intelligence"
+
+extra_tags = {
+  Owner = "ai-platform"
+}

@@ -1,0 +1,82 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+.python-version-local
+
+# Linters, Formatters, & Typecheckers
+.ruff_cache/
+.mypy_cache/
+
+# Testing & Coverage
+.pytest_cache/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Build, Packaging, & Wheels
+dist/
+build/
+*.egg-info/
+*.egg
+cmake-build-*/
+CMakeUserPresets.json
+compile_commands.json
+*.o
+*.a
+
+# Native Future Vision generated inspection artifacts
+inspection_results/
+
+# Secrets & Environment variables
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.crt
+
+# IDE & Editor artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating System artifacts
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local databases, dumps, & logs
+*.sqlite3
+*.db
+*.log
+*.dump
+
+# Local test scratch & reports
+scratch/
+report.xml
+junit.xml
+
+
+# Supervisor frontend dependencies
+web/node_modules/
+web/test-results/
+web/playwright-report/
+
+# Release bundle staged by scripts/stage_deploy_folder.sh (generated, WIS-699).
+/wisedo_deploy/
+
+# WIS-708: operator secrets for compose.models-runtime.yml
+deploy/supervisor/runtime.env

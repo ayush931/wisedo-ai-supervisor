@@ -1,0 +1,1800 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evals/supervisor/manifest.schema.json",
+  "title": "WIS-280 supervisor eval manifest",
+  "description": "Shape of evals/supervisor/manifest.json. cmd/supervisor-eval's strict loader is the enforcement: it also refuses duplicate case IDs, an incident in two partitions, a corpus case (investigation, onboarding, chat or OCR) in no partition or a control in one, thresholds that differ from the pinned frozen digest, and a corpus_sha256 that does not match the cases.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "issue",
+    "corpus",
+    "thresholds",
+    "partitions",
+    "cases",
+    "gate_controls",
+    "corpus_sha256",
+    "onboarding_cases",
+    "onboarding_controls",
+    "chat_world",
+    "chat_cases",
+    "chat_controls",
+    "ocr_cases",
+    "ocr_controls"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "issue": {
+      "const": "WIS-280"
+    },
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_corpus",
+        "chat_2026_10_16",
+        "citations",
+        "detection",
+        "disposition",
+        "hard_gates",
+        "latency",
+        "runs",
+        "specialists",
+        "status",
+        "verbatim",
+        "onboarding",
+        "ocr"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hard_gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "cross_tenant_or_site_disclosures_max",
+            "deterministic_assertion_pass_rate",
+            "duplicate_internal_tasks_max",
+            "expired_or_revoked_authority_executions_max",
+            "unauthorized_effects_max"
+          ],
+          "properties": {
+            "unauthorized_effects_max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cross_tenant_or_site_disclosures_max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "expired_or_revoked_authority_executions_max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "duplicate_internal_tasks_max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "deterministic_assertion_pass_rate": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            }
+          }
+        },
+        "citations": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "action_driving_authorized_source_rate",
+            "correctness_min"
+          ],
+          "properties": {
+            "action_driving_authorized_source_rate": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "correctness_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            }
+          }
+        },
+        "disposition": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "disputed_label_human_reviews_min",
+            "insufficient_evidence_abstention_min",
+            "supported_held_out_min"
+          ],
+          "properties": {
+            "supported_held_out_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "insufficient_evidence_abstention_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "disputed_label_human_reviews_min": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "detection": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "actionable_incidents_min",
+            "non_actionable_alerts_per_line_per_8h_shift_max",
+            "normal_windows_min",
+            "precision_min",
+            "recall_min"
+          ],
+          "properties": {
+            "actionable_incidents_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "normal_windows_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "recall_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "precision_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "non_actionable_alerts_per_line_per_8h_shift_max": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "latency": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "completeness_eligibility_seconds",
+            "context_to_case_p95_seconds",
+            "investigation_p95_seconds"
+          ],
+          "properties": {
+            "completeness_eligibility_seconds": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "context_to_case_p95_seconds": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "investigation_p95_seconds": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "runs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "actual_runs_per_case"
+          ],
+          "properties": {
+            "actual_runs_per_case": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "baseline_corpus": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "adversarial_security",
+            "cases",
+            "held_out_min",
+            "missing_stale_conflicting_identity",
+            "recovery_concurrency",
+            "supported_flow"
+          ],
+          "properties": {
+            "cases": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "supported_flow": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "missing_stale_conflicting_identity": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "adversarial_security": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "recovery_concurrency": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "held_out_min": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "specialists": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "disposition_gain_percentage_points_min",
+            "reviewer_effort_reduction_min"
+          ],
+          "properties": {
+            "disposition_gain_percentage_points_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "reviewer_effort_reduction_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            }
+          }
+        },
+        "chat_2026_10_16": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "abstention_min",
+            "citation_support_min",
+            "concurrent_users",
+            "exact_production_shift",
+            "exact_quantities_units_time_rate",
+            "hard_deadline_seconds",
+            "insufficient_conflicting",
+            "interactive_p95_seconds",
+            "material_quality",
+            "process_document_qa",
+            "release_cases_min",
+            "retrieval_recall_at_10_min",
+            "security_adversarial_min",
+            "unauthorized_disclosure_or_effect_max"
+          ],
+          "properties": {
+            "release_cases_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "process_document_qa": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "exact_production_shift": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "material_quality": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "insufficient_conflicting": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "security_adversarial_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "retrieval_recall_at_10_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "citation_support_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "exact_quantities_units_time_rate": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "abstention_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "unauthorized_disclosure_or_effect_max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "interactive_p95_seconds": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "concurrent_users": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "hard_deadline_seconds": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "verbatim": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "onboarding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "cases_min",
+            "supported_min",
+            "adversarial_min",
+            "supported_fact_recall_min",
+            "ungrounded_persisted_facts_max",
+            "unauthorized_effects_max",
+            "cross_tenant_disclosures_max"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "proposed_pending_review",
+                "frozen"
+              ]
+            },
+            "cases_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "supported_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "adversarial_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "supported_fact_recall_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            },
+            "ungrounded_persisted_facts_max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "unauthorized_effects_max": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "cross_tenant_disclosures_max": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "ocr": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "cases_min",
+            "clean_page_exact_text_min"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "proposed_pending_review",
+                "frozen"
+              ]
+            },
+            "cases_min": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "clean_page_exact_text_min": {
+              "type": "string",
+              "pattern": "^(0|1)(\\.[0-9]{1,6})?$"
+            }
+          }
+        }
+      }
+    },
+    "partitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "development",
+        "held_out",
+        "train"
+      ],
+      "properties": {
+        "train": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "development": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "held_out": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    },
+    "gate_controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    },
+    "corpus_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "onboarding_cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "category",
+          "provenance",
+          "document",
+          "answer",
+          "script",
+          "outcome_status",
+          "outcome_reasons",
+          "expected_facts",
+          "actual_eligible"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "supported",
+              "ungrounded_name",
+              "invented_number",
+              "planted_instruction"
+            ]
+          },
+          "provenance": {
+            "enum": [
+              "synthetic",
+              "sanitized_customer"
+            ]
+          },
+          "document": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "answer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "script": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "tool_calls",
+              "entities",
+              "claims"
+            ],
+            "properties": {
+              "tool_calls": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "entities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "ref",
+                    "type",
+                    "name",
+                    "cite"
+                  ],
+                  "properties": {
+                    "ref": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "cite": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "integer",
+                        "minimum": -1
+                      }
+                    }
+                  }
+                }
+              },
+              "claims": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "predicate",
+                    "subject",
+                    "cite"
+                  ],
+                  "properties": {
+                    "predicate": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "string"
+                    },
+                    "object": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "cite": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "integer",
+                        "minimum": -1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "outcome_status": {
+            "enum": [
+              "proposed",
+              "refused",
+              "needs_input"
+            ]
+          },
+          "outcome_reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_facts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "predicate": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": "string"
+                },
+                "object": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "unit": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "actual_eligible": {
+            "type": "boolean"
+          },
+          "independent_reviews": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "People other than the author who reviewed this case's labels (WIS-646). Absent means 0; a control is never reviewed."
+          },
+          "expected_failure": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "onboarding_controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "category",
+          "provenance",
+          "document",
+          "answer",
+          "script",
+          "outcome_status",
+          "outcome_reasons",
+          "expected_facts",
+          "actual_eligible"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "supported",
+              "ungrounded_name",
+              "invented_number",
+              "planted_instruction"
+            ]
+          },
+          "provenance": {
+            "enum": [
+              "synthetic",
+              "sanitized_customer"
+            ]
+          },
+          "document": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "answer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "script": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "tool_calls",
+              "entities",
+              "claims"
+            ],
+            "properties": {
+              "tool_calls": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "entities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "ref",
+                    "type",
+                    "name",
+                    "cite"
+                  ],
+                  "properties": {
+                    "ref": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "cite": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "integer",
+                        "minimum": -1
+                      }
+                    }
+                  }
+                }
+              },
+              "claims": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "predicate",
+                    "subject",
+                    "cite"
+                  ],
+                  "properties": {
+                    "predicate": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "string"
+                    },
+                    "object": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "cite": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "integer",
+                        "minimum": -1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "outcome_status": {
+            "enum": [
+              "proposed",
+              "refused",
+              "needs_input"
+            ]
+          },
+          "outcome_reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_facts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "predicate": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": "string"
+                },
+                "object": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "unit": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "actual_eligible": {
+            "type": "boolean"
+          },
+          "expected_failure": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "chat_world": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "document",
+        "facts",
+        "foreign_document",
+        "foreign_secrets"
+      ],
+      "properties": {
+        "document": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "foreign_document": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "foreign_secrets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "facts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "symbol",
+              "subject_type",
+              "subject",
+              "predicate",
+              "paragraph",
+              "approved"
+            ],
+            "properties": {
+              "symbol": {
+                "type": "string"
+              },
+              "subject_type": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              },
+              "predicate": {
+                "type": "string"
+              },
+              "object_type": {
+                "type": "string"
+              },
+              "object": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "paragraph": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "approved": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "chat_cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "category",
+          "provenance",
+          "question",
+          "script",
+          "reply_state",
+          "reason_code",
+          "relevant_facts",
+          "expected_numbers",
+          "actual_eligible"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "process_document_qa",
+              "exact_production_shift",
+              "material_quality",
+              "insufficient_conflicting",
+              "security_adversarial"
+            ]
+          },
+          "provenance": {
+            "enum": [
+              "synthetic",
+              "sanitized_customer"
+            ]
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "script": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "statements",
+              "missing_inputs"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "answered",
+                  "needs_input"
+                ]
+              },
+              "statements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "text",
+                    "cite"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "cite": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "missing_inputs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "reply_state": {
+            "enum": [
+              "answered",
+              "needs_input",
+              "failed"
+            ]
+          },
+          "reason_code": {
+            "type": "string"
+          },
+          "relevant_facts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_numbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actual_eligible": {
+            "type": "boolean"
+          },
+          "independent_reviews": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "People other than the author who reviewed this case's labels (WIS-646). Absent means 0; a control is never reviewed."
+          },
+          "expected_failure": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "chat_controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "category",
+          "provenance",
+          "question",
+          "script",
+          "reply_state",
+          "reason_code",
+          "relevant_facts",
+          "expected_numbers",
+          "actual_eligible"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "process_document_qa",
+              "exact_production_shift",
+              "material_quality",
+              "insufficient_conflicting",
+              "security_adversarial"
+            ]
+          },
+          "provenance": {
+            "enum": [
+              "synthetic",
+              "sanitized_customer"
+            ]
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "script": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "statements",
+              "missing_inputs"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "answered",
+                  "needs_input"
+                ]
+              },
+              "statements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "text",
+                    "cite"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "cite": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "missing_inputs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "reply_state": {
+            "enum": [
+              "answered",
+              "needs_input",
+              "failed"
+            ]
+          },
+          "reason_code": {
+            "type": "string"
+          },
+          "relevant_facts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_numbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actual_eligible": {
+            "type": "boolean"
+          },
+          "expected_failure": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "chat_synonym_cases": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "category",
+          "provenance",
+          "question",
+          "script",
+          "reply_state",
+          "reason_code",
+          "relevant_facts",
+          "expected_numbers",
+          "actual_eligible"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "process_document_qa",
+              "exact_production_shift",
+              "material_quality",
+              "insufficient_conflicting",
+              "security_adversarial"
+            ]
+          },
+          "provenance": {
+            "enum": [
+              "synthetic",
+              "sanitized_customer"
+            ]
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "script": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "statements",
+              "missing_inputs"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "answered",
+                  "needs_input"
+                ]
+              },
+              "statements": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "text",
+                    "cite"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "type": "string"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "cite": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "missing_inputs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "reply_state": {
+            "enum": [
+              "answered",
+              "needs_input",
+              "failed"
+            ]
+          },
+          "reason_code": {
+            "type": "string"
+          },
+          "relevant_facts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_numbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actual_eligible": {
+            "type": "boolean"
+          },
+          "independent_reviews": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "People other than the author who reviewed this case's labels (WIS-646). Absent means 0; a control is never reviewed."
+          },
+          "expected_failure": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "WIS-647 retrieval comparison set: questions worded differently from their passages, over chat_world. Run only by CASE=chat_synonyms, in each -retrieval mode."
+    },
+    "ocr_cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "category",
+          "provenance",
+          "page_lines",
+          "script",
+          "stored",
+          "quarantine_reason",
+          "follow_up_tools",
+          "actual_eligible"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "clean_page",
+              "adversarial_instruction",
+              "truncated",
+              "illegible",
+              "hosted_site"
+            ]
+          },
+          "provenance": {
+            "enum": [
+              "synthetic",
+              "sanitized_customer"
+            ]
+          },
+          "page_lines": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 40,
+            "items": {
+              "type": "string"
+            }
+          },
+          "script": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "text",
+              "tool_calls",
+              "finish_reason"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "transcribed",
+                  "illegible"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "tool_calls": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "finish_reason": {
+                "enum": [
+                  "stop",
+                  "length"
+                ]
+              }
+            }
+          },
+          "stored": {
+            "type": "boolean"
+          },
+          "quarantine_reason": {
+            "type": "string"
+          },
+          "follow_up_tools": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actual_eligible": {
+            "type": "boolean"
+          },
+          "independent_reviews": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "People other than the author who reviewed this case's labels (WIS-646). Absent means 0; a control is never reviewed."
+          },
+          "expected_failure": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ocr_controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "category",
+          "provenance",
+          "page_lines",
+          "script",
+          "stored",
+          "quarantine_reason",
+          "follow_up_tools",
+          "actual_eligible"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "enum": [
+              "clean_page",
+              "adversarial_instruction",
+              "truncated",
+              "illegible",
+              "hosted_site"
+            ]
+          },
+          "provenance": {
+            "enum": [
+              "synthetic",
+              "sanitized_customer"
+            ]
+          },
+          "page_lines": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 40,
+            "items": {
+              "type": "string"
+            }
+          },
+          "script": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "text",
+              "tool_calls",
+              "finish_reason"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "transcribed",
+                  "illegible"
+                ]
+              },
+              "text": {
+                "type": "string"
+              },
+              "tool_calls": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "finish_reason": {
+                "enum": [
+                  "stop",
+                  "length"
+                ]
+              }
+            }
+          },
+          "stored": {
+            "type": "boolean"
+          },
+          "quarantine_reason": {
+            "type": "string"
+          },
+          "follow_up_tools": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actual_eligible": {
+            "type": "boolean"
+          },
+          "expected_failure": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actual_eligible",
+        "allowed_tools",
+        "approval_revisions",
+        "case_id",
+        "category",
+        "expected_citations",
+        "expected_readiness",
+        "forbidden_tools",
+        "incident_id",
+        "lifecycle_assertions",
+        "provenance",
+        "reviewer_labels",
+        "scenario",
+        "simulated_clock",
+        "site",
+        "source_permissions",
+        "source_revisions",
+        "tenant"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "enum": [
+            "supported_flow",
+            "missing_stale_conflicting_identity",
+            "adversarial_security",
+            "recovery_concurrency"
+          ]
+        },
+        "provenance": {
+          "enum": [
+            "synthetic",
+            "sanitized_customer"
+          ]
+        },
+        "incident_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tenant": {
+          "type": "string",
+          "minLength": 1
+        },
+        "site": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scenario": {
+          "type": "string",
+          "description": "named scripted model behaviour in cmd/supervisor-eval/scenarios.go"
+        },
+        "source_revisions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "asset_register",
+            "mapping",
+            "operational_source",
+            "shift_plan"
+          ],
+          "properties": {
+            "shift_plan": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "asset_register": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "operational_source": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "mapping": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "approval_revisions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "plan",
+            "policy"
+          ],
+          "properties": {
+            "plan": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "policy": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "simulated_clock": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+        },
+        "source_permissions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "asset_register",
+            "foreign_tenant_note",
+            "shift_plan"
+          ],
+          "properties": {
+            "shift_plan": {
+              "enum": [
+                "read",
+                "none"
+              ]
+            },
+            "asset_register": {
+              "enum": [
+                "read",
+                "none"
+              ]
+            },
+            "foreign_tenant_note": {
+              "enum": [
+                "read",
+                "none"
+              ]
+            }
+          }
+        },
+        "expected_readiness": {
+          "enum": [
+            "READY",
+            "LIMITED",
+            "NOT_READY",
+            "INVALID"
+          ]
+        },
+        "allowed_tools": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "context.get",
+              "evidence.get",
+              "claims.search",
+              "measurements.get"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "forbidden_tools": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "expected_citations": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "measurement:expected_good_units",
+              "measurement:actual_good_units",
+              "measurement:deficit_good_units"
+            ]
+          }
+        },
+        "lifecycle_assertions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "artifact_stored",
+            "outcome_reasons",
+            "outcome_status",
+            "provider_calls",
+            "replay_makes_no_call",
+            "run_state",
+            "tool_codes"
+          ],
+          "properties": {
+            "run_state": {
+              "enum": [
+                "completed",
+                "degraded",
+                "canceled",
+                "failed"
+              ]
+            },
+            "outcome_status": {
+              "enum": [
+                "",
+                "proposed",
+                "needs_input",
+                "refused",
+                "escalated"
+              ]
+            },
+            "outcome_reasons": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]{0,63}$"
+              }
+            },
+            "artifact_stored": {
+              "type": "boolean"
+            },
+            "provider_calls": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "tool_codes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "replay_makes_no_call": {
+              "type": "boolean"
+            }
+          }
+        },
+        "reviewer_labels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "disposition",
+            "independent_reviews",
+            "labelled_by"
+          ],
+          "properties": {
+            "disposition": {
+              "type": "string",
+              "minLength": 1
+            },
+            "labelled_by": {
+              "type": "string",
+              "minLength": 1
+            },
+            "independent_reviews": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "actual_eligible": {
+          "type": "boolean"
+        },
+        "expected_failure": {
+          "enum": [
+            "UNAUTHORIZED_EFFECT",
+            "CROSS_TENANT_DISCLOSURE",
+            "UNPERMITTED_SOURCE_READ",
+            "CITATION_OUTSIDE_AUTHORIZED_REFS",
+            "PROVIDER_LABEL_MISMATCH",
+            "ASSERTION_MISMATCH"
+          ],
+          "description": "gate_controls only: the reason code the control must FAIL with"
+        }
+      }
+    }
+  }
+}

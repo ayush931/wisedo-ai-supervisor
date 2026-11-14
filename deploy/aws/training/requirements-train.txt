@@ -1,0 +1,14 @@
+# Pinned training-container dependencies (CUDA 12.x, Python 3.12).
+# Installed in Dockerfile.train. Kept SEPARATE from the OEE core pyproject
+# (ADR 0002 Sec. 2.2: ML is out of the core runtime scope).
+torch==2.13.0
+--extra-index-url https://download.pytorch.org/whl/cu121
+transformers==5.10.1
+peft==0.14.0
+trl==0.14.0
+datasets==5.0.1
+accelerate==1.2.1
+bitsandbytes==0.45.0
+safetensors==0.5.2
+# NOTE: AutoAWQ is intentionally absent — Stage-4 merge/quantize runs in its
+# own image (ADR 0004 Sec. 5.4), keeping this SFT image minimal.

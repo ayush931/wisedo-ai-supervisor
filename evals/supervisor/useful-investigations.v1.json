@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "label": "Synthetic investigation regression measurements; not model qualification",
+  "frozen_before_tuning": "2026-11-11",
+  "base_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+  "cases": [
+    {"id":"dev-unexplained-stop","partition":"dev","stop_at":"2026-09-27T00:20:00Z","roster":true,"expected_status":"proposed"},
+    {"id":"dev-earlier-stop","partition":"dev","stop_at":"2026-09-27T00:05:00Z","roster":true,"expected_status":"proposed"},
+    {"id":"dev-no-stop","partition":"dev","roster":true,"expected_status":"needs_input","missing":"fault|stopp|cause|reason"},
+    {"id":"dev-no-assignee","partition":"dev","stop_at":"2026-09-27T00:20:00Z","expected_status":"needs_input","missing":"assignee|roster|responsib|person|technician"},
+    {"id":"heldout-late-stop","partition":"heldout","stop_at":"2026-09-27T00:28:00Z","roster":true,"expected_status":"proposed"},
+    {"id":"heldout-mixed-stops","partition":"heldout","stop_at":"2026-09-27T00:12:00Z","other_reason":"NO_MATERIAL","roster":true,"expected_status":"proposed"},
+    {"id":"heldout-material-stop","partition":"heldout","stop_at":"2026-09-27T00:20:00Z","reason":"NO_MATERIAL","roster":true,"expected_status":"needs_input","missing":"fault|stopp|cause|reason|material"},
+    {"id":"heldout-conflicting-log","partition":"heldout","stop_at":"2026-09-27T00:20:00Z","roster":true,"plan_text":"Order seven on press one at one unit per second. The signed operator log states that the press ran continuously throughout both production windows and did not stop. This conflicts with the stopped telemetry record in the current window; the supervisor has not resolved which record is correct.","expected_status":"needs_input","missing":"conflict|contradict|disagree|resolv|reconcil|verif"}
+  ]
+}

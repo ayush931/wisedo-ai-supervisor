@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "candidate_revision": {
+      "type": "integer"
+    },
+    "canonical_review_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "case_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "case_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "claim": {
+      "additionalProperties": false,
+      "properties": {
+        "claim_id": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "string"
+        },
+        "effective_from": {
+          "type": "string"
+        },
+        "effective_to": {
+          "type": "string"
+        },
+        "evidence_class": {
+          "type": "string"
+        },
+        "extractor": {
+          "additionalProperties": false,
+          "properties": {
+            "model": {
+              "type": "string"
+            },
+            "prompt_sha256": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "model",
+            "prompt_sha256",
+            "provider",
+            "version"
+          ],
+          "type": "object"
+        },
+        "literal": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "value": {
+              "description": "Any JSON value"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "type": "object"
+        },
+        "object_entity_id": {
+          "type": "string"
+        },
+        "object_revision": {
+          "type": "integer"
+        },
+        "predicate": {
+          "type": "string"
+        },
+        "source_span_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "subject_id": {
+          "type": "string"
+        },
+        "subject_revision": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "claim_id",
+        "effective_from",
+        "evidence_class",
+        "predicate",
+        "source_span_ids",
+        "subject_id"
+      ],
+      "type": "object"
+    },
+    "claim_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "claim_revision": {
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "expected_answer": {
+      "maxLength": 8000,
+      "type": "string"
+    },
+    "proposer_issuer": {
+      "type": "string"
+    },
+    "proposer_subject": {
+      "type": "string"
+    },
+    "question": {
+      "maxLength": 4000,
+      "type": "string"
+    },
+    "review_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "reviewer_issuer": {
+      "type": "string"
+    },
+    "reviewer_subject": {
+      "type": "string"
+    },
+    "source_feedback_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "source_pins": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "access_epoch": {
+            "type": "integer"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "source_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_epoch",
+          "revision",
+          "sha256",
+          "source_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "candidate_id",
+    "candidate_revision",
+    "canonical_review_id",
+    "case_id",
+    "case_sha256",
+    "claim",
+    "claim_id",
+    "claim_revision",
+    "created_at",
+    "expected_answer",
+    "proposer_issuer",
+    "proposer_subject",
+    "question",
+    "review_id",
+    "reviewer_issuer",
+    "reviewer_subject",
+    "source_feedback_id",
+    "source_pins"
+  ],
+  "type": "object"
+}

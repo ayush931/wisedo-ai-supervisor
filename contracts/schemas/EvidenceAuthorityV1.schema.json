@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "authenticated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "decision_id": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "review_evidence_eligible": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "source_access_epoch": {
+      "type": "integer"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "source_model_extracted": {
+      "type": "boolean"
+    },
+    "source_revision": {
+      "type": "integer"
+    },
+    "source_sha256": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "actor_issuer",
+    "actor_subject",
+    "authenticated_at",
+    "created_at",
+    "current_revision",
+    "decision_id",
+    "reason",
+    "review_evidence_eligible",
+    "revision",
+    "source_access_epoch",
+    "source_id",
+    "source_model_extracted",
+    "source_revision",
+    "source_sha256",
+    "verdict"
+  ],
+  "type": "object"
+}

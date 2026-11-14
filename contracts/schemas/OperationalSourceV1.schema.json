@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "access_policy_revision": {
+      "type": "integer"
+    },
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "authority_scope": {
+      "type": "string"
+    },
+    "clock_skew_seconds": {
+      "type": "integer"
+    },
+    "config_sha256": {
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "freshness_seconds": {
+      "type": "integer"
+    },
+    "mapping_revision": {
+      "type": "integer"
+    },
+    "mapping_sha256": {
+      "type": "string"
+    },
+    "mapping_targets_current": {
+      "type": "boolean"
+    },
+    "review": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_issuer": {
+          "type": "string"
+        },
+        "actor_subject": {
+          "type": "string"
+        },
+        "authenticated_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "config_sha256": {
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "current_revision": {
+          "type": "integer"
+        },
+        "decision_id": {
+          "type": "string"
+        },
+        "mapping_revision": {
+          "type": "integer"
+        },
+        "mapping_sha256": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "source_revision": {
+          "type": "integer"
+        },
+        "verdict": {
+          "enum": [
+            "approved",
+            "rejected"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "actor_issuer",
+        "actor_subject",
+        "authenticated_at",
+        "config_sha256",
+        "created_at",
+        "current_revision",
+        "decision_id",
+        "mapping_revision",
+        "mapping_sha256",
+        "reason",
+        "revision",
+        "source_revision",
+        "verdict"
+      ],
+      "type": "object"
+    },
+    "review_eligible": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "source_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "csv",
+        "event_api",
+        "json",
+        "manual"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "access_policy_revision",
+    "actor_issuer",
+    "actor_subject",
+    "authority_scope",
+    "clock_skew_seconds",
+    "config_sha256",
+    "created_at",
+    "current_revision",
+    "enabled",
+    "freshness_seconds",
+    "mapping_revision",
+    "mapping_sha256",
+    "mapping_targets_current",
+    "review_eligible",
+    "revision",
+    "source_id",
+    "type"
+  ],
+  "type": "object"
+}

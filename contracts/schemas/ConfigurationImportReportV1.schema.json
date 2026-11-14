@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "applicable": {
+      "type": "boolean"
+    },
+    "counts": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted": {
+          "type": "integer"
+        },
+        "duplicate": {
+          "type": "integer"
+        },
+        "rejected": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "accepted",
+        "duplicate",
+        "rejected"
+      ],
+      "type": "object"
+    },
+    "file_sha256": {
+      "type": "string"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "report_sha256": {
+      "type": "string"
+    },
+    "rows": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "display_name": {
+            "type": "string"
+          },
+          "expected_revision": {
+            "type": "integer"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "object_id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "row": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "row",
+          "status"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "applicable",
+    "counts",
+    "file_sha256",
+    "report_sha256",
+    "rows",
+    "schema_version"
+  ],
+  "type": "object"
+}

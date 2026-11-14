@@ -1,0 +1,30 @@
+# Version control and local metadata
+.git/
+.gitignore
+.github/
+.vscode/
+.idea/
+
+# Local configuration and credentials
+.env
+.env.*
+*.pem
+*.key
+*.cert
+*.crt
+
+# Build and test output
+build/
+dist/
+*.log
+*.dump
+web/node_modules/
+web/test-results/
+web/playwright-report/
+
+# Local state and editor files
+scratch/
+*.sqlite3
+*.db
+*.swp
+*.swo

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "authenticated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "decision_id": {
+      "type": "string"
+    },
+    "from_entity_id": {
+      "type": "string"
+    },
+    "from_entity_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "to_entity_id": {
+      "type": "string"
+    },
+    "to_entity_revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "actor_issuer",
+    "actor_subject",
+    "authenticated_at",
+    "created_at",
+    "decision_id",
+    "from_entity_id",
+    "from_entity_revision",
+    "reason",
+    "schema_version",
+    "to_entity_id",
+    "to_entity_revision"
+  ],
+  "type": "object"
+}

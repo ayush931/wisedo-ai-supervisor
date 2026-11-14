@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "object_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "object_revision": {
+      "type": "integer"
+    },
+    "promoted_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "promoted_by": {
+      "additionalProperties": false,
+      "properties": {
+        "issuer": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "subject"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "object_id",
+    "object_revision",
+    "promoted_at",
+    "promoted_by"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "current_revision": {
+      "type": "integer"
+    },
+    "id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "replayed_revision": {
+      "type": "integer"
+    },
+    "revisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "additionalProperties": false,
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "display_name": {
+                "maxLength": 128,
+                "type": "string"
+              },
+              "schema_version": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "active",
+              "display_name",
+              "schema_version"
+            ],
+            "type": "object"
+          },
+          "canonical_payload_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "digest_schema_version": {
+            "type": "integer"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "submitted_by": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "body",
+          "canonical_payload_digest",
+          "created_at",
+          "digest_schema_version",
+          "revision",
+          "submitted_by"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "current_revision",
+    "id",
+    "replayed",
+    "revisions"
+  ],
+  "type": "object"
+}

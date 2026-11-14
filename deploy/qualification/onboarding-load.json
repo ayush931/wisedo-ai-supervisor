@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "kind": "onboarding",
+  "issue": "onboarding-I",
+  "description": "Onboarding load gate (proposal section I): N tenants, each created with its first site through `supervisor provision` (with its provisioning audit row and owner invitation); the other sites of each tenant are inserted directly as supervisor_migrator and have no provisioning audit row. Then live operational intake batches and station record writes through the in-process HTTP API as the restricted runtime role, with an outbox consumer folding concurrently and tenant isolation checked as the runtime role throughout. Thresholds were frozen here before the first measured run; never edit them to make a run pass. Basis: every write transaction runs under statement_timeout 10s / lock_timeout 5s; WIS-270 frozen p95 500ms for a scoped read; an intake batch of 20 events is about 100 inserts in one transaction, so it gets twice the station-write budget; a tablet entry must feel immediate (p95 500ms). Errors, quarantined events and cross-tenant rows have zero tolerance, and every one of the 24000 events must be accepted and folded. Queue depth is the peak outbox lag (accepted minus folded events, all sources) and must stay within 20% of the run's 24000 events; the residual lag after the drain must be zero. PASS needs the measured reference host (client CPUs, memory, GOMAXPROCS and the PostgreSQL container's cgroup limits), this exact manifest at HEAD, a clean tree and a supervisor binary built from HEAD; otherwise NOT_QUALIFIED (exit 2).",
+  "seed": 520,
+  "tenants": 4,
+  "sites_per_tenant": 3,
+  "workstations_per_site": 4,
+  "intake_batches_per_site": 100,
+  "events_per_batch": 20,
+  "station_records_per_site": 100,
+  "concurrency": 8,
+  "thresholds": {
+    "intake_p95_ms": 1000,
+    "intake_p99_ms": 2500,
+    "station_write_p95_ms": 500,
+    "station_write_p99_ms": 1500,
+    "provision_max_ms": 10000,
+    "error_rate_max": 0,
+    "max_rss_mib": 512,
+    "queue_depth_max": 4800,
+    "cross_tenant_rows_max": 0
+  },
+  "reference_host": {
+    "description": "4 vCPU / 8 GiB test host running both the load client (GOMAXPROCS=4) and the PostgreSQL container limited with --cpus=4 --memory=8g",
+    "gomaxprocs": 4,
+    "num_cpu": 4,
+    "mem_total_gib": 8,
+    "postgres_cpus": 4,
+    "postgres_memory_bytes": 8589934592
+  }
+}

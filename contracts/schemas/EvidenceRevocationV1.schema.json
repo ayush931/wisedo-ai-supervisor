@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "access_epoch": {
+      "type": "integer"
+    },
+    "revoked": {
+      "type": "boolean"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "state_revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "access_epoch",
+    "revoked",
+    "source_id",
+    "state_revision"
+  ],
+  "type": "object"
+}

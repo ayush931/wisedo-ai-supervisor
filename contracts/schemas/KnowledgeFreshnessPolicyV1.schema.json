@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "authenticated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "basis": {
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "decision_id": {
+      "type": "string"
+    },
+    "max_age_seconds": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "policy_current": {
+      "type": "boolean"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "verdict": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "actor_issuer",
+    "actor_subject",
+    "authenticated_at",
+    "basis",
+    "created_at",
+    "current_revision",
+    "decision_id",
+    "max_age_seconds",
+    "policy_current",
+    "reason",
+    "revision",
+    "schema_version",
+    "verdict"
+  ],
+  "type": "object"
+}

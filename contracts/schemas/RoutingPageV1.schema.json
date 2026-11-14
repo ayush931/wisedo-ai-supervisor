@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "next_cursor": {
+      "type": "string"
+    },
+    "routings": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "additionalProperties": false,
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "display_name": {
+                "maxLength": 128,
+                "type": "string"
+              },
+              "item_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "line_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "schema_version": {
+                "type": "integer"
+              },
+              "steps": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "step_number": {
+                      "type": "integer"
+                    },
+                    "workstation_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "step_number",
+                    "workstation_id"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "active",
+              "display_name",
+              "item_id",
+              "line_id",
+              "schema_version",
+              "steps"
+            ],
+            "type": "object"
+          },
+          "current_revision": {
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "body",
+          "current_revision",
+          "id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "routings"
+  ],
+  "type": "object"
+}

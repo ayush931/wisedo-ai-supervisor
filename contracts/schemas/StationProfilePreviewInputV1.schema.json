@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "job_order_id": {
+      "type": "string"
+    },
+    "job_order_revision": {
+      "type": "integer"
+    },
+    "profile": {
+      "additionalProperties": false,
+      "properties": {
+        "display_name": {
+          "type": "string"
+        },
+        "fields": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "choices": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "max": {
+                "type": "string"
+              },
+              "min": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "label",
+              "name",
+              "required"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "instruction_references": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "document_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "document_id",
+              "revision",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "line_id": {
+          "type": "string"
+        },
+        "schema_version": {
+          "type": "integer"
+        },
+        "template": {
+          "type": "string"
+        },
+        "workstation_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "display_name",
+        "fields",
+        "line_id",
+        "schema_version",
+        "template",
+        "workstation_id"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "profile"
+  ],
+  "type": "object"
+}

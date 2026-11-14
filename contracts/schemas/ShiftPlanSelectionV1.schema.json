@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "ends_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "job_order_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "maxItems": 50,
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "line_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "type": "integer"
+    },
+    "starts_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "timezone": {
+      "maxLength": 64,
+      "type": "string"
+    }
+  },
+  "required": [
+    "ends_at",
+    "job_order_ids",
+    "line_id",
+    "schema_version",
+    "starts_at",
+    "timezone"
+  ],
+  "type": "object"
+}

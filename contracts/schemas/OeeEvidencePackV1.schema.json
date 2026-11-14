@@ -1,0 +1,820 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "calculated_at": {
+      "type": "string"
+    },
+    "cost": {
+      "additionalProperties": false,
+      "properties": {
+        "allocation": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "amount": {
+                "type": "string"
+              },
+              "exact_amount": {
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "level": {
+                "type": "string"
+              },
+              "parent_path": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "amount",
+              "exact_amount",
+              "key",
+              "level",
+              "parent_path",
+              "path"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "avoided_loss": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "cost_reason_codes": {
+          "items": {
+            "enum": [
+              "CONFLICTING_FX",
+              "CONFLICTING_RATE",
+              "CURRENCY_MISMATCH",
+              "EXPIRED_RATE",
+              "MISSING_ATTRIBUTION",
+              "MISSING_RATE",
+              "NO_MEASURE"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "exact_amount": {
+          "type": "string"
+        },
+        "fx_assumptions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "fx_id": {
+                "type": "string"
+              },
+              "rate": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "to": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "from",
+              "fx_id",
+              "rate",
+              "revision",
+              "to"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "lines": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "asset_id": {
+                "type": "string"
+              },
+              "basis": {
+                "type": "string"
+              },
+              "classification": {
+                "enum": [
+                  "PLANNED",
+                  "UNCLASSIFIED",
+                  "UNPLANNED"
+                ],
+                "type": "string"
+              },
+              "contribution_id": {
+                "type": "string"
+              },
+              "cost_reason_codes": {
+                "items": {
+                  "enum": [
+                    "CONFLICTING_FX",
+                    "CONFLICTING_RATE",
+                    "CURRENCY_MISMATCH",
+                    "EXPIRED_RATE",
+                    "MISSING_ATTRIBUTION",
+                    "MISSING_RATE",
+                    "NO_MEASURE"
+                  ],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "exact_amount": {
+                "type": "string"
+              },
+              "fx_id": {
+                "type": "string"
+              },
+              "fx_revision": {
+                "type": "integer"
+              },
+              "line_id": {
+                "type": "string"
+              },
+              "loss_category": {
+                "enum": [
+                  "AVAILABILITY",
+                  "PERFORMANCE",
+                  "QUALITY"
+                ],
+                "type": "string"
+              },
+              "measure_exact": {
+                "type": "string"
+              },
+              "modeled_opportunity": {
+                "type": "string"
+              },
+              "order_id": {
+                "type": "string"
+              },
+              "product_id": {
+                "type": "string"
+              },
+              "rate_id": {
+                "type": "string"
+              },
+              "rate_revision": {
+                "type": "integer"
+              },
+              "reason_code": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "asset_id",
+              "basis",
+              "classification",
+              "contribution_id",
+              "cost_reason_codes",
+              "line_id",
+              "loss_category",
+              "measure_exact",
+              "order_id",
+              "product_id",
+              "reason_code"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "minor_units": {
+          "type": "integer"
+        },
+        "modeled_opportunity": {
+          "type": "string"
+        },
+        "not_computed": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "policy_revision": {
+          "type": "integer"
+        },
+        "rate_assumptions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "asset_id": {
+                "type": "string"
+              },
+              "burden_ratio": {
+                "type": "string"
+              },
+              "currency": {
+                "type": "string"
+              },
+              "effective_end": {
+                "type": "string"
+              },
+              "effective_start": {
+                "type": "string"
+              },
+              "hourly_rate": {
+                "type": "string"
+              },
+              "loss_category": {
+                "enum": [
+                  "AVAILABILITY",
+                  "PERFORMANCE",
+                  "QUALITY"
+                ],
+                "type": "string"
+              },
+              "rate_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "unit_margin": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "asset_id",
+              "currency",
+              "effective_end",
+              "effective_start",
+              "rate_id",
+              "revision"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "realized_savings": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "READY",
+            "LIMITED",
+            "NOT_READY",
+            "INVALID"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "allocation",
+        "avoided_loss",
+        "cost_reason_codes",
+        "currency",
+        "exact_amount",
+        "fx_assumptions",
+        "lines",
+        "minor_units",
+        "modeled_opportunity",
+        "not_computed",
+        "policy_revision",
+        "rate_assumptions",
+        "realized_savings",
+        "status"
+      ],
+      "type": "object"
+    },
+    "data_quality": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_ratio": {
+          "type": "string"
+        },
+        "gap_seconds": {
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "enum": [
+              "AVAILABILITY_OVERSHOOT",
+              "CANCELLED",
+              "CONFLICTING_FACT",
+              "DEADLINE_EXCEEDED",
+              "EXCEEDS_THEORETICAL_BOUNDS",
+              "INVALID_QUALITY_COUNTS",
+              "MISSING_DATA",
+              "MISSING_IDEAL_CYCLE",
+              "MISSING_POLICY",
+              "NEGATIVE_COUNTER_DELTA",
+              "PERFORMANCE_OVERSHOOT",
+              "STALE_SOURCE",
+              "UNSUPPORTED_RULE",
+              "ZERO_DENOMINATOR"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "READY",
+            "LIMITED",
+            "NOT_READY",
+            "INVALID"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "coverage_ratio",
+        "gap_seconds",
+        "reason_codes",
+        "status"
+      ],
+      "type": "object"
+    },
+    "digest": {
+      "type": "string"
+    },
+    "digests": {
+      "additionalProperties": false,
+      "properties": {
+        "calculation": {
+          "type": "string"
+        },
+        "classification": {
+          "type": "string"
+        },
+        "normalized_input": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "calculation",
+        "classification",
+        "normalized_input"
+      ],
+      "type": "object"
+    },
+    "downtime_pareto": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "classification": {
+            "enum": [
+              "PLANNED",
+              "UNCLASSIFIED",
+              "UNPLANNED"
+            ],
+            "type": "string"
+          },
+          "cumulative_percentage": {
+            "type": "string"
+          },
+          "duration_seconds": {
+            "type": "string"
+          },
+          "loss_category": {
+            "enum": [
+              "AVAILABILITY",
+              "PERFORMANCE",
+              "QUALITY"
+            ],
+            "type": "string"
+          },
+          "lost_quantity": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "percentage": {
+            "type": "string"
+          },
+          "rank": {
+            "type": "integer"
+          },
+          "reason_code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "classification",
+          "cumulative_percentage",
+          "duration_seconds",
+          "loss_category",
+          "lost_quantity",
+          "name",
+          "percentage",
+          "rank",
+          "reason_code"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "durations": {
+      "additionalProperties": false,
+      "properties": {
+        "calendar": {
+          "type": "string"
+        },
+        "gap": {
+          "type": "string"
+        },
+        "microstop": {
+          "type": "string"
+        },
+        "planned_exclusion": {
+          "type": "string"
+        },
+        "planned_loss": {
+          "type": "string"
+        },
+        "planned_production": {
+          "type": "string"
+        },
+        "run": {
+          "type": "string"
+        },
+        "stop": {
+          "type": "string"
+        },
+        "unclassified_loss": {
+          "type": "string"
+        },
+        "unplanned_loss": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "calendar",
+        "gap",
+        "microstop",
+        "planned_exclusion",
+        "planned_loss",
+        "planned_production",
+        "run",
+        "stop",
+        "unclassified_loss",
+        "unplanned_loss"
+      ],
+      "type": "object"
+    },
+    "evidence_id": {
+      "type": "string"
+    },
+    "kpis": {
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "additionalProperties": false,
+          "properties": {
+            "denominator": {
+              "type": "string"
+            },
+            "numerator": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "denominator",
+            "numerator",
+            "value"
+          ],
+          "type": "object"
+        },
+        "loading": {
+          "additionalProperties": false,
+          "properties": {
+            "denominator": {
+              "type": "string"
+            },
+            "numerator": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "denominator",
+            "numerator",
+            "value"
+          ],
+          "type": "object"
+        },
+        "oee": {
+          "additionalProperties": false,
+          "properties": {
+            "denominator": {
+              "type": "string"
+            },
+            "numerator": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "denominator",
+            "numerator",
+            "value"
+          ],
+          "type": "object"
+        },
+        "performance": {
+          "additionalProperties": false,
+          "properties": {
+            "denominator": {
+              "type": "string"
+            },
+            "numerator": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "denominator",
+            "numerator",
+            "value"
+          ],
+          "type": "object"
+        },
+        "quality": {
+          "additionalProperties": false,
+          "properties": {
+            "denominator": {
+              "type": "string"
+            },
+            "numerator": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "denominator",
+            "numerator",
+            "value"
+          ],
+          "type": "object"
+        },
+        "teep": {
+          "additionalProperties": false,
+          "properties": {
+            "denominator": {
+              "type": "string"
+            },
+            "numerator": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "denominator",
+            "numerator",
+            "value"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "availability",
+        "loading",
+        "oee",
+        "performance",
+        "quality",
+        "teep"
+      ],
+      "type": "object"
+    },
+    "loss_tree": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "classification": {
+            "enum": [
+              "PLANNED",
+              "UNCLASSIFIED",
+              "UNPLANNED"
+            ],
+            "type": "string"
+          },
+          "contribution_count": {
+            "type": "integer"
+          },
+          "loss_category": {
+            "enum": [
+              "AVAILABILITY",
+              "PERFORMANCE",
+              "QUALITY"
+            ],
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "reason_code": {
+            "type": "string"
+          },
+          "total_duration_seconds": {
+            "type": "string"
+          },
+          "total_lost_quantity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "classification",
+          "contribution_count",
+          "loss_category",
+          "path",
+          "reason_code",
+          "total_duration_seconds",
+          "total_lost_quantity"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "reason_codes": {
+      "items": {
+        "enum": [
+          "AVAILABILITY_OVERSHOOT",
+          "CANCELLED",
+          "CONFLICTING_FACT",
+          "DEADLINE_EXCEEDED",
+          "EXCEEDS_THEORETICAL_BOUNDS",
+          "INVALID_QUALITY_COUNTS",
+          "MISSING_DATA",
+          "MISSING_IDEAL_CYCLE",
+          "MISSING_POLICY",
+          "NEGATIVE_COUNTER_DELTA",
+          "PERFORMANCE_OVERSHOOT",
+          "STALE_SOURCE",
+          "UNSUPPORTED_RULE",
+          "ZERO_DENOMINATOR"
+        ],
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "site_id": {
+      "type": "string"
+    },
+    "sources": {
+      "additionalProperties": false,
+      "properties": {
+        "contribution_digests": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "source_event_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "contribution_digests",
+        "source_event_ids"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "enum": [
+        "READY",
+        "LIMITED",
+        "NOT_READY",
+        "INVALID"
+      ],
+      "type": "string"
+    },
+    "versions": {
+      "additionalProperties": false,
+      "properties": {
+        "cost_policy_revision": {
+          "type": "integer"
+        },
+        "formula_version": {
+          "type": "string"
+        },
+        "fx_revisions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "kernel_version": {
+          "type": "string"
+        },
+        "microstop_threshold_sec": {
+          "type": "string"
+        },
+        "policy_digest": {
+          "type": "string"
+        },
+        "policy_version": {
+          "type": "string"
+        },
+        "rate_revisions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rework_counts_as_good": {
+          "type": "boolean"
+        },
+        "taxonomy_digest": {
+          "type": "string"
+        },
+        "taxonomy_revision": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cost_policy_revision",
+        "formula_version",
+        "fx_revisions",
+        "kernel_version",
+        "microstop_threshold_sec",
+        "policy_digest",
+        "policy_version",
+        "rate_revisions",
+        "rework_counts_as_good",
+        "taxonomy_digest",
+        "taxonomy_revision"
+      ],
+      "type": "object"
+    },
+    "window_end": {
+      "type": "string"
+    },
+    "window_start": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "calculated_at",
+    "cost",
+    "data_quality",
+    "digest",
+    "digests",
+    "downtime_pareto",
+    "durations",
+    "evidence_id",
+    "kpis",
+    "loss_tree",
+    "reason_codes",
+    "run_id",
+    "schema_version",
+    "site_id",
+    "sources",
+    "status",
+    "versions",
+    "window_end",
+    "window_start"
+  ],
+  "type": "object"
+}

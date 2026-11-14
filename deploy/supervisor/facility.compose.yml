@@ -1,0 +1,54 @@
+# WIS-709 test infrastructure. Use only through scripts/supervisor/facility.sh.
+name: supervisor-facility
+x-app: &app
+  image: supervisor-facility:local
+  user: "${FACILITY_UID:?}:${FACILITY_GID:?}"
+  network_mode: host
+  working_dir: /app
+  labels:
+    com.wisedo.facility.root: "${FACILITY_RUN_ROOT:?}"
+  environment: &app-env
+    SUPERVISOR_ENVIRONMENT: local
+    SUPERVISOR_DATABASE_URL: "${SUPERVISOR_DATABASE_URL:?}"
+    SUPERVISOR_PUBLIC_ORIGIN: "http://127.0.0.1:62376"
+    SUPERVISOR_LISTEN_ADDRESS: "127.0.0.1:62376"
+    SUPERVISOR_OIDC_ISSUER: "http://127.0.0.1:62077/realms/supervisor-local"
+    SUPERVISOR_OIDC_CLIENT_SECRET: "${SUPERVISOR_OIDC_CLIENT_SECRET:?}"
+    SUPERVISOR_TEMPORAL_ADDRESS: "127.0.0.1:62277"
+    SUPERVISOR_TEMPORAL_TASK_QUEUE: supervisor-facility
+    SUPERVISOR_AGENT_PROVIDER: fixture
+    SUPERVISOR_AGENT_MODEL: fixture-model
+    SUPERVISOR_AGENT_MODEL_REVISION: sha256:fixture
+    SUPERVISOR_AGENT_MODE_ENABLED: "true"
+    SUPERVISOR_CHAT_ANSWERING_ENABLED: "true"
+    SUPERVISOR_AGENT_FIXTURE_SCRIPT: /app/deploy/supervisor/agent-fixture-script.pilot.v1.json
+    SUPERVISOR_RELAY_TENANT_IDS: '["00000000-0000-4000-8000-000000000290"]'
+  volumes:
+    - "${FACILITY_REPO_ROOT:?}/web/dist:/app/web/dist:ro"
+    - "${FACILITY_REPO_ROOT:?}/deploy:/app/deploy:ro"
+services:
+  postgres:
+    labels:
+      com.wisedo.facility.root: "${FACILITY_RUN_ROOT:?}"
+    volumes:
+      - "${FACILITY_RUN_ROOT:?}/pgdata:/var/lib/postgresql/data"
+      - "${FACILITY_RUN_ROOT:?}/bootstrap.sh:/docker-entrypoint-initdb.d/010-supervisor.sh:ro"
+  keycloak:
+    labels:
+      com.wisedo.facility.root: "${FACILITY_RUN_ROOT:?}"
+  temporal:
+    labels:
+      com.wisedo.facility.root: "${FACILITY_RUN_ROOT:?}"
+  api:
+    <<: *app
+    command: [api]
+  worker:
+    <<: *app
+    command: [worker]
+# The base declares this unused volume; bind even its backing directory under /var/tmp.
+volumes:
+  postgres_data:
+    driver_opts:
+      type: none
+      o: bind
+      device: "${FACILITY_RUN_ROOT:?}/pgdata"

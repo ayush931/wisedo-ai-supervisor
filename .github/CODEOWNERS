@@ -1,0 +1,14 @@
+# Global repository ownership
+
+* @ayush931 @21Ansh
+
+# Architecture and contract definitions
+
+/docs/ @21Ansh @ayush931
+/internal/ @21Ansh @ayush931
+/cmd/ @ayush931
+/web/ @ayush931
+
+# CI/CD and security workflows
+
+/.github/ @ayush931 @21Ansh

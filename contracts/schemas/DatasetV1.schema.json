@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "dataset_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "site_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "asset_id",
+    "dataset_id",
+    "digest",
+    "site_id"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "plan": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "type": "string"
+        },
+        "order_id": {
+          "type": "string"
+        },
+        "plan_revision": {
+          "type": "integer"
+        },
+        "planned_breaks": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "end": {
+                "type": "string"
+              },
+              "start": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "end",
+              "start"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "rate_segments": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "end": {
+                "type": "string"
+              },
+              "start": {
+                "type": "string"
+              },
+              "target_good_units_per_second": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "end",
+              "start",
+              "target_good_units_per_second"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "window_end": {
+          "type": "string"
+        },
+        "window_start": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_id",
+        "order_id",
+        "plan_revision",
+        "planned_breaks",
+        "rate_segments",
+        "unit",
+        "window_end",
+        "window_start"
+      ],
+      "type": "object"
+    },
+    "source_span_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "plan",
+    "source_span_ids"
+  ],
+  "type": "object"
+}

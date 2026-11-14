@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "author_kind": {
+      "enum": [
+        "agent",
+        "human"
+      ],
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "created_by": {
+      "additionalProperties": false,
+      "properties": {
+        "issuer": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "subject"
+      ],
+      "type": "object"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "draft_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "item",
+        "line",
+        "routing",
+        "workstation_profile"
+      ],
+      "type": "string"
+    },
+    "promotion": {
+      "additionalProperties": false,
+      "properties": {
+        "object_id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "object_revision": {
+          "type": "integer"
+        },
+        "promoted_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "promoted_by": {
+          "additionalProperties": false,
+          "properties": {
+            "issuer": {
+              "type": "string"
+            },
+            "subject": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "issuer",
+            "subject"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "object_id",
+        "object_revision",
+        "promoted_at",
+        "promoted_by"
+      ],
+      "type": "object"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "revisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "description": "Any JSON value"
+          },
+          "body_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "citations": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "available": {
+                  "type": "boolean"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "source_id": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "source_revision": {
+                  "type": "integer"
+                },
+                "span_id": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "unavailable_reason": {
+                  "enum": [
+                    "ACCESS_EPOCH_CHANGED",
+                    "FIELD_CHANGED",
+                    "SOURCE_REVOKED"
+                  ],
+                  "type": "string"
+                }
+              },
+              "required": [
+                "available",
+                "path",
+                "source_id",
+                "source_revision",
+                "span_id"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "dropped_citations": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "reason": {
+                  "enum": [
+                    "ACCESS_EPOCH_CHANGED",
+                    "FIELD_CHANGED",
+                    "SOURCE_REVOKED"
+                  ],
+                  "type": "string"
+                },
+                "span_id": {
+                  "format": "uuid",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "reason",
+                "span_id"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "edited_by_kind": {
+            "enum": [
+              "agent",
+              "human"
+            ],
+            "type": "string"
+          },
+          "editor": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "run_id": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "body",
+          "body_digest",
+          "citations",
+          "created_at",
+          "dropped_citations",
+          "edited_by_kind",
+          "revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "run_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "discarded",
+        "draft",
+        "promoted"
+      ],
+      "type": "string"
+    },
+    "target_expected_revision": {
+      "type": "integer"
+    },
+    "target_object_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "author_kind",
+    "created_at",
+    "current_revision",
+    "draft_id",
+    "kind",
+    "replayed",
+    "revisions",
+    "status",
+    "updated_at"
+  ],
+  "type": "object"
+}

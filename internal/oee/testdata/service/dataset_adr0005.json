@@ -1,0 +1,102 @@
+{
+ "dataset_id": "32323232-3232-4232-8232-323232323232",
+ "schema_id": "oee.wisedo.io/v1/dataset",
+ "asset_id": "22222222-2222-4222-8222-222222222222",
+ "window_start": "2026-10-01T08:00:00Z",
+ "window_end": "2026-10-01T16:00:00Z",
+ "sources": [
+  {
+   "source_key": "plc",
+   "owner_service": "mes",
+   "source_revision": "r1",
+   "consistency_mode": "SNAPSHOT",
+   "snapshot_ref": "snapshot-1"
+  }
+ ],
+ "facts": [
+  {
+   "event_id": "run-1",
+   "source_key": "plc",
+   "state": "RUNNING",
+   "start": "2026-10-01T08:00:00Z",
+   "end": "2026-10-01T12:00:00Z",
+   "event_at": "2026-10-01T08:00:00Z",
+   "recorded_at": "2026-10-01T12:00:01Z",
+   "revision": 1,
+   "payload_digest": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  {
+   "event_id": "down-1",
+   "source_key": "plc",
+   "state": "UNPLANNED_DOWNTIME",
+   "start": "2026-10-01T12:00:00Z",
+   "end": "2026-10-01T12:40:00Z",
+   "event_at": "2026-10-01T12:00:00Z",
+   "recorded_at": "2026-10-01T12:40:01Z",
+   "revision": 1,
+   "payload_digest": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  {
+   "event_id": "chg-1",
+   "source_key": "plc",
+   "state": "CHANGEOVER",
+   "start": "2026-10-01T12:40:00Z",
+   "end": "2026-10-01T13:00:00Z",
+   "event_at": "2026-10-01T12:40:00Z",
+   "recorded_at": "2026-10-01T13:00:01Z",
+   "revision": 1,
+   "payload_digest": "3333333333333333333333333333333333333333333333333333333333333333"
+  },
+  {
+   "event_id": "run-2",
+   "source_key": "plc",
+   "state": "RUNNING",
+   "start": "2026-10-01T13:00:00Z",
+   "end": "2026-10-01T16:00:00Z",
+   "event_at": "2026-10-01T13:00:00Z",
+   "recorded_at": "2026-10-01T16:00:01Z",
+   "revision": 1,
+   "payload_digest": "4444444444444444444444444444444444444444444444444444444444444444"
+  }
+ ],
+ "exclusions": [
+  {
+   "exclusion_id": "brk-1",
+   "state": "PLANNED_BREAK",
+   "start": "2026-10-01T08:30:00Z",
+   "end": "2026-10-01T08:45:00Z",
+   "revision": 1,
+   "recorded_at": "2026-09-30T08:00:00Z"
+  },
+  {
+   "exclusion_id": "brk-2",
+   "state": "PLANNED_BREAK",
+   "start": "2026-10-01T13:00:00Z",
+   "end": "2026-10-01T13:15:00Z",
+   "revision": 1,
+   "recorded_at": "2026-09-30T08:00:00Z"
+  }
+ ],
+ "counts": [
+  {
+   "contribution_id": "shift-total",
+   "product_id": "bottle",
+   "start": "2026-10-01T08:00:00Z",
+   "end": "2026-10-01T16:00:00Z",
+   "total": "19500",
+   "scrap": "300",
+   "unit": "pcs",
+   "source_key": "plc"
+  }
+ ],
+ "ideal_cycles": [
+  {
+   "product_id": "bottle",
+   "revision": 1,
+   "seconds_per_unit": "1",
+   "unit": "s/unit",
+   "source_key": "plc"
+  }
+ ],
+ "provenance_digest": ""
+}

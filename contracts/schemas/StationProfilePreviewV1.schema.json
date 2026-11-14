@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "conflicts": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "fields": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "additionalProperties": false,
+            "properties": {
+              "choices": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "kind": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "max": {
+                "type": "string"
+              },
+              "min": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "label",
+              "name",
+              "required"
+            ],
+            "type": "object"
+          },
+          "source": {
+            "enum": [
+              "both",
+              "job_order",
+              "station_profile"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "source"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "instructions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "instruction": {
+            "additionalProperties": false,
+            "properties": {
+              "document_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              }
+            },
+            "required": [
+              "document_id",
+              "revision",
+              "sha256"
+            ],
+            "type": "object"
+          },
+          "reason": {
+            "enum": [
+              "INSTRUCTION_NOT_CONFIRMED",
+              "INSTRUCTION_REVOKED",
+              "INSTRUCTION_SUPERSEDED"
+            ],
+            "type": "string"
+          },
+          "source": {
+            "enum": [
+              "both",
+              "job_order",
+              "station_profile"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "available",
+          "instruction",
+          "source"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "job_order_id": {
+      "type": "string"
+    },
+    "job_order_revision": {
+      "type": "integer"
+    },
+    "profile_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "ready": {
+      "type": "boolean"
+    },
+    "template": {
+      "type": "string"
+    },
+    "workstation_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "conflicts",
+    "fields",
+    "instructions",
+    "profile_digest",
+    "ready",
+    "template",
+    "workstation_id"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "drafts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "author_kind": {
+            "enum": [
+              "agent",
+              "human"
+            ],
+            "type": "string"
+          },
+          "citation_count": {
+            "type": "integer"
+          },
+          "current_revision": {
+            "type": "integer"
+          },
+          "draft_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "item",
+              "line",
+              "routing",
+              "workstation_profile"
+            ],
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "discarded",
+              "draft",
+              "promoted"
+            ],
+            "type": "string"
+          },
+          "target_expected_revision": {
+            "type": "integer"
+          },
+          "target_object_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "unavailable_citation_count": {
+            "type": "integer"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "author_kind",
+          "citation_count",
+          "current_revision",
+          "draft_id",
+          "kind",
+          "status",
+          "unavailable_citation_count",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "next_cursor": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "drafts"
+  ],
+  "type": "object"
+}

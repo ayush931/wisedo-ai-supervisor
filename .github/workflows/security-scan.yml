@@ -1,0 +1,156 @@
+name: Security Scan
+
+# Vulnerability + code scanning without GHAS. Findings appear in the job logs,
+# the run Summary, and downloadable artifacts. Complements the Bandit /
+# pip-audit / secret-scan gates in security.yml.
+#
+# Tool coverage:
+#   - Trivy fs          : SCA on go.sum / web/package-lock.json,
+#                         secrets, Dockerfile misconfig            [report-only]
+#   - Trivy image gate  : builds each image (linux/amd64); fails the PR on any
+#                         fixable CRITICAL (--ignore-unfixed is the only control;
+#                         no suppression file)
+#   - Trivy image full  : HIGH+CRITICAL including no-fix items for the audit
+#                         trail; never blocks merge
+#   - Dependabot        : monthly dependency PRs (dependabot.yml)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: security-scan-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  TRIVY_VERSION: "0.71.0"
+  TRIVY_SHA256: "30a3d22b23f88c233f1658f562fb477cae3b3e8b4761109d515b7698daf85814" # trivy_0.71.0_Linux-64bit.tar.gz
+
+jobs:
+  # ── 1. Filesystem scan (fast, every PR) ─────────────────────────────────
+  trivy:
+    name: Trivy — deps / secrets / misconfig
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Trivy
+        run: |
+          curl -sfL "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz" \
+            -o "$RUNNER_TEMP/trivy.tar.gz"
+          # Published SHA-256 (trivy_<version>_checksums.txt); bump it with TRIVY_VERSION.
+          echo "${TRIVY_SHA256}  $RUNNER_TEMP/trivy.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/trivy.tar.gz" -C "$RUNNER_TEMP" trivy
+          "$RUNNER_TEMP/trivy" --version
+
+      - name: Trivy filesystem scan (report-only)
+        run: |
+          "$RUNNER_TEMP/trivy" fs --scanners vuln,secret,misconfig \
+            --severity HIGH,CRITICAL \
+            --ignore-unfixed \
+            --skip-dirs web/node_modules,.venv \
+            --exit-code 0 \
+            --format table \
+            --output trivy-fs.txt .
+          {
+            echo '### Trivy fs — HIGH/CRITICAL fixable (deps, secrets, Dockerfile misconfig)'
+            echo '```'
+            cat trivy-fs.txt 2>/dev/null || echo '(no findings)'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: trivy-fs-report
+          path: trivy-fs.txt
+
+  # ── 2. Image gate — blocks merge on fixable CRITICALs ──────────────────
+  trivy-image-gate:
+    name: Trivy image — CRITICAL gate (${{ matrix.image }})
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - dockerfile: Dockerfile
+            image: ai-supervisor
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install Trivy
+        run: |
+          curl -sfL "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz" \
+            -o "$RUNNER_TEMP/trivy.tar.gz"
+          # Published SHA-256 (trivy_<version>_checksums.txt); bump it with TRIVY_VERSION.
+          echo "${TRIVY_SHA256}  $RUNNER_TEMP/trivy.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/trivy.tar.gz" -C "$RUNNER_TEMP" trivy
+
+      - name: Build ${{ matrix.image }} (linux/amd64)
+        run: docker build --pull -f ${{ matrix.dockerfile }} -t ${{ matrix.image }}:scan-${{ github.run_id }} .
+
+      - name: Gate — CRITICAL with available fix
+        run: |
+          set +e
+          "$RUNNER_TEMP/trivy" image \
+            --severity CRITICAL \
+            --ignore-unfixed \
+            --exit-code 1 \
+            --format table \
+            --output trivy-image-gate-${{ matrix.image }}.txt \
+            ${{ matrix.image }}:scan-${{ github.run_id }}
+          gate_exit=$?
+          {
+            echo "### Trivy image gate — ${{ matrix.image }} (fixable CRITICAL only)"
+            if [ "$gate_exit" -eq 0 ]; then
+              echo 'No fixable CRITICAL vulnerabilities found.'
+            else
+              echo 'Fixable CRITICAL vulnerabilities — must resolve before merge.'
+            fi
+            echo '```'
+            cat trivy-image-gate-${{ matrix.image }}.txt 2>/dev/null || echo '(no output)'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $gate_exit
+
+      - name: Full report — all HIGH+CRITICAL (including no-fix / accepted-risk)
+        if: always()
+        run: |
+          "$RUNNER_TEMP/trivy" image \
+            --severity HIGH,CRITICAL \
+            --exit-code 0 \
+            --format table \
+            --output trivy-image-full-${{ matrix.image }}.txt \
+            ${{ matrix.image }}:scan-${{ github.run_id }}
+          {
+            echo "### Trivy image full — ${{ matrix.image }} (HIGH+CRITICAL incl. no-fix)"
+            echo '_No-fix items have no upstream patch available; they are accepted-risk pending vendor release._'
+            echo '```'
+            cat trivy-image-full-${{ matrix.image }}.txt 2>/dev/null || echo '(no findings)'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: trivy-image-${{ matrix.image }}
+          path: |
+            trivy-image-gate-${{ matrix.image }}.txt
+            trivy-image-full-${{ matrix.image }}.txt
+
+      - name: Remove scan image
+        if: always()
+        run: docker image rm -f ${{ matrix.image }}:scan-${{ github.run_id }} >/dev/null 2>&1 || true
+

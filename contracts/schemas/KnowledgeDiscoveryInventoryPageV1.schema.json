@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "inventories": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "capability": {
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "current_revision": {
+            "type": "integer"
+          },
+          "inventory_id": {
+            "type": "string"
+          },
+          "process_display_name": {
+            "type": "string"
+          },
+          "process_id": {
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "capability",
+          "created_at",
+          "current_revision",
+          "inventory_id",
+          "process_display_name",
+          "process_id",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "next_cursor": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "inventories"
+  ],
+  "type": "object"
+}

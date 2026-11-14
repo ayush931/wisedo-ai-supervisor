@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "current_revision": {
+      "type": "integer"
+    },
+    "id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "replayed_revision": {
+      "type": "integer"
+    },
+    "revisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "additionalProperties": false,
+            "properties": {
+              "active": {
+                "type": "boolean"
+              },
+              "display_name": {
+                "maxLength": 128,
+                "type": "string"
+              },
+              "item_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "line_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "schema_version": {
+                "type": "integer"
+              },
+              "steps": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "step_number": {
+                      "type": "integer"
+                    },
+                    "workstation_id": {
+                      "format": "uuid",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "step_number",
+                    "workstation_id"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "active",
+              "display_name",
+              "item_id",
+              "line_id",
+              "schema_version",
+              "steps"
+            ],
+            "type": "object"
+          },
+          "canonical_payload_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "digest_schema_version": {
+            "type": "integer"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "submitted_by": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "body",
+          "canonical_payload_digest",
+          "created_at",
+          "digest_schema_version",
+          "revision",
+          "submitted_by"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "current_revision",
+    "id",
+    "replayed",
+    "revisions"
+  ],
+  "type": "object"
+}

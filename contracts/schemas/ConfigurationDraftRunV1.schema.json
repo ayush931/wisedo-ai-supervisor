@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "draft_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "outcome_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "outcome_status": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "draft_ids",
+    "outcome_reasons",
+    "run_id",
+    "session_id",
+    "state"
+  ],
+  "type": "object"
+}

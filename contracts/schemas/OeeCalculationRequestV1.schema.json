@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "dataset": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "maxLength": 36,
+          "type": "string"
+        },
+        "counts": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "conforming": {
+                "type": "string"
+              },
+              "contribution_id": {
+                "type": "string"
+              },
+              "end": {
+                "type": "string"
+              },
+              "product_id": {
+                "type": "string"
+              },
+              "rework": {
+                "type": "string"
+              },
+              "routing_id": {
+                "type": "string"
+              },
+              "scrap": {
+                "type": "string"
+              },
+              "source_key": {
+                "type": "string"
+              },
+              "start": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "contribution_id",
+              "end",
+              "product_id",
+              "source_key",
+              "start",
+              "total",
+              "unit"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "dataset_id": {
+          "maxLength": 36,
+          "type": "string"
+        },
+        "exclusions": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "end": {
+                "type": "string"
+              },
+              "exclusion_id": {
+                "type": "string"
+              },
+              "recorded_at": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "start": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "end",
+              "exclusion_id",
+              "recorded_at",
+              "revision",
+              "start",
+              "state"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "facts": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "end": {
+                "type": "string"
+              },
+              "event_at": {
+                "type": "string"
+              },
+              "event_id": {
+                "type": "string"
+              },
+              "payload_digest": {
+                "type": "string"
+              },
+              "recorded_at": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "source_key": {
+                "type": "string"
+              },
+              "start": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "end",
+              "event_at",
+              "event_id",
+              "payload_digest",
+              "recorded_at",
+              "revision",
+              "source_key",
+              "start",
+              "state"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "ideal_cycles": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "effective_end": {
+                "type": "string"
+              },
+              "effective_start": {
+                "type": "string"
+              },
+              "product_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "routing_id": {
+                "type": "string"
+              },
+              "seconds_per_unit": {
+                "type": "string"
+              },
+              "source_key": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "product_id",
+              "revision",
+              "seconds_per_unit",
+              "source_key",
+              "unit"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "provenance_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "schema_id": {
+          "maxLength": 64,
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "consistency_mode": {
+                "type": "string"
+              },
+              "owner_service": {
+                "maxLength": 128,
+                "type": "string"
+              },
+              "snapshot_ref": {
+                "maxLength": 256,
+                "type": "string"
+              },
+              "source_key": {
+                "maxLength": 128,
+                "type": "string"
+              },
+              "source_revision": {
+                "maxLength": 128,
+                "type": "string"
+              },
+              "watermark_ref": {
+                "maxLength": 256,
+                "type": "string"
+              }
+            },
+            "required": [
+              "consistency_mode",
+              "owner_service",
+              "source_key",
+              "source_revision"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "window_end": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_id",
+        "counts",
+        "dataset_id",
+        "exclusions",
+        "facts",
+        "ideal_cycles",
+        "provenance_digest",
+        "schema_id",
+        "sources",
+        "window_end",
+        "window_start"
+      ],
+      "type": "object"
+    },
+    "expected_policy_revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "dataset"
+  ],
+  "type": "object"
+}

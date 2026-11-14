@@ -1,0 +1,32 @@
+# Automated dependency-update PRs. Grouped to keep PR volume low: minor and
+# patch updates per ecosystem land in one PR; major bumps come individually.
+version: 2
+updates:
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule: { interval: "monthly" }
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: "npm"
+    directory: "/web"
+    schedule: { interval: "monthly" }
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: "docker"
+    directories: ["/", "/deploy/supervisor", "/deploy/aws/training"]
+    schedule: { interval: "monthly" }
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: { interval: "monthly" }
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: ["minor", "patch"]

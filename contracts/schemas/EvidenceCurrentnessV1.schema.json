@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "authenticated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "authority_decision_id": {
+      "type": "string"
+    },
+    "authority_revision": {
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "source_access_epoch": {
+      "type": "integer"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "source_revision": {
+      "type": "integer"
+    },
+    "source_sha256": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string"
+    },
+    "verification_current": {
+      "type": "boolean"
+    },
+    "verification_id": {
+      "type": "string"
+    },
+    "verified_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "actor_issuer",
+    "actor_subject",
+    "authenticated_at",
+    "authority_decision_id",
+    "authority_revision",
+    "created_at",
+    "current_revision",
+    "reason",
+    "revision",
+    "schema_version",
+    "source_access_epoch",
+    "source_id",
+    "source_revision",
+    "source_sha256",
+    "verdict",
+    "verification_current",
+    "verification_id",
+    "verified_at"
+  ],
+  "type": "object"
+}

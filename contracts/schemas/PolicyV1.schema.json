@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "policy_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "site_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "digest",
+    "policy_id",
+    "site_id"
+  ],
+  "type": "object"
+}

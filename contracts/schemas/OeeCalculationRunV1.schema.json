@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "accepted_at": {
+      "type": "string"
+    },
+    "asset_id": {
+      "type": "string"
+    },
+    "cancel_generation": {
+      "type": "integer"
+    },
+    "dataset_id": {
+      "type": "string"
+    },
+    "deadline_at": {
+      "type": "string"
+    },
+    "evidence_id": {
+      "type": "string"
+    },
+    "failure_code": {
+      "type": "string"
+    },
+    "finished_at": {
+      "type": "string"
+    },
+    "policy": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "policy_id": {
+          "maxLength": 36,
+          "type": "string"
+        },
+        "policy_revision_id": {
+          "maxLength": 36,
+          "type": "string"
+        },
+        "revision": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "digest",
+        "policy_id",
+        "policy_revision_id",
+        "revision"
+      ],
+      "type": "object"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "result_status": {
+      "enum": [
+        "READY",
+        "LIMITED",
+        "NOT_READY",
+        "INVALID"
+      ],
+      "type": "string"
+    },
+    "row_version": {
+      "type": "integer"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "started_at": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "truth_state": {
+      "type": "string"
+    },
+    "window_end": {
+      "type": "string"
+    },
+    "window_start": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "accepted_at",
+    "asset_id",
+    "cancel_generation",
+    "dataset_id",
+    "deadline_at",
+    "policy",
+    "replayed",
+    "row_version",
+    "run_id",
+    "status",
+    "window_end",
+    "window_start"
+  ],
+  "type": "object"
+}

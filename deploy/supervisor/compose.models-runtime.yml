@@ -1,0 +1,52 @@
+# Optional container consumers of the private model network. Supply the API/worker's
+# existing deployment settings in runtime.env; this does not provision identities.
+services:
+  api:
+    profiles: [runtime]
+    build:
+      context: ../..
+      dockerfile: deploy/supervisor/Dockerfile
+    env_file: ${SUPERVISOR_RUNTIME_ENV_FILE:-./runtime.env}
+    environment: &local-model-settings
+      SUPERVISOR_AGENT_PROVIDER: local
+      SUPERVISOR_AGENT_TIMEOUT: ${SUPERVISOR_AGENT_TIMEOUT:-120s}
+      SUPERVISOR_AGENT_BASE_URL: http://llm-chat:8080
+      SUPERVISOR_AGENT_ENDPOINT_ALLOWLIST: llm-chat
+      SUPERVISOR_AGENT_ENDPOINT_ADDRS: ${SUPERVISOR_CHAT_IP:-10.253.183.2}:8080
+      # Keep MAX_CONCURRENT at or below llm-chat's --parallel slots in compose.yml (1 by
+      # default). With one slot, llama.cpp makes a second call wait for the first; a waiting
+      # call can then exceed its own time limit. If slots are raised, llama.cpp splits
+      # --ctx-size across them, and each WIS-702 local call needs about 12k tokens: too small a
+      # share overflows ("Context size has been exceeded"), opens the provider circuit breaker
+      # and refuses every chat. So raise --ctx-size to at least slots x (12k + output) first.
+      # api and worker each apply this limit, so two calls can still reach llm-chat at once.
+      SUPERVISOR_AGENT_MAX_CONCURRENT: ${SUPERVISOR_AGENT_MAX_CONCURRENT:-1}
+      SUPERVISOR_AGENT_MODEL: ${SUPERVISOR_AGENT_MODEL:-unsloth/Qwen3.5-9B-GGUF:Q4_K_M}
+      SUPERVISOR_AGENT_MODEL_REVISION: ${SUPERVISOR_AGENT_MODEL_REVISION:-}
+      SUPERVISOR_AGENT_VISION_MODEL: ${SUPERVISOR_AGENT_MODEL:-unsloth/Qwen3.5-9B-GGUF:Q4_K_M}
+      SUPERVISOR_AGENT_VISION_MODEL_REVISION: ${SUPERVISOR_AGENT_VISION_MODEL_REVISION:-}
+      SUPERVISOR_EMBEDDINGS_BASE_URL: http://llm-embed:8080
+      SUPERVISOR_EMBEDDINGS_ENABLED: "true"
+      SUPERVISOR_EMBEDDINGS_TIMEOUT: ${SUPERVISOR_EMBEDDINGS_TIMEOUT:-8s}
+      SUPERVISOR_EMBEDDINGS_ENDPOINT_ALLOWLIST: llm-embed
+      SUPERVISOR_EMBEDDINGS_ENDPOINT_ADDRS: ${SUPERVISOR_EMBED_IP:-10.253.183.3}:8080
+      SUPERVISOR_EMBEDDINGS_MODEL: ${SUPERVISOR_EMBEDDINGS_MODEL:-Qwen3-Embedding-0.6B}
+      SUPERVISOR_EMBEDDINGS_MODEL_REVISION: ${SUPERVISOR_EMBEDDINGS_MODEL_REVISION:-}
+    command: [api]
+    ports: ["127.0.0.1:${SUPERVISOR_API_PORT:-58176}:8080"]
+    networks: [default, models]
+    depends_on: &models-ready
+      llm-chat:
+        condition: service_healthy
+      llm-embed:
+        condition: service_healthy
+  worker:
+    profiles: [runtime]
+    build:
+      context: ../..
+      dockerfile: deploy/supervisor/Dockerfile
+    env_file: ${SUPERVISOR_RUNTIME_ENV_FILE:-./runtime.env}
+    environment: *local-model-settings
+    command: [worker]
+    networks: [default, models]
+    depends_on: *models-ready

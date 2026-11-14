@@ -1,0 +1,147 @@
+# LOCAL REHEARSAL ONLY: not a production deployment (see LOCAL-ONLY.md in the release bundle).
+# Local development dependencies only. API and worker run on the host to share
+# the browser-visible OIDC issuer. This is not a production deployment profile.
+name: supervisor-foundation-local
+services:
+  llm-chat:
+    profiles: [models]
+    image: &llama-image ghcr.io/ggml-org/llama.cpp@sha256:5bb779a449a18d8f4333e9814e887746342fe555c528f5eabc92b2093e32673a
+    pull_policy: never
+    entrypoint: [/bin/sh, /model-entrypoint.sh]
+    # Non-root: the model files, their directories and symlink targets must be readable by it.
+    user: &model-user "${SUPERVISOR_MODELS_UID:-65534}:${SUPERVISOR_MODELS_GID:-65534}"
+    # --parallel bounds SUPERVISOR_AGENT_MAX_CONCURRENT in compose.models-runtime.yml; change both together.
+    command: [chat, --host, 0.0.0.0, --port, "8080", --ctx-size, "16384", --parallel, "1", --jinja, --chat-template-kwargs, '{"enable_thinking":false}', -ngl, "0", --no-mmproj-offload, --threads, "4"]
+    environment:
+      SUPERVISOR_AGENT_MODEL: ${SUPERVISOR_AGENT_MODEL:-unsloth/Qwen3.5-9B-GGUF:Q4_K_M}
+      SUPERVISOR_AGENT_MODEL_FILE: ${SUPERVISOR_AGENT_MODEL_FILE:-Qwen3.5-9B-Q4_K_M.gguf}
+      SUPERVISOR_AGENT_MODEL_REVISION: ${SUPERVISOR_AGENT_MODEL_REVISION:-}
+      SUPERVISOR_AGENT_VISION_MODEL_FILE: ${SUPERVISOR_AGENT_VISION_MODEL_FILE:-mmproj-BF16.gguf}
+      SUPERVISOR_AGENT_VISION_MODEL_REVISION: ${SUPERVISOR_AGENT_VISION_MODEL_REVISION:-}
+    volumes: &model-volumes
+      - type: bind
+        source: ${SUPERVISOR_MODELS_DIR:-/nonexistent-supervisor-models}
+        target: /models
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ./model-entrypoint.sh
+        target: /model-entrypoint.sh
+        read_only: true
+        bind:
+          create_host_path: false
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    networks:
+      models:
+        ipv4_address: ${SUPERVISOR_CHAT_IP:-10.253.183.2}
+    healthcheck: &model-health
+      test: [CMD, curl, --fail, --silent, --max-time, "3", http://127.0.0.1:8080/health]
+      interval: 10s
+      timeout: 5s
+      start_period: 5m
+      retries: 30
+  llm-embed:
+    profiles: [models]
+    image: *llama-image
+    pull_policy: never
+    entrypoint: [/bin/sh, /model-entrypoint.sh]
+    user: *model-user
+    command: [embed, --host, 0.0.0.0, --port, "8080", --ctx-size, "8192", --parallel, "1", -ngl, "0", --threads, "4"]
+    environment:
+      SUPERVISOR_EMBEDDINGS_MODEL: ${SUPERVISOR_EMBEDDINGS_MODEL:-Qwen3-Embedding-0.6B}
+      SUPERVISOR_EMBEDDINGS_MODEL_FILE: ${SUPERVISOR_EMBEDDINGS_MODEL_FILE:-Qwen3-Embedding-0.6B-Q8_0.gguf}
+      SUPERVISOR_EMBEDDINGS_MODEL_REVISION: ${SUPERVISOR_EMBEDDINGS_MODEL_REVISION:-}
+    volumes: *model-volumes
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    networks:
+      models:
+        ipv4_address: ${SUPERVISOR_EMBED_IP:-10.253.183.3}
+    healthcheck: *model-health
+  postgres:
+    # WIS-627: PostgreSQL 17 with pgvector 0.8.0 (Debian). Moving an existing volume from the
+    # earlier Alpine image changes the libc collation: run REINDEX DATABASE after the upgrade.
+    image: pgvector/pgvector:0.8.0-pg17@sha256:40b404964359299eefdd5f8518facf1886c562848cf4de13b6eaf91cb70c2b87
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?set POSTGRES_ADMIN_PASSWORD}
+      SUPERVISOR_MIGRATION_PASSWORD: ${SUPERVISOR_MIGRATION_PASSWORD:?set SUPERVISOR_MIGRATION_PASSWORD}
+      SUPERVISOR_RUNTIME_PASSWORD: ${SUPERVISOR_RUNTIME_PASSWORD:?set SUPERVISOR_RUNTIME_PASSWORD}
+      KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?set KEYCLOAK_DB_PASSWORD}
+      TEMPORAL_DB_PASSWORD: ${TEMPORAL_DB_PASSWORD:?set TEMPORAL_DB_PASSWORD}
+    ports:
+      - "127.0.0.1:${SUPERVISOR_PG_PORT:-55477}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./bootstrap.sh:/docker-entrypoint-initdb.d/010-supervisor.sh:ro
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U postgres -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.7@sha256:4388e2379b7e870a447adbe7b80bd61f5fbf04e925832b19669fda4957f05a81
+    command: [start-dev]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?set KEYCLOAK_DB_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USERNAME:-local-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?set KEYCLOAK_ADMIN_PASSWORD}
+      KC_HOSTNAME: http://127.0.0.1:${SUPERVISOR_IDP_PORT:-58077}
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "127.0.0.1:${SUPERVISOR_IDP_PORT:-58077}:8080"
+  temporal:
+    image: temporalio/auto-setup:1.25.2@sha256:b1edc1e20002d958c8182f2ae08dee877a125083683a627a44917683419ba6a8
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB: postgres12
+      DB_PORT: "5432"
+      POSTGRES_SEEDS: postgres
+      POSTGRES_USER: temporal
+      POSTGRES_PWD: ${TEMPORAL_DB_PASSWORD:?set TEMPORAL_DB_PASSWORD}
+      DBNAME: temporal
+      VISIBILITY_DBNAME: temporal_visibility
+      SKIP_DB_CREATE: "true"
+      DEFAULT_NAMESPACE: default
+    ports:
+      - "127.0.0.1:${SUPERVISOR_TEMPORAL_PORT:-57277}:7233"
+  migrate:
+    profiles: [tools]
+    build:
+      context: ../..
+      dockerfile: deploy/supervisor/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Local only: the migration URL is checked against the environment's rule (WIS-699).
+      SUPERVISOR_ENVIRONMENT: local
+      SUPERVISOR_MIGRATION_URL: postgresql://supervisor_migrator:${SUPERVISOR_MIGRATION_PASSWORD:?set SUPERVISOR_MIGRATION_PASSWORD}@postgres:5432/supervisor
+    command: [migrate]
+volumes:
+  postgres_data:
+
+networks:
+  models:
+    internal: true
+    ipam:
+      config:
+        - subnet: ${SUPERVISOR_MODELS_SUBNET:-10.253.183.0/24}
+  default:
+    ipam:
+      config:
+        - subnet: ${SUPERVISOR_LOCAL_SUBNET:-10.253.77.0/24}

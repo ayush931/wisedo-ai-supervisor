@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "approved_count": {
+      "type": "integer"
+    },
+    "month_end": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "month_start": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "timezone": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "approved_count",
+    "month_end",
+    "month_start",
+    "timezone"
+  ],
+  "type": "object"
+}

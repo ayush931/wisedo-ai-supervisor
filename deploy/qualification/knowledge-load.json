@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "issue": "WIS-270",
+  "description": "Scoped 2-hop approved-graph read qualification. Thresholds are frozen here and read before measuring; never edit them to make a run pass.",
+  "seed": 270,
+  "fixture": {
+    "entities": 10000,
+    "claims": 100000,
+    "sibling_site_entities": 1000,
+    "sibling_site_claims": 10000,
+    "foreign_tenant_entities": 1000,
+    "foreign_tenant_claims": 10000
+  },
+  "queries": 1000,
+  "concurrency": 8,
+  "hops": 2,
+  "thresholds": {
+    "p95_ms": 500,
+    "unauthorized_max": 0,
+    "errors_max": 0
+  },
+  "reference_host": {
+    "description": "4 vCPU / 8 GiB test host: GOMAXPROCS=4 for the load client and the PostgreSQL container limited to 4 CPUs and 8 GiB",
+    "gomaxprocs": 4,
+    "postgres_limits_attestation": "cpus=4,memory=8g"
+  }
+}

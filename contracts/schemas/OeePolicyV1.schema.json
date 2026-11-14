@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "current_publication": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "action": {
+              "type": "string"
+            },
+            "policy_revision_id": {
+              "type": "string"
+            },
+            "publication_id": {
+              "type": "string"
+            },
+            "publication_no": {
+              "type": "integer"
+            },
+            "published_at": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "action",
+            "policy_revision_id",
+            "publication_id",
+            "publication_no",
+            "published_at"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "policy_code": {
+      "type": "string"
+    },
+    "policy_id": {
+      "type": "string"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "revisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "digest": {
+            "type": "string"
+          },
+          "effective_end": {
+            "type": "string"
+          },
+          "effective_start": {
+            "type": "string"
+          },
+          "policy": {
+            "additionalProperties": false,
+            "properties": {
+              "max_source_silence_seconds": {
+                "type": "integer"
+              },
+              "microstop_threshold_seconds": {
+                "type": "string"
+              },
+              "min_coverage": {
+                "type": "string"
+              },
+              "performance_cap_rule": {
+                "type": "string"
+              },
+              "policy_version": {
+                "type": "string"
+              },
+              "precedence_order": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "rework_counts_as_good": {
+                "type": "boolean"
+              },
+              "rounding_mode": {
+                "type": "string"
+              },
+              "rounding_scale": {
+                "type": "integer"
+              },
+              "state_buckets": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "bucket": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "bucket",
+                    "state"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "zero_denominator_rule": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "max_source_silence_seconds",
+              "microstop_threshold_seconds",
+              "min_coverage",
+              "performance_cap_rule",
+              "policy_version",
+              "precedence_order",
+              "rework_counts_as_good",
+              "rounding_mode",
+              "rounding_scale",
+              "state_buckets",
+              "zero_denominator_rule"
+            ],
+            "type": "object"
+          },
+          "policy_revision_id": {
+            "type": "string"
+          },
+          "revision_no": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "created_at",
+          "digest",
+          "effective_start",
+          "policy",
+          "policy_revision_id",
+          "revision_no"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "row_version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "current_publication",
+    "policy_code",
+    "policy_id",
+    "replayed",
+    "revisions",
+    "row_version"
+  ],
+  "type": "object"
+}

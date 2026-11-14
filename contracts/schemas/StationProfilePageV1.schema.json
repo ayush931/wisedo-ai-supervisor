@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "next_cursor": {
+      "type": "string"
+    },
+    "workstations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "current_revision": {
+            "type": "integer"
+          },
+          "display_name": {
+            "description": "Current human-readable name for this configured workstation.",
+            "type": "string"
+          },
+          "line_id": {
+            "description": "UUID of the production line configured for this workstation.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "workstation_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "current_revision",
+          "workstation_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "workstations"
+  ],
+  "type": "object"
+}

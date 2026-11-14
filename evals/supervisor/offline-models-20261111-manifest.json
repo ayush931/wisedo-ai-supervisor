@@ -1,0 +1,842 @@
+[
+  {
+    "case_id": "offline-clean-01",
+    "style": "clean",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-001",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-01",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2301",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "107",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "1",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-01",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-clean-02",
+    "style": "clean",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-002",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-02",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2302",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "114",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "2",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-02",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-clean-03",
+    "style": "clean",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-003",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-03",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2303",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "121",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "3",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-03",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-clean-04",
+    "style": "clean",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-004",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-04",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2304",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "128",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "4",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-04",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-skewed-01",
+    "style": "skewed",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-005",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-01",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2305",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "135",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "0",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-05",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-skewed-02",
+    "style": "skewed",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-006",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-02",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2306",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "142",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "1",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-06",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-skewed-03",
+    "style": "skewed",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-007",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-03",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2307",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "149",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "2",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-07",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-skewed-04",
+    "style": "skewed",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-008",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-04",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2308",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "156",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "3",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-08",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-low_contrast-01",
+    "style": "low_contrast",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-009",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-01",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2309",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "163",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "4",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-09",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-low_contrast-02",
+    "style": "low_contrast",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-010",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-02",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2310",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "170",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "0",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-10",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-low_contrast-03",
+    "style": "low_contrast",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-011",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-03",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2311",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "177",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "1",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-11",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-low_contrast-04",
+    "style": "low_contrast",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-012",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-04",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2312",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "184",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "2",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-12",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-stamped-01",
+    "style": "stamped",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-013",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-01",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2313",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "191",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "3",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-13",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-stamped-02",
+    "style": "stamped",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-014",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-02",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2314",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "198",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "4",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-14",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-stamped-03",
+    "style": "stamped",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-015",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-03",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2315",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "205",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "0",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-15",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-stamped-04",
+    "style": "stamped",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-016",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-04",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2316",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "212",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "1",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-16",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-handwritten_style-01",
+    "style": "handwritten_style",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-017",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-01",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2317",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "219",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "2",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-17",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-handwritten_style-02",
+    "style": "handwritten_style",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-018",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-02",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2318",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "226",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "3",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-18",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-handwritten_style-03",
+    "style": "handwritten_style",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-019",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-03",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2319",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "233",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "4",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-19",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "case_id": "offline-handwritten_style-04",
+    "style": "handwritten_style",
+    "fields": [
+      {
+        "name": "Record",
+        "expected": "INSP-020",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Machine",
+        "expected": "PRESS-04",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Lot",
+        "expected": "BATCH-2320",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Accepted",
+        "expected": "240",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Rejected",
+        "expected": "0",
+        "observed": "",
+        "correct": false
+      },
+      {
+        "name": "Date",
+        "expected": "2026-11-20",
+        "observed": "",
+        "correct": false
+      }
+    ]
+  }
+]

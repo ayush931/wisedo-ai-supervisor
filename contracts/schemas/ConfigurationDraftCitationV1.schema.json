@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "available": {
+      "type": "boolean"
+    },
+    "path": {
+      "type": "string"
+    },
+    "source_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "source_revision": {
+      "type": "integer"
+    },
+    "span_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "unavailable_reason": {
+      "enum": [
+        "ACCESS_EPOCH_CHANGED",
+        "FIELD_CHANGED",
+        "SOURCE_REVOKED"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "available",
+    "path",
+    "source_id",
+    "source_revision",
+    "span_id"
+  ],
+  "type": "object"
+}

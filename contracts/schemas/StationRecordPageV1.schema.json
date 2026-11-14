@@ -1,0 +1,211 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "next_cursor": {
+      "type": "string"
+    },
+    "records": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "canonical_payload_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "corrected_by_record_id": {
+            "type": "string"
+          },
+          "digest_schema_version": {
+            "type": "integer"
+          },
+          "event_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "late": {
+            "type": "boolean"
+          },
+          "plan_id": {
+            "type": "string"
+          },
+          "plan_revision": {
+            "type": "integer"
+          },
+          "profile_revision": {
+            "type": "integer"
+          },
+          "received_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": false,
+            "properties": {
+              "authorizes_release": {
+                "type": "boolean"
+              },
+              "comment": {
+                "type": "string"
+              },
+              "corrects_record_id": {
+                "type": "string"
+              },
+              "cycle_time_seconds": {
+                "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+                "type": "string"
+              },
+              "disposition": {
+                "enum": [
+                  "accept",
+                  "hold",
+                  "reject"
+                ],
+                "type": "string"
+              },
+              "event_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "good_quantity": {
+                "type": "integer"
+              },
+              "job_order_id": {
+                "type": "string"
+              },
+              "job_order_revision": {
+                "type": "integer"
+              },
+              "kind": {
+                "enum": [
+                  "acknowledged",
+                  "started",
+                  "paused",
+                  "blocked",
+                  "resumed",
+                  "quantity",
+                  "cycle_time",
+                  "quality_measurement",
+                  "quality_disposition_recorded",
+                  "material_exception",
+                  "completion_evidence",
+                  "note"
+                ],
+                "type": "string"
+              },
+              "material_code": {
+                "type": "string"
+              },
+              "material_issue": {
+                "enum": [
+                  "damaged",
+                  "other",
+                  "shortage",
+                  "wrong_material"
+                ],
+                "type": "string"
+              },
+              "reject_quantity": {
+                "type": "integer"
+              },
+              "schema_version": {
+                "type": "integer"
+              },
+              "values": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "field": {
+                      "type": "string"
+                    },
+                    "unit": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "field",
+                    "value"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "workstation_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "event_at",
+              "job_order_id",
+              "job_order_revision",
+              "kind",
+              "schema_version",
+              "workstation_id"
+            ],
+            "type": "object"
+          },
+          "recorded_by": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "source": {
+            "enum": [
+              "manual_tablet"
+            ],
+            "type": "string"
+          },
+          "state": {
+            "enum": [
+              "current",
+              "superseded"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "canonical_payload_digest",
+          "digest_schema_version",
+          "event_at",
+          "id",
+          "late",
+          "plan_id",
+          "plan_revision",
+          "profile_revision",
+          "received_at",
+          "record",
+          "recorded_by",
+          "replayed",
+          "source",
+          "state"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "records"
+  ],
+  "type": "object"
+}

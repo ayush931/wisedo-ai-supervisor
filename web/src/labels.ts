@@ -1,0 +1,186 @@
+// Human labels for server codes. The code itself stays available (title, Details); an
+// unknown code is shown as-is, never hidden or guessed.
+type Tone = "ok" | "warn" | "bad" | "muted";
+const TABLE: Record<string, [label: string, icon: string, tone: Tone]> = {
+    // Configuration import row outcomes
+    accepted: ["Accepted", "✓", "ok"],
+    duplicate: ["Duplicate", "↔", "muted"],
+    rejected: ["Rejected", "✕", "bad"],
+    INVALID_VALUE: ["Invalid value", "✕", "bad"],
+    INVALID_MASTER_DATA: ["Invalid master data", "✕", "bad"],
+    COLUMN_NOT_APPLICABLE: ["Column does not apply", "✕", "bad"],
+    DUPLICATE_REF: ["Reference used more than once", "✕", "bad"],
+    UNKNOWN_REF: ["Reference not found in this file", "✕", "bad"],
+    REFERENCE_REJECTED: ["Referenced row was rejected", "✕", "bad"],
+    NOT_FOUND: ["Object not found on this site", "✕", "bad"],
+    REVISION_CONFLICT: ["Revision changed", "↺", "warn"],
+    DUPLICATE_IN_FILE: ["Name repeated in this file", "✕", "bad"],
+    DISPLAY_NAME_EXISTS: ["Name already exists", "✕", "bad"],
+    AMBIGUOUS_DUPLICATE: ["More than one matching object", "✕", "bad"],
+    MASTER_DATA_IN_USE: ["Object is in use", "✕", "bad"],
+    LINE_VALIDATION_BLOCKED: ["Line validation blocks this change", "✕", "bad"],
+    OBJECT_ALREADY_CREATED: ["Import object changed since creation", "↺", "warn"],
+    // readiness
+    READY: ["Ready", "●", "ok"],
+    LIMITED: ["Limited", "◐", "warn"],
+    NOT_READY: ["Not ready", "○", "warn"],
+    INVALID: ["Invalid", "✕", "bad"],
+    // WIS-629 advisor suggestion reasons
+    NO_APPROVED_PLAN: ["No plan approved for this window now", "○", "warn"],
+    CONTEXT_NOT_ELIGIBLE: ["Window data changed since the case", "↺", "warn"],
+    NO_PROCESS_SNAPSHOT: ["No approved process snapshot", "○", "warn"],
+    SNAPSHOT_STALE: ["Approved knowledge changed since this snapshot", "↺", "warn"],
+    SOURCE_UNAVAILABLE: ["A cited source is no longer available", "✕", "warn"],
+    FACTS_TRUNCATED: ["More approved facts than shown", "…", "muted"],
+    CASE_WINDOW_UNKNOWN: ["Case windows unreadable; no fact selected", "?", "warn"],
+    INVESTIGATION_NOT_RUN: ["Not investigated yet", "◐", "muted"],
+    INVESTIGATION_RUNNING: ["Investigation still running", "◐", "muted"],
+    INVESTIGATION_NO_OUTPUT: ["Investigation gave no usable output", "▲", "warn"],
+    INVESTIGATION_EARLIER_REVISION: ["Hypotheses from an earlier case revision", "↺", "warn"],
+    HYPOTHESIS_CITATION_INVALID: ["Model output cited outside its evidence; left out", "✕", "bad"],
+    SUGGESTION_REJECTED: ["Suggestion failed its checks; nothing shown", "✕", "bad"],
+    // readiness reasons
+    CORRECTIONS_PRESENT: ["Corrections present", "↺", "muted"],
+    INVALID_RECORDED_VALUE: ["Invalid recorded value", "✕", "bad"],
+    LATE_ENTRIES: ["Late entries", "⏱", "muted"],
+    NOT_IN_APPROVED_PLAN: ["Not in approved plan", "▲", "warn"],
+    NO_CYCLE_TIME_RECORDS: ["No cycle times yet", "○", "muted"],
+    NO_QUANTITY_RECORDS: ["No quantities yet", "○", "muted"],
+    NO_RECORDS: ["No records yet", "○", "muted"],
+    OVER_PRODUCTION: ["Over production", "▲", "warn"],
+    QUANTITY_OVERFLOW: ["Quantity overflow", "✕", "bad"],
+    RECORDED_AFTER_RUN_END: ["Timed after shift end", "⏱", "warn"],
+    SHIFT_IN_PROGRESS: ["Shift in progress", "◐", "muted"],
+    STALE_INPUT: ["Inputs stale", "⏱", "warn"],
+    SUPERSEDED_PLAN_BINDING: ["Plan revised since", "↺", "warn"],
+    UNCLOSED_DOWNTIME: ["Open downtime", "▲", "warn"],
+    // completion states
+    completed: ["Completed", "✓", "ok"],
+    in_progress: ["In progress", "◐", "ok"],
+    not_started: ["Not started", "○", "muted"],
+    unknown: ["Not reported", "?", "muted"],
+    // current job order states and instruction reasons
+    current: ["Current job order", "●", "ok"],
+    needs_replan: ["Needs re-plan", "▲", "warn"],
+    instruction_unavailable: ["Instruction unavailable", "▲", "warn"],
+    NEEDS_REPLAN: ["Needs re-plan", "▲", "warn"],
+    INSTRUCTION_UNAVAILABLE: ["Instruction unavailable", "▲", "warn"],
+    INSTRUCTION_NOT_CONFIRMED: ["Instruction not confirmed", "▲", "warn"],
+    INSTRUCTION_REVOKED: ["Instruction revoked", "✕", "bad"],
+    INSTRUCTION_SUPERSEDED: ["Instruction superseded", "↺", "warn"],
+    NO_CURRENT_JOB_ORDER: ["No current job order", "○", "muted"],
+    // handover not-proposed reasons
+    COMPLETED: ["Completed", "✓", "ok"],
+    NOTHING_REMAINING: ["Nothing remaining", "✓", "ok"],
+    REMAINING_EXCEEDS_ORDER_TARGET: ["Remaining exceeds order", "▲", "warn"],
+    REMAINING_UNKNOWN: ["Remaining unknown", "?", "muted"],
+    // plan / handover / record states
+    approved: ["Approved", "●", "ok"],
+    draft: ["Draft", "◐", "warn"],
+    superseded: ["Superseded", "↺", "muted"],
+    adopted: ["Adopted", "●", "ok"],
+    // configuration drafts
+    promoted: ["Promoted", "●", "ok"],
+    discarded: ["Discarded", "✕", "muted"],
+    SOURCE_REVOKED: ["Source revoked", "✕", "bad"],
+    ACCESS_EPOCH_CHANGED: ["Source access changed; edit to re-confirm", "▲", "warn"],
+    FIELD_CHANGED: ["Field changed; citation dropped", "↺", "warn"],
+    // interviews (WIS-271)
+    owner: ["Owner", "◆", "muted"],
+    supervisor: ["Supervisor", "◆", "muted"],
+    operator: ["Operator", "◆", "muted"],
+    viewer: ["Viewer", "◇", "muted"],
+    active: ["Active", "●", "ok"],
+    paused: ["Paused", "❚❚", "muted"],
+    submitted: ["Submitted", "✓", "ok"],
+    closed: ["Closed", "■", "muted"],
+    unanswered: ["Unanswered", "○", "warn"],
+    answered: ["Answered", "✓", "ok"],
+    dismissed: ["Dismissed", "✕", "muted"],
+    question_missing: ["Missing fact", "?", "muted"],
+    question_conflict: ["Conflicting sources", "⇄", "warn"],
+    question_stale: ["Stale fact", "⏱", "warn"],
+    // agent runs: state and outcome
+    running: ["Running", "◐", "muted"],
+    proposed: ["Finished", "✓", "ok"],
+    refused: ["Refused", "✕", "bad"],
+    needs_input: ["Needs input", "▲", "warn"],
+    canceled: ["Canceled", "■", "muted"],
+    failed: ["Failed", "✕", "bad"],
+    degraded: ["Degraded", "▲", "warn"],
+    TURN_ACTIVITY_FAILED: ["Run stopped before finishing", "⏱", "warn"],
+    NO_CONFIGURATION_DRAFTS: ["Nothing to draft", "○", "muted"],
+    NO_NEW_INTERVIEW_OUTPUT: ["No new questions", "○", "muted"],
+    DRAFT_KIND_FORBIDDEN: ["Kind not requested", "✕", "bad"],
+    CITATION_NOT_IN_SCOPE: ["Citation outside scope", "✕", "bad"],
+    FIELD_UNCITED: ["Field without citation", "✕", "bad"],
+    SCHEMA_INVALID: ["Output failed validation", "✕", "bad"],
+    EVIDENCE_REVOKED: ["Source revoked during run", "✕", "bad"],
+    BUDGET_EXHAUSTED: ["Budget used up", "▲", "warn"],
+    QUESTION_LIMIT: ["Too many questions", "✕", "bad"],
+    REQUIREMENT_NOT_IN_SCOPE: ["Requirement outside scope", "✕", "bad"],
+    RUN_CANCELED: ["Run canceled", "■", "muted"],
+    SPECIALIST_FAILED: ["Model call failed", "✕", "bad"],
+    TOOL_NOT_ALLOWED: ["Tool not allowed", "✕", "bad"],
+    // Coverage cell states and their reasons on the onboarding checklist (WIS-618).
+    missing: ["Missing", "○", "muted"],
+    contested: ["Contested", "▲", "warn"],
+    stale: ["Stale", "▲", "warn"],
+    not_applicable: ["Not applicable", "–", "muted"],
+    decision_missing: ["No reviewed facts yet", "", "muted"],
+    // Discovery inventory capabilities: which checklist an interview covers (WIS-617).
+    process_understanding: ["Value stream", "•", "muted"],
+    shortfall_investigation: ["Shortfall investigation", "•", "muted"],
+    internal_task_coordination: ["Task coordination", "•", "muted"],
+};
+
+export type Label = { text: string; icon: string; tone: Tone; code: string };
+export function label(code: string): Label {
+    const hit = TABLE[code];
+    return hit ? { text: hit[0], icon: hit[1], tone: hit[2], code } : { text: code, icon: "•", tone: "muted", code };
+}
+export const known = (code: string) => code in TABLE;
+
+// Shift run state as an operator reads it; the record refusals below reuse the same sentences.
+export const shiftRunText = {
+    planned: "The supervisor has not started this shift yet.",
+    ended: "This shift has ended.",
+};
+
+// Problem codes with their own sentence, shown instead of the generic outcome text (the code
+// stays in Details). A self-review refusal is a separation-of-duties rule, not a missing
+// permission, so it must never read as one.
+export const problemText: Record<string, string> = {
+    // Shift run (start, end, records, approvals). Each is a refusal: nothing was saved.
+    SHIFT_NOT_STARTED: `${shiftRunText.planned} Nothing was saved.`,
+    SHIFT_RUN_ENDED: `${shiftRunText.ended} Nothing was saved.`,
+    SHIFT_RUN_ALREADY_STARTED: "This shift is already running. The page has been reloaded.",
+    SHIFT_START_TOO_EARLY: "It is too early to start this shift: a shift can start at most 30 minutes before its planned start.",
+    SHIFT_WINDOW_ENDED: "The planned shift window is over, so this shift can no longer be started.",
+    SHIFT_PLAN_NOT_APPROVED: "Only the approved revision of a plan can be started. Approve the plan first.",
+    INVALID_SHIFT_RUN: "The server refused this request. Check the next-shift window: it must end after it starts, last at most 24 hours, and use the plan's time zone.",
+    SELF_REVIEW_FORBIDDEN: "You submitted this revision. Another supervisor must approve it.",
+    SELF_AUTHORIZATION_FORBIDDEN: "You cannot authorize yourself. Another supervisor must grant it.",
+    PROMOTER_IS_EDITOR: "You created or edited this draft. Another supervisor must promote it.",
+    TARGET_REVISION_CONFLICT: "The live configuration changed after this draft was written. Discard this draft and create a new one.",
+    DRAFT_SOURCE_UNAVAILABLE: "A cited source is no longer available. Edit the draft to re-confirm or remove the citation before promoting.",
+    DRAFT_NOT_OPEN: "This draft is already promoted or discarded. It has been reloaded.",
+    DRAFT_UNCHANGED: "Nothing changed since the current draft revision.",
+    DISCOVERY_INVENTORY_AMBIGUOUS: "This process has more than one checklist. Choose which checklist the interview covers.",
+    DISCOVERY_INVENTORY_CHANGED: "The process inventory changed or this interview has none. Reload; start a new interview if it is not bound to a process.",
+    AGENT_UNAVAILABLE: "The agent is turned off for this site.",
+    CASE_EPISODE_ACTIVE: "A newer episode of this case exists. Open the latest episode instead.",
+    ADVISOR_DISABLED: "Advisor suggestions are switched off for this deployment.",
+    ILLEGAL_TRANSITION: "That action is not allowed in the current state. Refresh to see what is allowed now.",
+    TASK_ROLE_REQUIRED: "Only the person assigned to this task, or a site supervisor for block, cancel and reopen, can do this. Nothing was changed.",
+    COMPLETION_EVIDENCE_UNUSABLE: "The report could not be used as completion evidence: it must be your own current written report at this site. The task was not completed.",
+    TRANSITION_GUARD_FAILED: "A condition for this action is not met yet. Nothing was submitted.",
+    REVIEWER_NOT_ELIGIBLE: "You cannot decide this proposal: whoever raised or edited it, or a member without approval rights, must leave it to another supervisor.",
+    APPROVAL_EXPIRED: "This proposal expired before a decision. Nothing was approved.",
+    PROPOSAL_STALE: "The evidence behind this proposal changed. It can no longer be approved.",
+    EVIDENCE_UNAVAILABLE: "Evidence this proposal cites is no longer available. It can no longer be approved.",
+    REVIEW_BLOCKED: "Approval needs a cited source the owner has marked authoritative, and no open conflict on this claim. You can still reject it.",
+    REVIEW_CONFLICT: "This claim already has a decision, or its conflicts changed. It has been reloaded.",
+    MODEL_EXTRACTED_UNCONFIRMED: "This document's text was read from a photo by a model. Check it against the original page, then confirm that you did before marking it authoritative.",
+    SOURCE_CHANGED: "The document or its authority changed since it was read. Check its current state before deciding again.",
+};

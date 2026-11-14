@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "assignee_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "assignee_subject": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "case_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "due_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "line_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "assignee_id",
+          "assignee_subject",
+          "case_id",
+          "created_at",
+          "due_at",
+          "id",
+          "line_id",
+          "revision",
+          "state"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "next_cursor": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "items",
+    "next_cursor"
+  ],
+  "type": "object"
+}

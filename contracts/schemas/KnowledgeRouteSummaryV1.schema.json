@@ -1,0 +1,312 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "as_of": {
+      "type": "string"
+    },
+    "cycle_time_seconds": {
+      "additionalProperties": false,
+      "properties": {
+        "claim_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "steps_missing": {
+          "type": "integer"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "claim_ids",
+        "steps_missing",
+        "unit",
+        "value"
+      ],
+      "type": "object"
+    },
+    "inventory_revision": {
+      "type": "integer"
+    },
+    "longest_lead_time_days": {
+      "additionalProperties": false,
+      "properties": {
+        "claim_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "entity_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "entity_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "materials": {
+          "type": "integer"
+        },
+        "materials_without_lead_time": {
+          "type": "integer"
+        },
+        "source_span_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "claim_ids",
+        "entity_id",
+        "entity_name",
+        "materials",
+        "materials_without_lead_time",
+        "source_span_ids",
+        "unit",
+        "value"
+      ],
+      "type": "object"
+    },
+    "order_claim_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "process_id": {
+      "type": "string"
+    },
+    "process_name": {
+      "type": "string"
+    },
+    "readiness": {
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "setup_time_seconds": {
+      "additionalProperties": false,
+      "properties": {
+        "claim_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "steps_missing": {
+          "type": "integer"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "claim_ids",
+        "steps_missing",
+        "unit",
+        "value"
+      ],
+      "type": "object"
+    },
+    "sha256": {
+      "type": "string"
+    },
+    "snapshot_id": {
+      "type": "string"
+    },
+    "step_count": {
+      "type": "integer"
+    },
+    "steps": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "cycle_time_seconds": {
+            "additionalProperties": false,
+            "properties": {
+              "claim_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "source_span_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "status": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "claim_ids",
+              "source_span_ids",
+              "status",
+              "unit",
+              "value"
+            ],
+            "type": "object"
+          },
+          "display_name": {
+            "type": "string"
+          },
+          "entity_id": {
+            "type": "string"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "setup_time_seconds": {
+            "additionalProperties": false,
+            "properties": {
+              "claim_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "source_span_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "status": {
+                "type": "string"
+              },
+              "unit": {
+                "type": "string"
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "claim_ids",
+              "source_span_ids",
+              "status",
+              "unit",
+              "value"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "cycle_time_seconds",
+          "display_name",
+          "entity_id",
+          "position",
+          "setup_time_seconds"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "as_of",
+    "cycle_time_seconds",
+    "inventory_revision",
+    "longest_lead_time_days",
+    "order_claim_ids",
+    "process_id",
+    "process_name",
+    "readiness",
+    "reason_codes",
+    "schema_version",
+    "setup_time_seconds",
+    "sha256",
+    "snapshot_id",
+    "step_count",
+    "steps"
+  ],
+  "type": "object"
+}

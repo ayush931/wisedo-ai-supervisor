@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "version": "2026-10-29.1",
+  "source": "docs/onboarding-agent/README.md cost table, vendor pages gathered 2026-10-29. Upper bounds: confirm against the Model Studio International price page before a site is switched on; a change is a new version.",
+  "prices": [
+    {"provider": "qwen-intl", "model": "qwen-plus-2025-09-11", "model_revision": "qwen-plus-2025-09-11", "input_micro_usd_per_million": 400000, "output_micro_usd_per_million": 1600000},
+    {"provider": "qwen-intl", "model": "qwen-flash-2025-07-28", "model_revision": "qwen-flash-2025-07-28", "input_micro_usd_per_million": 50000, "output_micro_usd_per_million": 400000}
+  ]
+}

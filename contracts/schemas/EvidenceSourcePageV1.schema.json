@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "next_cursor": {
+      "type": "string"
+    },
+    "sources": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "access_epoch": {
+            "type": "integer"
+          },
+          "authority": {
+            "type": "string"
+          },
+          "authority_class": {
+            "type": "string"
+          },
+          "byte_length": {
+            "type": "integer"
+          },
+          "independence_group_id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "model_extracted": {
+            "type": "boolean"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "rune_length": {
+            "type": "integer"
+          },
+          "sha256": {
+            "type": "string"
+          },
+          "source_id": {
+            "type": "string"
+          },
+          "state_revision": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_epoch",
+          "authority",
+          "authority_class",
+          "byte_length",
+          "independence_group_id",
+          "kind",
+          "model_extracted",
+          "revision",
+          "rune_length",
+          "sha256",
+          "source_id",
+          "state_revision",
+          "title"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "sources"
+  ],
+  "type": "object"
+}

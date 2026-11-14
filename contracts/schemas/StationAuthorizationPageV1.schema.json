@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authorizations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "type": "boolean"
+          },
+          "current_revision": {
+            "type": "integer"
+          },
+          "events": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "action": {
+                  "enum": [
+                    "grant",
+                    "revoke"
+                  ],
+                  "type": "string"
+                },
+                "actor": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "issuer": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "issuer",
+                    "subject"
+                  ],
+                  "type": "object"
+                },
+                "created_at": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "revision": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "action",
+                "actor",
+                "created_at",
+                "revision"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "grantee": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "replayed": {
+            "type": "boolean"
+          },
+          "workstation_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "active",
+          "current_revision",
+          "events",
+          "grantee",
+          "replayed",
+          "workstation_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "next_cursor": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "authorizations"
+  ],
+  "type": "object"
+}

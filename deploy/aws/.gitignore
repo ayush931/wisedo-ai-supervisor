@@ -1,0 +1,15 @@
+# Local Terraform state, caches, and operator overrides — never committed.
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+terraform.tfvars
+*.auto.tfvars
+# NOTE: terraform.tfvars.example and .terraform.lock.hcl ARE committed
+# (reproducible example config + pinned provider hashes).

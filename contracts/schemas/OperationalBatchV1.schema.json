@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "events": {
+      "items": {
+        "anyOf": [
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "asset_external_key": {
+                "type": "string"
+              },
+              "event_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "external_key": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "production_delta"
+                ],
+                "type": "string"
+              },
+              "order_external_key": {
+                "type": "string"
+              },
+              "payload": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "additionalProperties": false,
+                "properties": {
+                  "asset_id": {
+                    "type": "string"
+                  },
+                  "good_units": {
+                    "type": "string"
+                  },
+                  "interval_end": {
+                    "type": "string"
+                  },
+                  "interval_start": {
+                    "type": "string"
+                  },
+                  "order_id": {
+                    "type": "string"
+                  },
+                  "unit": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "asset_id",
+                  "good_units",
+                  "interval_end",
+                  "interval_start",
+                  "order_id",
+                  "unit"
+                ],
+                "type": "object"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "source_sequence": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "event_at",
+              "external_key",
+              "kind",
+              "payload",
+              "revision",
+              "source_sequence"
+            ],
+            "type": "object"
+          },
+          {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "additionalProperties": false,
+            "properties": {
+              "asset_external_key": {
+                "type": "string"
+              },
+              "event_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "external_key": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "production_plan",
+                  "machine_state",
+                  "operator_report",
+                  "heartbeat",
+                  "watermark"
+                ],
+                "type": "string"
+              },
+              "order_external_key": {
+                "type": "string"
+              },
+              "payload": {
+                "description": "Any JSON value"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "source_sequence": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "event_at",
+              "external_key",
+              "kind",
+              "payload",
+              "revision",
+              "source_sequence"
+            ],
+            "type": "object"
+          }
+        ]
+      },
+      "type": "array"
+    },
+    "mapping_revision": {
+      "type": "integer"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "source_revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "events",
+    "mapping_revision",
+    "schema_version",
+    "source_id",
+    "source_revision"
+  ],
+  "type": "object"
+}

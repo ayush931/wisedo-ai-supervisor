@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "dataset_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "idempotency_key": {
+      "maxLength": 128,
+      "type": "string"
+    },
+    "policy_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "scope": {
+      "maxLength": 64,
+      "type": "string"
+    },
+    "window_end": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "window_start": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "dataset_id",
+    "idempotency_key",
+    "policy_id",
+    "scope",
+    "window_end",
+    "window_start"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,91 @@
+# Paths excluded from Claude Code context for Wisedo-Technology/wisedo-ai-supervisor
+
+## Derived from .gitignore, .dockerignore, SECURITY.md, deploy/supervisor/README.md and
+
+## deploy/aws/README.md. Nothing here is a product source of truth; everything here is either
+
+## generated, vendored, or a credential/evidence artifact that must never enter a prompt or log
+
+## --- Secrets and local credentials (SECURITY.md, deploy/supervisor/README.md) ---
+
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.keystore
+**/secrets/
+**/*credential*
+**/*.tfvars
+!deploy/aws/terraform.tfvars.example
+
+## --- Go build output ---
+
+/build/
+/bin/
+*.test
+*.out
+coverage.*
+
+## --- Frontend ---
+
+web/node_modules/
+web/dist/
+web/.vite/
+web/playwright-report/
+web/test-results/
+node_modules/
+
+## --- Native Future Vision build and inspection artifacts ---
+
+build/vision-cpp/
+src/wisedo_fixture_vision_cpp/build/
+inspection_results/
+*.mp4
+*.avi
+*.o
+*.a
+*.so
+*.dylib
+
+## --- Terraform state and plan output (deploy/aws) ---
+
+deploy/aws/.terraform/
+deploy/aws/*.tfstate
+deploy/aws/*.tfstate.*
+deploy/aws/*.tfplan
+deploy/aws/.terraform.lock.hcl
+
+## --- Python training workload caches (offline, optional) ---
+
+deploy/aws/training/**/__pycache__/
+**/*.pyc
+.venv/
+.uv/
+
+## --- Generated and vendored artifacts; read the source contract instead ---
+
+go.sum
+web/package-lock.json
+**/*.generated.go
+**/*.gen.ts
+vendor/
+
+## --- Evaluation, release and customer evidence bundles (WIS-280 / WIS-281) ---
+
+## Sanitized traces and release bundles may carry customer content; open them deliberately
+
+## never by default
+
+evals/__/traces/
+evals/__/runs/
+release-evidence/
+*.sbom.json
+
+## --- Local tooling noise ---
+
+.DS_Store
+.idea/
+*.log
+tmp/

@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "document": {
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "additionalProperties": false,
+          "properties": {
+            "access_epoch": {
+              "type": "integer"
+            },
+            "authority": {
+              "type": "string"
+            },
+            "authority_class": {
+              "type": "string"
+            },
+            "byte_length": {
+              "type": "integer"
+            },
+            "created_at": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "current_revision": {
+              "type": "integer"
+            },
+            "extraction": {
+              "additionalProperties": false,
+              "properties": {
+                "method": {
+                  "type": "string"
+                },
+                "model": {
+                  "type": "string"
+                },
+                "model_revision": {
+                  "type": "string"
+                },
+                "prompt_sha256": {
+                  "type": "string"
+                },
+                "run_id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "method",
+                "model",
+                "model_revision",
+                "prompt_sha256",
+                "run_id"
+              ],
+              "type": "object"
+            },
+            "independence_group_id": {
+              "type": "string"
+            },
+            "kind": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer"
+            },
+            "rune_length": {
+              "type": "integer"
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string"
+            },
+            "state_revision": {
+              "type": "integer"
+            },
+            "text": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "access_epoch",
+            "authority",
+            "authority_class",
+            "byte_length",
+            "created_at",
+            "current_revision",
+            "independence_group_id",
+            "kind",
+            "revision",
+            "rune_length",
+            "sha256",
+            "source_id",
+            "state_revision",
+            "text",
+            "title"
+          ],
+          "type": "object"
+        },
+        "spans": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "access_epoch": {
+                "type": "integer"
+              },
+              "end_char": {
+                "type": "integer"
+              },
+              "id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer"
+              },
+              "source_id": {
+                "type": "string"
+              },
+              "source_sha256": {
+                "type": "string"
+              },
+              "start_char": {
+                "type": "integer"
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "access_epoch",
+              "end_char",
+              "id",
+              "revision",
+              "source_id",
+              "source_sha256",
+              "start_char",
+              "text"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "source",
+        "spans"
+      ],
+      "type": "object"
+    },
+    "jobs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "media_type": {
+            "type": "string"
+          },
+          "original_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "quarantine_reason": {
+            "type": "string"
+          },
+          "run_id": {
+            "type": "string"
+          },
+          "source_id": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "width": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "created_at",
+          "height",
+          "job_id",
+          "media_type",
+          "original_sha256",
+          "run_id",
+          "state",
+          "title",
+          "width"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "upload_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "jobs"
+  ],
+  "type": "object"
+}

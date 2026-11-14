@@ -1,0 +1,81 @@
+name: Future Vision C++ Native Core CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build & Verify C++ OpenCV Core
+    runs-on: [self-hosted, linux, x64]
+    # The self-hosted workstation runner has no OpenCV and no passwordless
+    # sudo, so the toolchain is installed as root inside a pinned container
+    # instead of on the host.
+    container:
+      image: ubuntu:24.04@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55
+    timeout-minutes: 15
+
+    steps:
+      - name: Install system dependencies (OpenCV 4, CMake, GCC)
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends ca-certificates git cmake build-essential libopencv-dev pkg-config
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Verify OpenCV installation
+        run: |
+          pkg-config --modversion opencv4
+          pkg-config --cflags-only-I opencv4
+
+      - name: Configure CMake (Release)
+        run: |
+          cmake -S src/wisedo_fixture_vision_cpp -B build/vision-cpp \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_TESTING=ON
+
+      - name: Compile C++ Targets
+        run: |
+          cmake --build build/vision-cpp --parallel $(nproc)
+
+      - name: Run C++ Unit Tests (CTest)
+        run: |
+          ctest --test-dir build/vision-cpp --output-on-failure
+
+      - name: Verify CLI Executable
+        run: |
+          ./build/vision-cpp/wisedo_vision_inspect --help
+
+      - name: Run Verification Smoke Test on Fixture Video
+        if: hashFiles('video.mp4') != ''
+        run: |
+          ./build/vision-cpp/wisedo_vision_inspect \
+            --video video.mp4 \
+            --output-dir /tmp/wisedo_ci_inspection \
+            --side-by-side \
+            --max-frames 30
+          test -f /tmp/wisedo_ci_inspection/annotated_results.mp4
+          test -f /tmp/wisedo_ci_inspection/frame_deviations.csv
+          test -f /tmp/wisedo_ci_inspection/frame_deviations.json
+          test -f /tmp/wisedo_ci_inspection/corrected_frames.csv
+          test -f /tmp/wisedo_ci_inspection/deviated_frames.csv
+          rm -rf /tmp/wisedo_ci_inspection
+
+      # The container runs as root on the shared self-hosted workspace; hand
+      # ownership back to the host runner user so host-side checkouts can clean it.
+      - name: Restore workspace ownership
+        if: always()
+        run: chown -R "$(stat -c %u:%g "$GITHUB_WORKSPACE/..")" "$GITHUB_WORKSPACE"

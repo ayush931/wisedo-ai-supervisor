@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "coverage": {
+      "additionalProperties": false,
+      "properties": {
+        "applicable_count": {
+          "type": "integer"
+        },
+        "approved_count": {
+          "type": "integer"
+        },
+        "authorization_state": {
+          "type": "string"
+        },
+        "bound_count": {
+          "type": "integer"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "evaluation_state": {
+          "type": "string"
+        },
+        "evaluator_version": {
+          "type": "integer"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "inventory_id": {
+          "type": "string"
+        },
+        "inventory_revision": {
+          "type": "integer"
+        },
+        "knowledge_inventory_revision": {
+          "type": "integer"
+        },
+        "knowledge_ready": {
+          "type": "boolean"
+        },
+        "requirements": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "as_of": {
+                "type": "string"
+              },
+              "binding_supported": {
+                "type": "boolean"
+              },
+              "decision_id": {
+                "type": "string"
+              },
+              "decision_revision": {
+                "type": "integer"
+              },
+              "expires_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "freshness_policy_revision": {
+                "type": "integer"
+              },
+              "interview_role": {
+                "type": "string"
+              },
+              "key": {
+                "type": "string"
+              },
+              "reason_code": {
+                "type": "string"
+              },
+              "requirement_id": {
+                "type": "string"
+              },
+              "snapshot_id": {
+                "type": "string"
+              },
+              "snapshot_inventory_revision": {
+                "type": "integer"
+              },
+              "snapshot_sha256": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "binding_supported",
+              "interview_role",
+              "key",
+              "reason_code",
+              "requirement_id",
+              "state"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "schema_version": {
+          "type": "integer"
+        },
+        "scope_current": {
+          "type": "boolean"
+        },
+        "template_version": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "applicable_count",
+        "approved_count",
+        "authorization_state",
+        "bound_count",
+        "evaluated_at",
+        "evaluation_state",
+        "evaluator_version",
+        "inventory_id",
+        "inventory_revision",
+        "knowledge_inventory_revision",
+        "knowledge_ready",
+        "requirements",
+        "schema_version",
+        "scope_current",
+        "template_version"
+      ],
+      "type": "object"
+    },
+    "inventory_id": {
+      "type": "string"
+    },
+    "readiness": {
+      "type": "string"
+    },
+    "reason_code": {
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "readiness",
+    "schema_version"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "area_id": {
+      "type": "string"
+    },
+    "area_revision": {
+      "type": "integer"
+    },
+    "authenticated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "capability": {
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "inventory_id": {
+      "type": "string"
+    },
+    "process_id": {
+      "type": "string"
+    },
+    "process_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "requirements": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "interview_role": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "requirement_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "interview_role",
+          "key",
+          "requirement_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "scope_current": {
+      "type": "boolean"
+    },
+    "template_version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "actor_issuer",
+    "actor_subject",
+    "area_id",
+    "area_revision",
+    "authenticated_at",
+    "capability",
+    "created_at",
+    "current_revision",
+    "inventory_id",
+    "process_id",
+    "process_revision",
+    "reason",
+    "requirements",
+    "revision",
+    "schema_version",
+    "scope_current",
+    "template_version"
+  ],
+  "type": "object"
+}

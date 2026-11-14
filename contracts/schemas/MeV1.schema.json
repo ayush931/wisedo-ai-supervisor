@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "csrf_token": {
+      "maxLength": 128,
+      "type": "string"
+    },
+    "display_name": {
+      "anyOf": [
+        {
+          "maxLength": 128,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sites": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "agent_available": {
+            "type": "boolean"
+          },
+          "agent_unavailable_reason_code": {
+            "description": "Why agent support is unavailable; omitted when available. Availability is deployment-wide and is reported per site until a site agent policy exists.",
+            "enum": [
+              "AGENT_MODE_DISABLED",
+              "AGENT_NOT_CONFIGURED"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_available",
+          "id",
+          "name",
+          "role",
+          "tenant_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "subject": {
+      "maxLength": 255,
+      "type": "string"
+    }
+  },
+  "required": [
+    "csrf_token",
+    "display_name",
+    "sites",
+    "subject"
+  ],
+  "type": "object"
+}

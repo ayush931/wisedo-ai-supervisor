@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "claim_id": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "string"
+    },
+    "effective_from": {
+      "type": "string"
+    },
+    "effective_to": {
+      "type": "string"
+    },
+    "evidence_class": {
+      "type": "string"
+    },
+    "literal": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "unit": {
+          "type": "string"
+        },
+        "value": {
+          "description": "Any JSON value"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ],
+      "type": "object"
+    },
+    "object_entity_id": {
+      "type": "string"
+    },
+    "object_revision": {
+      "type": "integer"
+    },
+    "predicate": {
+      "type": "string"
+    },
+    "source_span_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "subject_id": {
+      "type": "string"
+    },
+    "subject_revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "claim_id",
+    "effective_from",
+    "evidence_class",
+    "predicate",
+    "source_span_ids",
+    "subject_id"
+  ],
+  "type": "object"
+}

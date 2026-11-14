@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "decision": {
+      "type": "string"
+    },
+    "expected_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "decision",
+    "expected_revision",
+    "reason"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assignee_eligible": {
+      "type": "boolean"
+    },
+    "assignee_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "assignee_subject": {
+      "maxLength": 255,
+      "type": "string"
+    },
+    "confirmed": {
+      "type": "boolean"
+    },
+    "decided_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "decided_by_subject": {
+      "maxLength": 255,
+      "type": "string"
+    },
+    "line_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 2000,
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "assignee_eligible",
+    "assignee_id",
+    "assignee_subject",
+    "confirmed",
+    "decided_at",
+    "decided_by_subject",
+    "line_id",
+    "reason",
+    "revision"
+  ],
+  "type": "object"
+}

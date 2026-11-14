@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "mappings": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "entity_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "entity_revision": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "external_key": {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          "external_type": {
+            "enum": [
+              "asset",
+              "order"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "entity_id",
+          "entity_revision",
+          "external_key",
+          "external_type"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10000,
+      "type": "array"
+    }
+  },
+  "required": [
+    "mappings"
+  ],
+  "type": "object"
+}

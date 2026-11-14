@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "authority_class": {
+      "type": "string"
+    },
+    "independence_group_id": {
+      "type": "string"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "source_id",
+    "text",
+    "title"
+  ],
+  "type": "object"
+}

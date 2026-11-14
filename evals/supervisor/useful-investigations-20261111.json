@@ -1,0 +1,3560 @@
+{
+  "schema_version": 1,
+  "issue": "WIS-710",
+  "mode": "actual",
+  "qualified": false,
+  "date": "2026-11-11",
+  "manifest_path": "evals/supervisor/useful-investigations.v1.json",
+  "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+  "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+  "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+  "tool_version": "wis614-tools-7",
+  "environment": {
+    "endpoint": "loopback shared llm-chat",
+    "context_tokens": 16384,
+    "server_slots": 4,
+    "client_concurrency": 1,
+    "shared_advisory_lock": true,
+    "temperature": 0,
+    "reasoning_effort": "none",
+    "max_output_tokens": 2000,
+    "cumulative_token_limit": 24000,
+    "local_input_limit": 12000,
+    "gpu": "NVIDIA GeForce RTX 5070 Ti, 16303 MiB",
+    "image_sha256": "sha256:5bb779a449a18d8f4333e9814e887746342fe555c528f5eabc92b2093e32673a",
+    "shared_host": true
+  },
+  "notes": [
+    "WIS-710 synthetic engineering-authored regression measurements, qualified=false. No independent labeling or full blind model qualification. The independent reviewer audited the earlier implementation/evidence but did not call the model.",
+    "Counts measure the whole Go/model pipeline. Three missing-input sentences are deterministic server text; one conflict statement is model text based on an explicitly contradictory fixture. Do not interpret four actionable needs_input outputs as four model-written questions.",
+    "Labels and split were frozen before tuning. The first heldout read was after eb00d346 (v9). Later heldout reruns, including this review follow-up, are verification on an already evaluated set; heldout cases are structural near-copies of dev cases.",
+    "Baseline production is 94dba219; its harness was uncommitted and lacked a patch digest. Initial v13 measured production is 06c8ba2c. The final review replay uses the clean tracked production SHA in each after row. Prompt remains wisnew-investigation-13 because instructions/schema are unchanged; tool provenance is wis614-tools-7.",
+    "Only labels were frozen, not a hashed harness. Prior additions strengthened task-description checks; review changes remove prefix credit and report server authorship. The requested needs_input fallback changes an outcome expectation while keeping no-unvalidated-artifact assertions.",
+    "Wall-clock latency covers Runtime.Investigate including tokenization, tools and database persistence, excluding test setup and model-lock wait. Shared GPU/CPU/cache effects are uncontrolled. The server was externally restarted between early historical runs. These are measurements, not an isolated speed benchmark.",
+    "Historical two-of-four SCHEMA_INVALID responses were not retained; exact fields remain unknown. Fresh baseline and final schema rates are separate. V10 interrupted failures and all intermediates remain in private evidence.",
+    "Final direct clarifications have Go-written rationale. Earlier raw model responses with approximate quantities or clipped reason codes remain historical evidence; their text is no longer copied into the persisted clarification rationale.",
+    "Raw diagnostics, RED/green logs and credentials remain untracked. The JSON includes only synthetic artifacts and report metadata. No push, PR, merge, deployment or Linear write."
+  ],
+  "summary": {
+    "before": {
+      "all": {
+        "cases": 8,
+        "assertion_passes": 0,
+        "status_matches": 3,
+        "expected_proposals": 4,
+        "proposals_produced": 0,
+        "correct_proposals": 0,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 6,
+        "correct_and_actionable_needs_input": 0,
+        "refusals": 2,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 24,
+        "latency_ms": {
+          "mean": 14662,
+          "median": 16978,
+          "min": 4572,
+          "max": 19795
+        },
+        "metric_scope": "whole_pipeline_not_model_only"
+      },
+      "dev": {
+        "cases": 4,
+        "assertion_passes": 0,
+        "status_matches": 1,
+        "expected_proposals": 2,
+        "proposals_produced": 0,
+        "correct_proposals": 0,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 3,
+        "correct_and_actionable_needs_input": 0,
+        "refusals": 1,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 12,
+        "latency_ms": {
+          "mean": 14585.5,
+          "median": 17174.5,
+          "min": 4572,
+          "max": 19421
+        },
+        "metric_scope": "whole_pipeline_not_model_only"
+      },
+      "heldout": {
+        "cases": 4,
+        "assertion_passes": 0,
+        "status_matches": 2,
+        "expected_proposals": 2,
+        "proposals_produced": 0,
+        "correct_proposals": 0,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 3,
+        "correct_and_actionable_needs_input": 0,
+        "refusals": 1,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 12,
+        "latency_ms": {
+          "mean": 14738.5,
+          "median": 16840.5,
+          "min": 5478,
+          "max": 19795
+        },
+        "metric_scope": "whole_pipeline_not_model_only"
+      }
+    },
+    "after": {
+      "all": {
+        "metric_scope": "whole_pipeline_not_model_only",
+        "cases": 8,
+        "assertion_passes": 8,
+        "status_matches": 8,
+        "expected_proposals": 4,
+        "proposals_produced": 4,
+        "correct_proposals": 4,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 4,
+        "correct_and_actionable_needs_input": 4,
+        "refusals": 0,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 24,
+        "latency_ms": {
+          "mean": 15610.5,
+          "median": 13572.5,
+          "min": 5947,
+          "max": 28719
+        }
+      },
+      "dev": {
+        "metric_scope": "whole_pipeline_not_model_only",
+        "cases": 4,
+        "assertion_passes": 4,
+        "status_matches": 4,
+        "expected_proposals": 2,
+        "proposals_produced": 2,
+        "correct_proposals": 2,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 2,
+        "correct_and_actionable_needs_input": 2,
+        "refusals": 0,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 12,
+        "latency_ms": {
+          "mean": 15196.5,
+          "median": 13398,
+          "min": 5947,
+          "max": 28043
+        }
+      },
+      "heldout": {
+        "metric_scope": "whole_pipeline_not_model_only",
+        "cases": 4,
+        "assertion_passes": 4,
+        "status_matches": 4,
+        "expected_proposals": 2,
+        "proposals_produced": 2,
+        "correct_proposals": 2,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 2,
+        "correct_and_actionable_needs_input": 2,
+        "refusals": 0,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 12,
+        "latency_ms": {
+          "mean": 16024.5,
+          "median": 14692,
+          "min": 5995,
+          "max": 28719
+        }
+      }
+    },
+    "after_v13": {
+      "all": {
+        "cases": 8,
+        "assertion_passes": 8,
+        "status_matches": 8,
+        "expected_proposals": 4,
+        "proposals_produced": 4,
+        "correct_proposals": 4,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 4,
+        "correct_and_actionable_needs_input": 4,
+        "refusals": 0,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 24,
+        "latency_ms": {
+          "mean": 15880.875,
+          "median": 15067,
+          "min": 5022,
+          "max": 26693
+        },
+        "metric_scope": "whole_pipeline_not_model_only"
+      },
+      "dev": {
+        "cases": 4,
+        "assertion_passes": 4,
+        "status_matches": 4,
+        "expected_proposals": 2,
+        "proposals_produced": 2,
+        "correct_proposals": 2,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 2,
+        "correct_and_actionable_needs_input": 2,
+        "refusals": 0,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 12,
+        "latency_ms": {
+          "mean": 15163.75,
+          "median": 14925.5,
+          "min": 5022,
+          "max": 25782
+        },
+        "metric_scope": "whole_pipeline_not_model_only"
+      },
+      "heldout": {
+        "cases": 4,
+        "assertion_passes": 4,
+        "status_matches": 4,
+        "expected_proposals": 2,
+        "proposals_produced": 2,
+        "correct_proposals": 2,
+        "incorrect_proposals": 0,
+        "needs_input_produced": 2,
+        "correct_and_actionable_needs_input": 2,
+        "refusals": 0,
+        "terminal_schema_invalid": 0,
+        "provider_schema_errors": 0,
+        "model_calls": 12,
+        "latency_ms": {
+          "mean": 16598,
+          "median": 16762,
+          "min": 6175,
+          "max": 26693
+        },
+        "metric_scope": "whole_pipeline_not_model_only"
+      }
+    }
+  },
+  "original_cases": {
+    "baseline": [
+      {
+        "case_id": "0e07e22d-1460-4c38-9d66-3faed8eda3e3",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wis702-investigation-6",
+        "qualified": false,
+        "result": {
+          "RunID": "65fa58b6-0c9a-4cc2-bae0-5195d0910073",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "REQUIRED_INPUT_MISSING"
+          ],
+          "ArtifactID": "6a1f174a-3401-43b4-b56d-cfb1ef15bbd2",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "tool_version": "wis614-tools-6"
+      },
+      {
+        "case_id": "31795061-6099-49eb-8b74-2760637dd5eb",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wis702-investigation-6",
+        "qualified": false,
+        "result": {
+          "RunID": "482dea3d-7fd4-47c6-86fa-53d967b2d8fa",
+          "State": "completed",
+          "Status": "refused",
+          "Reasons": [
+            "TOOL_REF_NOT_IN_SCOPE"
+          ],
+          "ArtifactID": "",
+          "Replayed": false
+        },
+        "model_calls": 2,
+        "tool_version": "wis614-tools-6"
+      },
+      {
+        "case_id": "6fc46aef-3e8b-4023-b428-9935776a36f8",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wis702-investigation-6",
+        "qualified": false,
+        "result": {
+          "RunID": "4dd022ee-37e6-49f0-93ad-cdc56d81af2d",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "CONTRADICTORY_EVIDENCE"
+          ],
+          "ArtifactID": "",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "tool_version": "wis614-tools-6"
+      },
+      {
+        "case_id": "97fa64a0-81a2-4071-aad4-b7dcac61afcc",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wis702-investigation-6",
+        "qualified": false,
+        "result": {
+          "RunID": "6308088c-a476-4ab7-bcc6-502bec5b793b",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "SPECIALIST_NEEDS_INPUT"
+          ],
+          "ArtifactID": "",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "tool_version": "wis614-tools-6"
+      }
+    ],
+    "v13": [
+      {
+        "case_id": "0e07e22d-1460-4c38-9d66-3faed8eda3e3",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wisnew-investigation-13",
+        "qualified": false,
+        "result": {
+          "RunID": "9b7207cc-3160-4744-822f-22b8171b700e",
+          "State": "completed",
+          "Status": "proposed",
+          "Reasons": [],
+          "ArtifactID": "d585438e-5c47-436a-a153-11841acac08f",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "tool_version": "wis614-tools-6"
+      },
+      {
+        "case_id": "31795061-6099-49eb-8b74-2760637dd5eb",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wisnew-investigation-13",
+        "qualified": false,
+        "result": {
+          "RunID": "dd834b06-cf6d-405b-8e5f-88ded077d59b",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "SPECIALIST_NEEDS_INPUT"
+          ],
+          "ArtifactID": "87d1aef5-6ca7-4545-a1bb-8a387406d968",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "tool_version": "wis614-tools-6"
+      },
+      {
+        "case_id": "6fc46aef-3e8b-4023-b428-9935776a36f8",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wisnew-investigation-13",
+        "qualified": false,
+        "result": {
+          "RunID": "2b9eb47b-6e2d-4560-b365-1b5d2b7357f5",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "SPECIALIST_NEEDS_INPUT"
+          ],
+          "ArtifactID": "64165483-addf-4687-9738-03fc84c167bd",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "tool_version": "wis614-tools-6"
+      },
+      {
+        "case_id": "97fa64a0-81a2-4071-aad4-b7dcac61afcc",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wisnew-investigation-13",
+        "qualified": false,
+        "result": {
+          "RunID": "c4be3599-968f-49b3-a47f-c70094852e75",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "SPECIALIST_NEEDS_INPUT"
+          ],
+          "ArtifactID": "af1be799-6d84-47c8-a9d8-bacd0c7cba23",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "tool_version": "wis614-tools-6"
+      }
+    ],
+    "review_final": [
+      {
+        "case_id": "0e07e22d-1460-4c38-9d66-3faed8eda3e3",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wisnew-investigation-13",
+        "tool_version": "wis614-tools-7",
+        "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+        "qualified": false,
+        "result": {
+          "RunID": "573d3fa4-7163-4c94-9584-0f93649697c6",
+          "State": "completed",
+          "Status": "proposed",
+          "Reasons": [],
+          "ArtifactID": "6f2d247c-385f-41f9-bc49-cf963f0797f6",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "stored_artifact": {
+          "case_id": "0e07e22d-1460-4c38-9d66-3faed8eda3e3",
+          "options": [
+            {
+              "kind": "maintenance_investigation",
+              "text": "Inspect the machine fault to determine root cause and repair status.",
+              "evidence_ids": [
+                "7e680c0d-7c64-5db5-9309-566c66b5e127"
+              ]
+            },
+            {
+              "kind": "defer",
+              "text": "Defer the investigation.",
+              "evidence_ids": []
+            },
+            {
+              "kind": "escalate",
+              "text": "Escalate the issue.",
+              "evidence_ids": []
+            }
+          ],
+          "unknowns": [
+            {
+              "field": "root_cause",
+              "question": "What is the root cause of the machine fault?",
+              "required": false
+            },
+            {
+              "field": "repair_status",
+              "question": "What is the current repair status?",
+              "required": false
+            }
+          ],
+          "versions": {
+            "tool_version": "wis614-tools-7",
+            "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+            "plan_revision": 1,
+            "graph_revision": 12,
+            "prompt_version": "wisnew-investigation-13",
+            "policy_revision": 1
+          },
+          "rationale": "The machine fault stoppage may have contributed to the measured deficit.",
+          "context_id": "c381ab56-f14c-45e3-b3dd-178e5eb624a9",
+          "expires_at": "2026-11-11T19:23:47Z",
+          "hypotheses": [
+            {
+              "text": "The machine fault stoppage may have contributed to the measured deficit.",
+              "evidence_ids": [
+                "7e680c0d-7c64-5db5-9309-566c66b5e127"
+              ],
+              "contradicting_evidence_ids": []
+            }
+          ],
+          "proposal_id": "",
+          "generated_at": "2026-11-11T18:53:47Z",
+          "observations": [
+            {
+              "unit": "count",
+              "window_end": "2026-11-10T19:00:00Z",
+              "metric_name": "expected_good_units",
+              "evidence_ids": [
+                "38aa7a93-feb3-5e28-ae53-4069f0794fce"
+              ],
+              "window_start": "2026-11-10T18:45:00Z",
+              "value_decimal": "100.000000",
+              "measurement_id": "38aa7a93-feb3-5e28-ae53-4069f0794fce"
+            },
+            {
+              "unit": "count",
+              "window_end": "2026-11-10T19:00:00Z",
+              "metric_name": "actual_good_units",
+              "evidence_ids": [
+                "ff196855-ad79-59c0-9ed2-0759fabf64cd"
+              ],
+              "window_start": "2026-11-10T18:45:00Z",
+              "value_decimal": "80.000000",
+              "measurement_id": "ff196855-ad79-59c0-9ed2-0759fabf64cd"
+            }
+          ],
+          "task_payload": {
+            "kind": "maintenance_investigation.create",
+            "due_at": "2026-11-12T18:53:47Z",
+            "line_id": "75558ba0-c12d-5fd4-8d80-10fa3565c2c9",
+            "asset_id": "75558ba0-c12d-5fd4-8d80-10fa3565c2c9",
+            "order_id": "de7f7094-f512-4ec2-a853-2b732f01cab1",
+            "template": "inspect_report_only",
+            "assignee_id": "3df72cd3-9a36-58be-8b8d-26bd352429c0",
+            "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures."
+          },
+          "case_revision": 4,
+          "selected_option": "maintenance_investigation",
+          "context_revision": 1
+        },
+        "question_origin": null
+      },
+      {
+        "case_id": "31795061-6099-49eb-8b74-2760637dd5eb",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wisnew-investigation-13",
+        "tool_version": "wis614-tools-7",
+        "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+        "qualified": false,
+        "result": {
+          "RunID": "87e2c06e-b6f9-44de-b947-8adf2ad75435",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "SPECIALIST_NEEDS_INPUT"
+          ],
+          "ArtifactID": "0548b263-6cbd-4974-94f4-81ee4ac07585",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "stored_artifact": {
+          "case_id": "31795061-6099-49eb-8b74-2760637dd5eb",
+          "options": [
+            {
+              "kind": "clarify",
+              "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+              "evidence_ids": []
+            }
+          ],
+          "unknowns": [
+            {
+              "field": "required_input_1",
+              "question": "Can the supervisor provide trustworthy machine-state evidence of an unexplained stoppage during the case windows?",
+              "required": true
+            }
+          ],
+          "versions": {
+            "tool_version": "wis614-tools-7",
+            "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+            "plan_revision": 1,
+            "graph_revision": 1043,
+            "prompt_version": "wisnew-investigation-13",
+            "policy_revision": 1
+          },
+          "rationale": "The supervisor must supply the missing input or reconcile the conflicting evidence before an inspection can proceed.",
+          "context_id": "1caef3c5-79f5-422e-90aa-4d36d276c5be",
+          "expires_at": "2026-11-11T19:24:08.86575Z",
+          "hypotheses": [],
+          "proposal_id": "",
+          "generated_at": "2026-11-11T18:54:08.86575Z",
+          "observations": [
+            {
+              "unit": "count",
+              "window_end": "2026-10-23T02:45:00Z",
+              "metric_name": "deficit_good_units",
+              "evidence_ids": [
+                "ca5c4c00-510b-5e24-8037-33824c5582e7"
+              ],
+              "window_start": "2026-10-23T02:30:00Z",
+              "value_decimal": "5.000300",
+              "measurement_id": "ca5c4c00-510b-5e24-8037-33824c5582e7"
+            },
+            {
+              "unit": "count",
+              "window_end": "2026-10-23T03:00:00Z",
+              "metric_name": "deficit_good_units",
+              "evidence_ids": [
+                "fe03e283-4e1b-5e3c-9c0a-cef8ee2f4500"
+              ],
+              "window_start": "2026-10-23T02:45:00Z",
+              "value_decimal": "5.000300",
+              "measurement_id": "fe03e283-4e1b-5e3c-9c0a-cef8ee2f4500"
+            }
+          ],
+          "task_payload": null,
+          "case_revision": 4,
+          "selected_option": "clarify",
+          "context_revision": 1
+        },
+        "question_origin": "server_derived_from_forced_missing_key"
+      },
+      {
+        "case_id": "6fc46aef-3e8b-4023-b428-9935776a36f8",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wisnew-investigation-13",
+        "tool_version": "wis614-tools-7",
+        "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+        "qualified": false,
+        "result": {
+          "RunID": "872c6211-8df0-4210-84d7-ea2b7d379eaa",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "SPECIALIST_NEEDS_INPUT"
+          ],
+          "ArtifactID": "e2156940-6cd5-47c4-9d5f-e750656c2bbe",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "stored_artifact": {
+          "case_id": "6fc46aef-3e8b-4023-b428-9935776a36f8",
+          "options": [
+            {
+              "kind": "clarify",
+              "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+              "evidence_ids": []
+            }
+          ],
+          "unknowns": [
+            {
+              "field": "required_input_1",
+              "question": "Can the supervisor provide trustworthy machine-state evidence of an unexplained stoppage during the case windows?",
+              "required": true
+            }
+          ],
+          "versions": {
+            "tool_version": "wis614-tools-7",
+            "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+            "plan_revision": 1,
+            "graph_revision": 1043,
+            "prompt_version": "wisnew-investigation-13",
+            "policy_revision": 1
+          },
+          "rationale": "The supervisor must supply the missing input or reconcile the conflicting evidence before an inspection can proceed.",
+          "context_id": "15f4168d-46da-466c-95f5-7b405d61fc03",
+          "expires_at": "2026-11-11T19:24:23.457887Z",
+          "hypotheses": [],
+          "proposal_id": "",
+          "generated_at": "2026-11-11T18:54:23.457887Z",
+          "observations": [
+            {
+              "unit": "count",
+              "window_end": "2026-10-23T09:15:00Z",
+              "metric_name": "deficit_good_units",
+              "evidence_ids": [
+                "77bd79ab-ca96-584e-801c-7443fdfb5105"
+              ],
+              "window_start": "2026-10-23T09:00:00Z",
+              "value_decimal": "5.000800",
+              "measurement_id": "77bd79ab-ca96-584e-801c-7443fdfb5105"
+            },
+            {
+              "unit": "count",
+              "window_end": "2026-10-23T09:30:00Z",
+              "metric_name": "deficit_good_units",
+              "evidence_ids": [
+                "fe61facb-209b-5b5c-9309-f208f46324e0"
+              ],
+              "window_start": "2026-10-23T09:15:00Z",
+              "value_decimal": "5.000800",
+              "measurement_id": "fe61facb-209b-5b5c-9309-f208f46324e0"
+            }
+          ],
+          "task_payload": null,
+          "case_revision": 4,
+          "selected_option": "clarify",
+          "context_revision": 1
+        },
+        "question_origin": "server_derived_from_forced_missing_key"
+      },
+      {
+        "case_id": "97fa64a0-81a2-4071-aad4-b7dcac61afcc",
+        "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+        "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+        "prompt_version": "wisnew-investigation-13",
+        "tool_version": "wis614-tools-7",
+        "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+        "qualified": false,
+        "result": {
+          "RunID": "17f85770-57da-4724-99a9-824159dbf1d9",
+          "State": "completed",
+          "Status": "needs_input",
+          "Reasons": [
+            "SPECIALIST_NEEDS_INPUT"
+          ],
+          "ArtifactID": "170b1760-0b52-4c72-8388-7a34155c1c4a",
+          "Replayed": false
+        },
+        "model_calls": 3,
+        "stored_artifact": {
+          "case_id": "97fa64a0-81a2-4071-aad4-b7dcac61afcc",
+          "options": [
+            {
+              "kind": "clarify",
+              "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+              "evidence_ids": []
+            }
+          ],
+          "unknowns": [
+            {
+              "field": "required_input_1",
+              "question": "Can the supervisor provide trustworthy machine-state evidence of an unexplained stoppage during the case windows?",
+              "required": true
+            }
+          ],
+          "versions": {
+            "tool_version": "wis614-tools-7",
+            "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+            "plan_revision": 1,
+            "graph_revision": 1043,
+            "prompt_version": "wisnew-investigation-13",
+            "policy_revision": 1
+          },
+          "rationale": "The supervisor must supply the missing input or reconcile the conflicting evidence before an inspection can proceed.",
+          "context_id": "9f1179ef-ee31-4a0d-81fd-1fe746ce227f",
+          "expires_at": "2026-11-11T19:24:33.846924Z",
+          "hypotheses": [],
+          "proposal_id": "",
+          "generated_at": "2026-11-11T18:54:33.846924Z",
+          "observations": [
+            {
+              "unit": "count",
+              "window_end": "2026-10-23T01:45:00Z",
+              "metric_name": "deficit_good_units",
+              "evidence_ids": [
+                "2ca4857a-7322-5df9-bba6-ab9ee2b4153e"
+              ],
+              "window_start": "2026-10-23T01:30:00Z",
+              "value_decimal": "6.000800",
+              "measurement_id": "2ca4857a-7322-5df9-bba6-ab9ee2b4153e"
+            },
+            {
+              "unit": "count",
+              "window_end": "2026-10-23T02:00:00Z",
+              "metric_name": "deficit_good_units",
+              "evidence_ids": [
+                "dc33d239-68d0-5724-814d-91da7515bcf6"
+              ],
+              "window_start": "2026-10-23T01:45:00Z",
+              "value_decimal": "6.000800",
+              "measurement_id": "dc33d239-68d0-5724-814d-91da7515bcf6"
+            }
+          ],
+          "task_payload": null,
+          "case_revision": 4,
+          "selected_option": "clarify",
+          "context_revision": 1
+        },
+        "question_origin": "server_derived_from_forced_missing_key"
+      }
+    ]
+  },
+  "intermediate_measurements": [
+    {
+      "artifact": "synthetic-dev-after.jsonl",
+      "sha256": "45059c54ff8baba6a1ca70c32067c145bdb0b1f901692e5b38aa2c854b7a7cc1",
+      "cases": 4,
+      "assertion_passes": 1,
+      "status_matches": 1,
+      "expected_proposals": 2,
+      "proposals_produced": 0,
+      "incorrect_proposals": 0,
+      "needs_input_produced": 3,
+      "refusals": 1,
+      "terminal_schema_invalid": 0,
+      "provider_schema_errors": 0,
+      "model_calls": 12,
+      "latency_ms": {
+        "mean": 16368,
+        "median": 19193,
+        "min": 7153,
+        "max": 19933
+      },
+      "counts_are_assertion_based": true,
+      "proposals_passing_then_current_assertions": 0,
+      "needs_input_passing_then_current_assertions": 1
+    },
+    {
+      "artifact": "synthetic-dev-v8.jsonl",
+      "sha256": "cbe72bbb851c7ac2b0ad01ac507f86fc9ccd8de4d2b0d649bbe0d90a713fd4b4",
+      "cases": 4,
+      "assertion_passes": 2,
+      "status_matches": 2,
+      "expected_proposals": 2,
+      "proposals_produced": 0,
+      "incorrect_proposals": 0,
+      "needs_input_produced": 4,
+      "refusals": 0,
+      "terminal_schema_invalid": 0,
+      "provider_schema_errors": 0,
+      "model_calls": 12,
+      "latency_ms": {
+        "mean": 13309.5,
+        "median": 13224,
+        "min": 5596,
+        "max": 21194
+      },
+      "counts_are_assertion_based": true,
+      "proposals_passing_then_current_assertions": 0,
+      "needs_input_passing_then_current_assertions": 2
+    },
+    {
+      "artifact": "synthetic-dev-v9.jsonl",
+      "sha256": "1a2dff1ca847cbef030a0d925e22c0cb332bde75050369553acb418ca82c20a3",
+      "cases": 4,
+      "assertion_passes": 4,
+      "status_matches": 4,
+      "expected_proposals": 2,
+      "proposals_produced": 2,
+      "incorrect_proposals": 0,
+      "needs_input_produced": 2,
+      "refusals": 0,
+      "terminal_schema_invalid": 0,
+      "provider_schema_errors": 0,
+      "model_calls": 12,
+      "latency_ms": {
+        "mean": 12428.25,
+        "median": 12296,
+        "min": 4954,
+        "max": 20167
+      },
+      "counts_are_assertion_based": true,
+      "proposals_passing_then_current_assertions": 2,
+      "needs_input_passing_then_current_assertions": 2
+    },
+    {
+      "artifact": "synthetic-final.jsonl",
+      "sha256": "c9244a7a18735fe47b63e9309b8ae8e40d9eb39b7415454212f218003e10f5e3",
+      "cases": 8,
+      "assertion_passes": 8,
+      "status_matches": 8,
+      "expected_proposals": 4,
+      "proposals_produced": 4,
+      "incorrect_proposals": 0,
+      "needs_input_produced": 4,
+      "refusals": 0,
+      "terminal_schema_invalid": 0,
+      "provider_schema_errors": 0,
+      "model_calls": 24,
+      "latency_ms": {
+        "mean": 13716.5,
+        "median": 13647.5,
+        "min": 4823,
+        "max": 22765
+      },
+      "counts_are_assertion_based": true,
+      "proposals_passing_then_current_assertions": 4,
+      "needs_input_passing_then_current_assertions": 4
+    },
+    {
+      "artifact": "synthetic-v10-verified.jsonl",
+      "sha256": "7674ee5c29b2329a0d1f84d33e68d7d0c5fbfb30dea8c388ecbf65ae226d21f7",
+      "cases": 3,
+      "assertion_passes": 1,
+      "status_matches": 1,
+      "expected_proposals": 2,
+      "proposals_produced": 0,
+      "incorrect_proposals": 0,
+      "needs_input_produced": 1,
+      "refusals": 2,
+      "terminal_schema_invalid": 2,
+      "provider_schema_errors": 0,
+      "model_calls": 11,
+      "latency_ms": {
+        "mean": 46059.666666666664,
+        "median": 54332,
+        "min": 29285,
+        "max": 54562
+      },
+      "counts_are_assertion_based": true,
+      "proposals_passing_then_current_assertions": 0,
+      "needs_input_passing_then_current_assertions": 1
+    },
+    {
+      "artifact": "synthetic-v11.jsonl",
+      "sha256": "f8f742171680c381150d645f0f0708aefffdef79814e94d3c0bcce7e18660f5a",
+      "cases": 8,
+      "assertion_passes": 8,
+      "status_matches": 8,
+      "expected_proposals": 4,
+      "proposals_produced": 4,
+      "incorrect_proposals": 0,
+      "needs_input_produced": 4,
+      "refusals": 0,
+      "terminal_schema_invalid": 0,
+      "provider_schema_errors": 0,
+      "model_calls": 24,
+      "latency_ms": {
+        "mean": 15171.75,
+        "median": 14814.5,
+        "min": 5746,
+        "max": 26638
+      },
+      "counts_are_assertion_based": true,
+      "manual_review_issue": "Dev task text asserted unestablished causal contribution despite passing the original assertions.",
+      "proposals_passing_then_current_assertions": 4,
+      "needs_input_passing_then_current_assertions": 4
+    },
+    {
+      "artifact": "synthetic-v12.jsonl",
+      "sha256": "17d82fbe404be155104098a8c5b90fbe34e492a88b04ef14c23fa97b3a64d1c8",
+      "cases": 8,
+      "assertion_passes": 7,
+      "status_matches": 8,
+      "expected_proposals": 4,
+      "proposals_produced": 4,
+      "incorrect_proposals": 0,
+      "needs_input_produced": 4,
+      "refusals": 0,
+      "terminal_schema_invalid": 0,
+      "provider_schema_errors": 0,
+      "model_calls": 24,
+      "latency_ms": {
+        "mean": 18845.5,
+        "median": 23194.5,
+        "min": 5037,
+        "max": 28759
+      },
+      "counts_are_assertion_based": true,
+      "proposals_passing_then_current_assertions": 4,
+      "needs_input_passing_then_current_assertions": 3
+    }
+  ],
+  "artifact_digests": {
+    "synthetic-baseline.jsonl": "7edbc9b275e58c8ec8b0a16aa8648538f14a943efdada689322efc2c6ab6d760",
+    "synthetic-v13.jsonl": "fb805b74fd13e983009d633fada94eadd064e3bdaa56ea2c6ed0e3c71a2b642a",
+    "diagnostic-baseline.jsonl": "b82a84ac7bd73e5bac486da19cda75ddf260c1839ad3457da225838ac640e2bb",
+    "diagnostic-v13.jsonl": "db15eb80ad86372ff9be434bfd13fecdaa1fc6d0f40ad4a825133df9fc00f1bc",
+    "synthetic-wis710-review.jsonl": "5d8bca0ac62303c5da1eb14651b7b2cda7fff30b27c231f11ebe814440367e4f",
+    "diagnostic-wis710-review.jsonl": "cdf8ef144ac7f210bb246d6c14666055d8b836df6941ef481944e888b1856283",
+    "wis710-original-artifacts.jsonl": "99cbc104e30f77e8f5942048f58b3f95390c043ad1b032665e88ea87bed0048d",
+    "wis710-model-weight-sha256.txt": "69ef5c9b9eafb3095e51a4187938426e5ebc31c3961eeea6703c52a2383fc312"
+  },
+  "cases": [
+    {
+      "phase": "before",
+      "case_id": "dev-unexplained-stop",
+      "database_case_id": "585f1818-f407-429d-81a9-538af0ffa008",
+      "expected_status": "proposed",
+      "failures": [
+        "expected proposed, got needs_input",
+        "hypothesis asserts an unestablished cause"
+      ],
+      "git_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+      "input_tokens": 11910,
+      "latency_ms": 19421,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1370,
+      "partition": "dev",
+      "prompt_version": "wis702-investigation-6",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "585f1818-f407-429d-81a9-538af0ffa008",
+        "case_revision": 2,
+        "context_id": "b4693f20-6413-42a2-9215-1cb64103f777",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "70776534-ad0c-5289-a9d2-9d4be7762a19",
+            "evidence_ids": [
+              "1f887745-0d2b-5ab4-90df-fc856211a537"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "8597b0f0-20b2-5b14-addb-c63c4aed541a",
+            "evidence_ids": [
+              "1f887745-0d2b-5ab4-90df-fc856211a537"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "e62631f3-30b8-5615-8766-00e775a91364",
+            "evidence_ids": [
+              "1f887745-0d2b-5ab4-90df-fc856211a537"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine fault stoppage interrupted production, causing the measured deficit.",
+            "evidence_ids": [
+              "1f887745-0d2b-5ab4-90df-fc856211a537"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "stoppage_reason",
+            "question": "What specific fault caused the machine stoppage?",
+            "required": true
+          },
+          {
+            "field": "repair_status",
+            "question": "Has the machine been repaired and restarted?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Initiate maintenance investigation to inspect the machine fault.",
+            "evidence_ids": [
+              "1f887745-0d2b-5ab4-90df-fc856211a537"
+            ]
+          },
+          {
+            "kind": "clarify",
+            "text": "Clarify the specific stoppage reason if not yet documented.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "be7adcac-66a7-4dce-b72a-10f931756766",
+          "line_id": "be7adcac-66a7-4dce-b72a-10f931756766",
+          "order_id": "3cc6cea9-f0cb-4d04-a8e5-923732a32fec",
+          "assignee_id": "97f9688c-091a-5fbb-87ea-093fc480938f",
+          "template": "inspect_report_only",
+          "description": "Inspect the machine fault that caused the stoppage and the subsequent production deficit.",
+          "due_at": "2026-11-12T17:28:04Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wis702-investigation-6",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T17:28:04Z",
+        "expires_at": "2026-11-11T17:58:04Z",
+        "rationale": "The stoppage is classified as a machine fault, which supports a maintenance investigation. The measured deficit correlates with the stoppage window."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "4c9eb24e-b96a-4ee0-86fa-c73a3a4cadf8",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "REQUIRED_INPUT_MISSING"
+        ],
+        "ArtifactID": "d6bca979-8ffe-4a83-a5a3-5696e40d2a89",
+        "Replayed": false
+      },
+      "run_id": "4c9eb24e-b96a-4ee0-86fa-c73a3a4cadf8",
+      "tool_version": "wis614-tools-6"
+    },
+    {
+      "phase": "before",
+      "case_id": "dev-earlier-stop",
+      "database_case_id": "46074217-5053-490d-a399-013079dac981",
+      "expected_status": "proposed",
+      "failures": [
+        "expected proposed, got needs_input",
+        "hypothesis asserts an unestablished cause"
+      ],
+      "git_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+      "input_tokens": 11984,
+      "latency_ms": 17261,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1221,
+      "partition": "dev",
+      "prompt_version": "wis702-investigation-6",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "46074217-5053-490d-a399-013079dac981",
+        "case_revision": 2,
+        "context_id": "168d8b77-308f-4770-bef6-c10035057fae",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "b399a177-981f-5ab0-a058-51bf30b36d40",
+            "evidence_ids": [
+              "5c895f24-7910-5785-a173-b6efadc9993f"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "b7b356b6-794a-5a02-b608-8f92f208fa00",
+            "evidence_ids": [
+              "5c895f24-7910-5785-a173-b6efadc9993f"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine fault caused the production shortfall.",
+            "evidence_ids": [
+              "5c895f24-7910-5785-a173-b6efadc9993f"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What specific machine fault occurred?",
+            "required": true
+          },
+          {
+            "field": "repair_status",
+            "question": "Has the machine been repaired?",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Initiate maintenance investigation for the machine fault.",
+            "evidence_ids": [
+              "5c895f24-7910-5785-a173-b6efadc9993f"
+            ]
+          },
+          {
+            "kind": "clarify",
+            "text": "Clarify the nature of the machine fault.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "1f867e07-abd1-4936-be85-b8a4a7e1499a",
+          "line_id": "1f867e07-abd1-4936-be85-b8a4a7e1499a",
+          "order_id": "9078599a-ae33-4c7a-af19-d008a661f893",
+          "assignee_id": "639714ee-7055-5af3-ba5c-a58778756f78",
+          "template": "inspect_report_only",
+          "description": "Investigate the machine fault causing the production deficit.",
+          "due_at": "2026-11-12T17:28:24Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wis702-investigation-6",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T17:28:24Z",
+        "expires_at": "2026-11-11T17:58:24Z",
+        "rationale": "The machine fault evidence supports a maintenance investigation for the observed production deficit."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "74b91490-97dc-48a0-80d7-ceb0b64e45cc",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "REQUIRED_INPUT_MISSING"
+        ],
+        "ArtifactID": "20550913-f00d-4bf9-b8e0-cf4f01b97819",
+        "Replayed": false
+      },
+      "run_id": "74b91490-97dc-48a0-80d7-ceb0b64e45cc",
+      "tool_version": "wis614-tools-6"
+    },
+    {
+      "phase": "before",
+      "case_id": "dev-no-stop",
+      "database_case_id": "47c91d7d-de41-4970-bbe3-5135c825c63c",
+      "expected_status": "needs_input",
+      "failures": [
+        "no persisted grounded output or actionable missing-input question"
+      ],
+      "git_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+      "input_tokens": 10039,
+      "latency_ms": 4572,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 238,
+      "partition": "dev",
+      "prompt_version": "wis702-investigation-6",
+      "proposal": null,
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "d8626cd1-ce3f-47ee-a069-29e5980e5ebb",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "SPECIALIST_NEEDS_INPUT"
+        ],
+        "ArtifactID": "",
+        "Replayed": false
+      },
+      "run_id": "d8626cd1-ce3f-47ee-a069-29e5980e5ebb",
+      "tool_version": "wis614-tools-6"
+    },
+    {
+      "phase": "before",
+      "case_id": "dev-no-assignee",
+      "database_case_id": "918f2596-8163-40bf-b919-2bd2a19c56d7",
+      "expected_status": "needs_input",
+      "failures": [
+        "expected needs_input, got refused",
+        "no persisted grounded output or actionable missing-input question"
+      ],
+      "git_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+      "input_tokens": 11790,
+      "latency_ms": 17088,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1207,
+      "partition": "dev",
+      "prompt_version": "wis702-investigation-6",
+      "proposal": null,
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "cc8d4b6b-d077-4968-93fe-22d2cce1a9f0",
+        "State": "completed",
+        "Status": "refused",
+        "Reasons": [
+          "NO_ASSIGNEE_REQUIRES_CLARIFY"
+        ],
+        "ArtifactID": "",
+        "Replayed": false
+      },
+      "run_id": "cc8d4b6b-d077-4968-93fe-22d2cce1a9f0",
+      "tool_version": "wis614-tools-6"
+    },
+    {
+      "phase": "before",
+      "case_id": "heldout-late-stop",
+      "database_case_id": "fa8592ae-6c47-4e53-a77d-c816c79ea5b1",
+      "expected_status": "proposed",
+      "failures": [
+        "expected proposed, got needs_input",
+        "hypothesis asserts an unestablished cause"
+      ],
+      "git_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+      "input_tokens": 11895,
+      "latency_ms": 16813,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1175,
+      "partition": "heldout",
+      "prompt_version": "wis702-investigation-6",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "fa8592ae-6c47-4e53-a77d-c816c79ea5b1",
+        "case_revision": 2,
+        "context_id": "66d3ed63-7a88-409e-af8e-e6889693be69",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "0e741336-3413-5288-befd-69a9b7597371",
+            "evidence_ids": [
+              "0e741336-3413-5288-befd-69a9b7597371"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "4efc8c32-7d95-56cd-90ba-52065f4c6cb2",
+            "evidence_ids": [
+              "4efc8c32-7d95-56cd-90ba-52065f4c6cb2"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The production shortfall is caused by the machine fault stoppage.",
+            "evidence_ids": [
+              "701b0f37-d776-587e-8649-8eeaa58df0da"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause_details",
+            "question": "What specific fault caused the stoppage?",
+            "required": true
+          },
+          {
+            "field": "repair_status",
+            "question": "Has the machine been repaired?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Initiate maintenance investigation for the machine fault.",
+            "evidence_ids": [
+              "701b0f37-d776-587e-8649-8eeaa58df0da"
+            ]
+          },
+          {
+            "kind": "clarify",
+            "text": "Clarify the stoppage reason if no fault evidence exists.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "46343411-09c7-489f-923a-b60d32a195f1",
+          "line_id": "46343411-09c7-489f-923a-b60d32a195f1",
+          "order_id": "d36c9bf3-7bd7-47ac-8d16-c1cfebdec8f5",
+          "assignee_id": "070fda69-e11a-5573-bf0a-3c12b3a67d06",
+          "template": "inspect_report_only",
+          "description": "Investigate machine fault causing production deficit.",
+          "due_at": "2026-11-12T17:29:04Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wis702-investigation-6",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T17:29:04Z",
+        "expires_at": "2026-11-11T17:59:04Z",
+        "rationale": "The measured deficit of twenty units aligns with a recorded machine fault stoppage, supporting a maintenance investigation."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "f7962595-95b4-496a-89cd-8f4dabc477e9",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "REQUIRED_INPUT_MISSING"
+        ],
+        "ArtifactID": "b98b78a4-156e-46d9-a957-a323422a5d78",
+        "Replayed": false
+      },
+      "run_id": "f7962595-95b4-496a-89cd-8f4dabc477e9",
+      "tool_version": "wis614-tools-6"
+    },
+    {
+      "phase": "before",
+      "case_id": "heldout-mixed-stops",
+      "database_case_id": "c88a375e-3f72-457c-8412-a4a4728ce64e",
+      "expected_status": "proposed",
+      "failures": [
+        "expected proposed, got refused",
+        "no persisted grounded output or actionable missing-input question"
+      ],
+      "git_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+      "input_tokens": 12407,
+      "latency_ms": 19795,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1395,
+      "partition": "heldout",
+      "prompt_version": "wis702-investigation-6",
+      "proposal": null,
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "c0757fd3-6fb2-4101-9e67-bfd5e0b550fa",
+        "State": "completed",
+        "Status": "refused",
+        "Reasons": [
+          "NUMERIC_MISMATCH"
+        ],
+        "ArtifactID": "",
+        "Replayed": false
+      },
+      "run_id": "c0757fd3-6fb2-4101-9e67-bfd5e0b550fa",
+      "tool_version": "wis614-tools-6"
+    },
+    {
+      "phase": "before",
+      "case_id": "heldout-material-stop",
+      "database_case_id": "714bd98e-7cfd-4295-9e80-f5a36dace38b",
+      "expected_status": "needs_input",
+      "failures": [
+        "no persisted grounded output or actionable missing-input question"
+      ],
+      "git_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+      "input_tokens": 10413,
+      "latency_ms": 5478,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 290,
+      "partition": "heldout",
+      "prompt_version": "wis702-investigation-6",
+      "proposal": null,
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "528a001e-134c-449f-80d8-fa1b1f5f693c",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "CONTRADICTORY_EVIDENCE"
+        ],
+        "ArtifactID": "",
+        "Replayed": false
+      },
+      "run_id": "528a001e-134c-449f-80d8-fa1b1f5f693c",
+      "tool_version": "wis614-tools-6"
+    },
+    {
+      "phase": "before",
+      "case_id": "heldout-conflicting-log",
+      "database_case_id": "0017f4e4-0c56-486a-bdb4-a5fd54e3eb61",
+      "expected_status": "needs_input",
+      "failures": [
+        "missing exact input and responsible human in persisted questions",
+        "insufficient case carries a task"
+      ],
+      "git_sha": "94dba2197e492490870939f52f5c3d4d395b53dc",
+      "input_tokens": 11853,
+      "latency_ms": 16868,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1182,
+      "partition": "heldout",
+      "prompt_version": "wis702-investigation-6",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "0017f4e4-0c56-486a-bdb4-a5fd54e3eb61",
+        "case_revision": 2,
+        "context_id": "61e42ead-e479-4b63-a4e8-525326e1da6f",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "39fd4a66-7a95-5469-954f-fd2bf792f970",
+            "evidence_ids": [
+              "39fd4a66-7a95-5469-954f-fd2bf792f970"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "fd79d956-877d-5291-8daf-3d40c5f6cc4f",
+            "evidence_ids": [
+              "fd79d956-877d-5291-8daf-3d40c5f6cc4f"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine stoppage caused the production deficit.",
+            "evidence_ids": [
+              "dab3efd8-f39c-51ad-aa2b-673fd25d67eb"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What specific fault caused the machine stoppage?",
+            "required": true
+          },
+          {
+            "field": "repair_status",
+            "question": "Has the machine been repaired and restarted?",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Initiate maintenance investigation to address the machine fault.",
+            "evidence_ids": [
+              "dab3efd8-f39c-51ad-aa2b-673fd25d67eb"
+            ]
+          },
+          {
+            "kind": "clarify",
+            "text": "Clarify the stoppage reason if no machine fault evidence exists.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "a3e5e7cf-e034-4ace-bc72-75f34d391591",
+          "line_id": "a3e5e7cf-e034-4ace-bc72-75f34d391591",
+          "order_id": "64c8b1b9-4666-400e-a33f-9baffb527845",
+          "assignee_id": "d46aed0d-e35a-5725-a0f8-450ccbda7e4f",
+          "template": "inspect_report_only",
+          "description": "Investigate machine fault causing production deficit.",
+          "due_at": "2026-11-12T17:29:49Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wis702-investigation-6",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T17:29:49Z",
+        "expires_at": "2026-11-11T17:59:49Z",
+        "rationale": "The machine stoppage is classified as a machine fault, which supports a maintenance investigation option. The production deficit correlates with the stoppage window."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "096c0103-7512-428f-a093-312831425eca",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "REQUIRED_INPUT_MISSING"
+        ],
+        "ArtifactID": "1fce863c-3988-4e92-865f-d84affa7e1cb",
+        "Replayed": false
+      },
+      "run_id": "096c0103-7512-428f-a093-312831425eca",
+      "tool_version": "wis614-tools-6"
+    },
+    {
+      "phase": "after_v13",
+      "case_id": "dev-unexplained-stop",
+      "database_case_id": "efbc3f18-e1fc-4e2e-9cac-a7d9352bebb4",
+      "expected_status": "proposed",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "06c8ba2c2ccefc65ba05747c062de109721cd5c1",
+      "input_tokens": 13622,
+      "latency_ms": 25782,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1577,
+      "partition": "dev",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "efbc3f18-e1fc-4e2e-9cac-a7d9352bebb4",
+        "case_revision": 2,
+        "context_id": "88d2c919-cea1-4263-bc7b-7bb43595abee",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "413720bb-93c4-53a2-9ce8-179fa63b9163",
+            "evidence_ids": [
+              "413720bb-93c4-53a2-9ce8-179fa63b9163"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "dc9a5482-a837-5dcc-9bce-82a654fc939f",
+            "evidence_ids": [
+              "dc9a5482-a837-5dcc-9bce-82a654fc939f"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "46d4e66a-a63d-51c6-bec1-ce4e577b21b7",
+            "evidence_ids": [
+              "46d4e66a-a63d-51c6-bec1-ce4e577b21b7"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine fault stoppage may have contributed to the measured deficit.",
+            "evidence_ids": [
+              "e6b34238-cb24-54da-88c3-7086d078cab3",
+              "46d4e66a-a63d-51c6-bec1-ce4e577b21b7"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What is the root cause of the machine fault stoppage?",
+            "required": false
+          },
+          {
+            "field": "repair_status",
+            "question": "What is the current repair status?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Inspect the machine fault stoppage to determine root cause and repair status.",
+            "evidence_ids": [
+              "e6b34238-cb24-54da-88c3-7086d078cab3"
+            ]
+          },
+          {
+            "kind": "defer",
+            "text": "Defer the investigation until further evidence is available.",
+            "evidence_ids": []
+          },
+          {
+            "kind": "clarify",
+            "text": "Clarify the scope of the investigation.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "e592d1b5-d288-442e-9d8a-4f6c309877ef",
+          "line_id": "e592d1b5-d288-442e-9d8a-4f6c309877ef",
+          "order_id": "c0dc5249-4c33-4bb8-b856-95726e19661f",
+          "assignee_id": "f1de174d-3ad8-52fd-bb58-1bb07c0e51d9",
+          "template": "inspect_report_only",
+          "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures.",
+          "due_at": "2026-11-12T18:11:20Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T18:11:20Z",
+        "expires_at": "2026-11-11T18:41:20Z",
+        "rationale": "The measured deficit aligns with a machine fault stoppage and a confirmed assignee, satisfying the criteria for an inspection proposal."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "94330867-b4b2-4803-b341-ba3e064eeb65",
+        "State": "completed",
+        "Status": "proposed",
+        "Reasons": [],
+        "ArtifactID": "bb4c592d-2945-4b20-8e2f-377186ad7b9f",
+        "Replayed": false
+      },
+      "run_id": "94330867-b4b2-4803-b341-ba3e064eeb65",
+      "tool_version": "wis614-tools-6",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after_v13",
+      "case_id": "dev-earlier-stop",
+      "database_case_id": "ad91ea8c-af27-4b28-88d1-62983cbd1297",
+      "expected_status": "proposed",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "06c8ba2c2ccefc65ba05747c062de109721cd5c1",
+      "input_tokens": 13689,
+      "latency_ms": 22285,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1342,
+      "partition": "dev",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "ad91ea8c-af27-4b28-88d1-62983cbd1297",
+        "case_revision": 2,
+        "context_id": "b9e0f87c-a3d3-487d-ae49-8cdc2e6f0c0b",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "52d00c89-9ede-5c88-b7b8-84d2b96d4a13",
+            "evidence_ids": [
+              "52d00c89-9ede-5c88-b7b8-84d2b96d4a13"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "ce4d3ad3-456e-5c90-896f-c34cee56bcc1",
+            "evidence_ids": [
+              "ce4d3ad3-456e-5c90-896f-c34cee56bcc1"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine stoppage may have contributed to the production deficit.",
+            "evidence_ids": [
+              "f23c025c-30dd-5f77-b042-d225a58e04ba"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What is the root cause of the machine stoppage?",
+            "required": false
+          },
+          {
+            "field": "repair_status",
+            "question": "What is the current repair status?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Inspect the machine to determine the root cause of the stoppage and assess repair status.",
+            "evidence_ids": [
+              "f23c025c-30dd-5f77-b042-d225a58e04ba"
+            ]
+          },
+          {
+            "kind": "defer",
+            "text": "Defer the investigation until further information is available.",
+            "evidence_ids": []
+          },
+          {
+            "kind": "escalate",
+            "text": "Escalate the issue to a higher authority for decision.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "e8d2c22a-b56c-48d5-9b70-5ec3f2d2cb10",
+          "line_id": "e8d2c22a-b56c-48d5-9b70-5ec3f2d2cb10",
+          "order_id": "47012284-9fa8-4e59-9d43-cfbed37598f9",
+          "assignee_id": "2a9842c8-8a20-55e4-be85-666fc5fcfd72",
+          "template": "inspect_report_only",
+          "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures.",
+          "due_at": "2026-11-12T18:11:47Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T18:11:47Z",
+        "expires_at": "2026-11-11T18:41:47Z",
+        "rationale": "The machine stoppage is classified as machine_fault and a confirmed assignee is available, satisfying the conditions for an inspection-only proposal. The stoppage may have contributed to the deficit but is not the proven cause."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "cbeee9ce-cf60-4984-ac30-cef5644c1aef",
+        "State": "completed",
+        "Status": "proposed",
+        "Reasons": [],
+        "ArtifactID": "aaf574e0-e5c6-442c-aea4-906c79d3baca",
+        "Replayed": false
+      },
+      "run_id": "cbeee9ce-cf60-4984-ac30-cef5644c1aef",
+      "tool_version": "wis614-tools-6",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after_v13",
+      "case_id": "dev-no-stop",
+      "database_case_id": "f400310b-5cfd-4f53-99b9-96b539e74401",
+      "expected_status": "needs_input",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "06c8ba2c2ccefc65ba05747c062de109721cd5c1",
+      "input_tokens": 9775,
+      "latency_ms": 7566,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 294,
+      "partition": "dev",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "f400310b-5cfd-4f53-99b9-96b539e74401",
+        "case_revision": 2,
+        "context_id": "337e1af1-812e-40b8-9d27-eb0e61304c24",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "2c43a304-3ee3-52a3-b810-33352bd772f2",
+            "evidence_ids": [
+              "2c43a304-3ee3-52a3-b810-33352bd772f2"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "45bb2317-181d-5365-8fdc-9d255d116c9e",
+            "evidence_ids": [
+              "45bb2317-181d-5365-8fdc-9d255d116c9e"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [],
+        "unknowns": [
+          {
+            "field": "required_input_1",
+            "question": "Supervisor: Can the supervisor provide trustworthy machine-state evidence of an unexplained stoppage during the case windows?",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "clarify",
+            "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+            "evidence_ids": [
+              "84a3765d-3911-4d62-8a37-2348d1a49009"
+            ]
+          }
+        ],
+        "selected_option": "clarify",
+        "task_payload": null,
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T18:12:09.99979Z",
+        "expires_at": "2026-11-11T18:42:09.99979Z",
+        "rationale": "The measured deficit of twenty units is unexplained by the available data. The evidence source is classified as untrusted and contains no machine fault classification. A machine fault is required to authorize an inspection proposal."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "43e95884-7d0e-4388-bb6f-6436f9d0353a",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "SPECIALIST_NEEDS_INPUT"
+        ],
+        "ArtifactID": "e18a1fde-ca74-4621-8bc7-efbac43e599f",
+        "Replayed": false
+      },
+      "run_id": "43e95884-7d0e-4388-bb6f-6436f9d0353a",
+      "tool_version": "wis614-tools-6",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "question_origins": [
+        {
+          "field": "required_input_1",
+          "origin": "server_derived_from_forced_missing_key",
+          "human_check_could_be_satisfied_by_go_prefix": true
+        }
+      ]
+    },
+    {
+      "phase": "after_v13",
+      "case_id": "dev-no-assignee",
+      "database_case_id": "53f3ba86-582c-42a3-a186-1013ec8cf54a",
+      "expected_status": "needs_input",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "06c8ba2c2ccefc65ba05747c062de109721cd5c1",
+      "input_tokens": 9837,
+      "latency_ms": 5022,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 218,
+      "partition": "dev",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "53f3ba86-582c-42a3-a186-1013ec8cf54a",
+        "case_revision": 2,
+        "context_id": "952e18ea-aa76-4bce-b083-07655889ad0f",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "71f5e155-1fc6-59e6-a52b-5f4a87559667",
+            "evidence_ids": [
+              "71f5e155-1fc6-59e6-a52b-5f4a87559667"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "7607a416-4c81-58f2-83c0-63643857e379",
+            "evidence_ids": [
+              "7607a416-4c81-58f2-83c0-63643857e379"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [],
+        "unknowns": [
+          {
+            "field": "required_input_1",
+            "question": "Supervisor: Which maintenance assignee can the supervisor confirm for this line?",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "clarify",
+            "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+            "evidence_ids": [
+              "72723a94-b2ac-5591-a33e-a95fa1b97b0d"
+            ]
+          }
+        ],
+        "selected_option": "clarify",
+        "task_payload": null,
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T18:12:18.139101Z",
+        "expires_at": "2026-11-11T18:42:18.139101Z",
+        "rationale": "A machine fault stoppage is recorded, but no assignee is confirmed."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "c57d2760-1eb5-4fb6-b066-edc04e591f0a",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "SPECIALIST_NEEDS_INPUT"
+        ],
+        "ArtifactID": "b388e39e-7820-43bb-8ed0-9ac70f24d461",
+        "Replayed": false
+      },
+      "run_id": "c57d2760-1eb5-4fb6-b066-edc04e591f0a",
+      "tool_version": "wis614-tools-6",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "question_origins": [
+        {
+          "field": "required_input_1",
+          "origin": "server_derived_from_forced_missing_key",
+          "human_check_could_be_satisfied_by_go_prefix": true
+        }
+      ]
+    },
+    {
+      "phase": "after_v13",
+      "case_id": "heldout-late-stop",
+      "database_case_id": "9c8e84b7-c71f-4294-a7f0-77d538423e29",
+      "expected_status": "proposed",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "06c8ba2c2ccefc65ba05747c062de109721cd5c1",
+      "input_tokens": 13706,
+      "latency_ms": 25675,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1609,
+      "partition": "heldout",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "9c8e84b7-c71f-4294-a7f0-77d538423e29",
+        "case_revision": 2,
+        "context_id": "bf0300f2-f32f-47ec-a846-868fe1a46418",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "315b19a0-661d-54f5-be23-cb4caa1fd61a",
+            "evidence_ids": [
+              "315b19a0-661d-54f5-be23-cb4caa1fd61a",
+              "2c205da6-9a63-5a15-a043-b5025d61a3c2",
+              "66680e58-e4cc-5057-a9a2-d5e4f2240bce"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "d58045fd-4993-540b-b61b-fcd0a67bde29",
+            "evidence_ids": [
+              "d58045fd-4993-540b-b61b-fcd0a67bde29",
+              "30783b21-68df-50e1-81ad-f96db3b29b82",
+              "3c4dcf17-45c4-5bad-abf5-61c60494c710",
+              "1fa43e27-84fd-5271-9a06-6e84b5f38ad3"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine stoppage may have contributed to the production deficit.",
+            "evidence_ids": [
+              "1fa43e27-84fd-5271-9a06-6e84b5f38ad3"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What is the root cause of the machine stoppage?",
+            "required": false
+          },
+          {
+            "field": "repair_status",
+            "question": "What is the current repair status?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Inspect the machine to determine the root cause of the stoppage and assess repair status.",
+            "evidence_ids": [
+              "1fa43e27-84fd-5271-9a06-6e84b5f38ad3"
+            ]
+          },
+          {
+            "kind": "defer",
+            "text": "Defer the investigation until further information is available.",
+            "evidence_ids": []
+          },
+          {
+            "kind": "clarify",
+            "text": "Clarify the status of the machine and the assigned personnel.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "30b3e648-5ac0-419f-95d2-ddecc2973c2c",
+          "line_id": "30b3e648-5ac0-419f-95d2-ddecc2973c2c",
+          "order_id": "2e50da5a-e218-4c60-b97c-cc956306c9cf",
+          "assignee_id": "b1d47c15-1756-54b9-b9c0-f516e7fc0811",
+          "template": "inspect_report_only",
+          "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures.",
+          "due_at": "2026-11-12T18:12:23Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T18:12:23Z",
+        "expires_at": "2026-11-11T18:42:23Z",
+        "rationale": "The machine stoppage is classified as machine_fault and a confirmed assignee is available. The inspection is proposed to determine the root cause and repair status."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "93616117-ce3b-4aaa-956b-66bb9ae14137",
+        "State": "completed",
+        "Status": "proposed",
+        "Reasons": [],
+        "ArtifactID": "c29afd6a-b197-4a66-91b3-7ec78dd62b11",
+        "Replayed": false
+      },
+      "run_id": "93616117-ce3b-4aaa-956b-66bb9ae14137",
+      "tool_version": "wis614-tools-6",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after_v13",
+      "case_id": "heldout-mixed-stops",
+      "database_case_id": "fcae3260-d06a-4d1d-80f7-e9fc8f950ea9",
+      "expected_status": "proposed",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "06c8ba2c2ccefc65ba05747c062de109721cd5c1",
+      "input_tokens": 13997,
+      "latency_ms": 26693,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1644,
+      "partition": "heldout",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "fcae3260-d06a-4d1d-80f7-e9fc8f950ea9",
+        "case_revision": 2,
+        "context_id": "a6c7a50b-eb32-4035-bd7d-1b9fd0e07830",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "8f74bf45-e650-5409-bd2d-cf2db7e9c68e",
+            "evidence_ids": [
+              "8f74bf45-e650-5409-bd2d-cf2db7e9c68e"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "caa4ef63-64fe-5df7-a020-6ea6f268ea0c",
+            "evidence_ids": [
+              "caa4ef63-64fe-5df7-a020-6ea6f268ea0c"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "4aacb23e-d0b7-5ddf-9c12-7adf617476cd",
+            "evidence_ids": [
+              "4aacb23e-d0b7-5ddf-9c12-7adf617476cd"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The unexplained machine fault stoppage may have contributed to the production deficit.",
+            "evidence_ids": [
+              "c172b128-a708-5e00-9247-c269199421d7"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What is the root cause of the machine fault stoppage?",
+            "required": false
+          },
+          {
+            "field": "repair_status",
+            "question": "What is the current repair status of the machine?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Inspect the machine to determine the root cause of the fault and assess repair status.",
+            "evidence_ids": [
+              "c172b128-a708-5e00-9247-c269199421d7"
+            ]
+          },
+          {
+            "kind": "defer",
+            "text": "Defer the investigation until further information is available.",
+            "evidence_ids": []
+          },
+          {
+            "kind": "escalate",
+            "text": "Escalate the issue to a higher authority for resolution.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "527c9c95-9680-45b7-a46a-e2cbd1ab0cd8",
+          "line_id": "527c9c95-9680-45b7-a46a-e2cbd1ab0cd8",
+          "order_id": "74c68233-5033-4fc3-bdf4-a9e5020f7419",
+          "assignee_id": "dded5178-b1ec-5c95-b0d9-93e91377167a",
+          "template": "inspect_report_only",
+          "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures.",
+          "due_at": "2026-11-18T18:12:50Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T18:12:50Z",
+        "expires_at": "2026-11-11T18:42:50Z",
+        "rationale": "An unexplained machine fault stoppage occurred within the window of the measured deficit. A confirmed assignee is available to inspect the machine and report findings. The inspection will determine the root cause and repair status."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "99cf114a-471b-4b7b-a469-a7979df98c61",
+        "State": "completed",
+        "Status": "proposed",
+        "Reasons": [],
+        "ArtifactID": "87134761-a9f4-471f-9f29-15f62a2039e2",
+        "Replayed": false
+      },
+      "run_id": "99cf114a-471b-4b7b-a469-a7979df98c61",
+      "tool_version": "wis614-tools-6",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after_v13",
+      "case_id": "heldout-material-stop",
+      "database_case_id": "9008d34c-d390-4543-a2f6-c0c2ce5583f5",
+      "expected_status": "needs_input",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "06c8ba2c2ccefc65ba05747c062de109721cd5c1",
+      "input_tokens": 10093,
+      "latency_ms": 6175,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 270,
+      "partition": "heldout",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "9008d34c-d390-4543-a2f6-c0c2ce5583f5",
+        "case_revision": 2,
+        "context_id": "3171df39-fa05-41c6-a013-9491db26fcb1",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "978b7521-af36-552d-8855-b24166b18e02",
+            "evidence_ids": [
+              "978b7521-af36-552d-8855-b24166b18e02"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "f3d06371-3f9c-5172-8635-3a79e4bc882e",
+            "evidence_ids": [
+              "f3d06371-3f9c-5172-8635-3a79e4bc882e"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [],
+        "unknowns": [
+          {
+            "field": "required_input_1",
+            "question": "Supervisor: Can the supervisor provide trustworthy machine-state evidence of an unexplained stoppage during the case windows?",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "clarify",
+            "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+            "evidence_ids": [
+              "6a5966c5-21a8-5e25-a927-c4f8f058923a"
+            ]
+          }
+        ],
+        "selected_option": "clarify",
+        "task_payload": null,
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T18:13:17.281687Z",
+        "expires_at": "2026-11-11T18:43:17.281687Z",
+        "rationale": "The stoppage is classified as machine_stoppage, not machine_fault, so maintenance cannot be proposed without further evidence."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "eda6da0e-0e60-4bd6-8ea9-30cc0a7bfe5d",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "SPECIALIST_NEEDS_INPUT"
+        ],
+        "ArtifactID": "bad6ed8d-d8a4-433e-9d86-c11f385c00cc",
+        "Replayed": false
+      },
+      "run_id": "eda6da0e-0e60-4bd6-8ea9-30cc0a7bfe5d",
+      "tool_version": "wis614-tools-6",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "question_origins": [
+        {
+          "field": "required_input_1",
+          "origin": "server_derived_from_forced_missing_key",
+          "human_check_could_be_satisfied_by_go_prefix": true
+        }
+      ]
+    },
+    {
+      "phase": "after_v13",
+      "case_id": "heldout-conflicting-log",
+      "database_case_id": "4ddbf7d0-b910-4c20-9525-0c1b56bea1a0",
+      "expected_status": "needs_input",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "06c8ba2c2ccefc65ba05747c062de109721cd5c1",
+      "input_tokens": 13710,
+      "latency_ms": 7849,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 372,
+      "partition": "heldout",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "4ddbf7d0-b910-4c20-9525-0c1b56bea1a0",
+        "case_revision": 2,
+        "context_id": "cd7f72f2-c5d1-4bfa-9ee1-b0d6671ffa26",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "1c00db0d-a8e6-5027-b611-97d026f6ab72",
+            "evidence_ids": [
+              "1c00db0d-a8e6-5027-b611-97d026f6ab72"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "0f517484-8166-5897-9ca6-22c9a216081d",
+            "evidence_ids": [
+              "0f517484-8166-5897-9ca6-22c9a216081d"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [],
+        "unknowns": [
+          {
+            "field": "conflicting_evidence_1",
+            "question": "Supervisor: The operator log states the press ran continuously without stopping, while the telemetry record indicates a stoppage during the current window; the supervisor has not resolved which record is correct.",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "clarify",
+            "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+            "evidence_ids": [
+              "0e95ef53-5fbe-528d-aba3-c1b18549d6ea",
+              "0f517484-8166-5897-9ca6-22c9a216081d",
+              "48e80c1c-a143-56ec-b2bb-3cb86d878453",
+              "7d97e3d5-0405-4d67-b952-9439541ca8c5"
+            ]
+          }
+        ],
+        "selected_option": "clarify",
+        "task_payload": null,
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-6"
+        },
+        "generated_at": "2026-11-11T18:13:24.041644Z",
+        "expires_at": "2026-11-11T18:43:24.041644Z",
+        "rationale": "A production deficit exists alongside a machine fault stoppage, but the operator log contradicts the stoppage record. The supervisor must reconcile these conflicting reports before an inspection can proceed."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "result": {
+        "RunID": "54dfdec9-cfbe-417d-8cff-7f02a1f2ddc0",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "CONTRADICTORY_EVIDENCE"
+        ],
+        "ArtifactID": "3191e3f6-a7ce-44ea-b61d-ada60ed86fc5",
+        "Replayed": false
+      },
+      "run_id": "54dfdec9-cfbe-417d-8cff-7f02a1f2ddc0",
+      "tool_version": "wis614-tools-6",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "question_origins": [
+        {
+          "field": "conflicting_evidence_1",
+          "origin": "model_reported_conflict_explicit_in_fixture",
+          "human_check_could_be_satisfied_by_go_prefix": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "case_id": "dev-unexplained-stop",
+      "database_case_id": "a08db801-8611-4283-b426-aa600fea7252",
+      "expected_status": "proposed",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+      "input_tokens": 13704,
+      "latency_ms": 28043,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1811,
+      "partition": "dev",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "a08db801-8611-4283-b426-aa600fea7252",
+        "case_revision": 2,
+        "context_id": "c679bcf3-8d15-45dc-bb61-bb4cb7f95bc3",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "2dbe0591-1d78-5c48-a8b6-14756638b53c",
+            "evidence_ids": [
+              "2dbe0591-1d78-5c48-a8b6-14756638b53c",
+              "2f943674-5b0d-5e3b-8028-4aceed250f0b",
+              "84284276-c2bd-5923-aef2-e9b3ede316cb"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "2f943674-5b0d-5e3b-8028-4aceed250f0b",
+            "evidence_ids": [
+              "2dbe0591-1d78-5c48-a8b6-14756638b53c",
+              "2f943674-5b0d-5e3b-8028-4aceed250f0b",
+              "84284276-c2bd-5923-aef2-e9b3ede316cb"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "84284276-c2bd-5923-aef2-e9b3ede316cb",
+            "evidence_ids": [
+              "2dbe0591-1d78-5c48-a8b6-14756638b53c",
+              "2f943674-5b0d-5e3b-8028-4aceed250f0b",
+              "84284276-c2bd-5923-aef2-e9b3ede316cb"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine stoppage may have contributed to the production deficit.",
+            "evidence_ids": [
+              "d118b1a3-6691-536d-b1c1-840000ad31c7"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What is the root cause of the machine stoppage?",
+            "required": false
+          },
+          {
+            "field": "repair_status",
+            "question": "What is the current repair status?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Inspect the machine to determine the root cause of the stoppage and assess repair status.",
+            "evidence_ids": [
+              "d118b1a3-6691-536d-b1c1-840000ad31c7"
+            ]
+          },
+          {
+            "kind": "defer",
+            "text": "Defer the investigation until further information is available.",
+            "evidence_ids": []
+          },
+          {
+            "kind": "escalate",
+            "text": "Escalate the issue to a higher authority for decision.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "1e4b8aab-63ed-4429-a176-067a16367c88",
+          "line_id": "1e4b8aab-63ed-4429-a176-067a16367c88",
+          "order_id": "9e6ed930-c31f-48a5-97c1-5e25c84b5377",
+          "assignee_id": "41befb2f-81bb-5f41-8165-896dc2ebdaf1",
+          "template": "inspect_report_only",
+          "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures.",
+          "due_at": "2026-11-18T18:51:32Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-7"
+        },
+        "generated_at": "2026-11-11T18:51:32Z",
+        "expires_at": "2026-11-11T19:21:32Z",
+        "rationale": "The machine stoppage is classified as machine_fault and a confirmed assignee is available. No conflicting evidence was found. An inspection is proposed to determine the root cause and repair status."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "question_origins": [],
+      "result": {
+        "RunID": "5870d8e3-3692-4c24-9624-83660a73f7aa",
+        "State": "completed",
+        "Status": "proposed",
+        "Reasons": [],
+        "ArtifactID": "0e084f36-37f7-4508-b894-477d4413e056",
+        "Replayed": false
+      },
+      "run_id": "5870d8e3-3692-4c24-9624-83660a73f7aa",
+      "tool_version": "wis614-tools-7",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after",
+      "case_id": "dev-earlier-stop",
+      "database_case_id": "ae2e73ed-ee01-484b-9a19-d46b3b463099",
+      "expected_status": "proposed",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+      "input_tokens": 13700,
+      "latency_ms": 20823,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1320,
+      "partition": "dev",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "ae2e73ed-ee01-484b-9a19-d46b3b463099",
+        "case_revision": 2,
+        "context_id": "040bc01e-eb6f-41bc-8c4a-54f6868a2da5",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "00799865-a293-5168-b5ff-231ee583558f",
+            "evidence_ids": [
+              "00799865-a293-5168-b5ff-231ee583558f"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "c1d791ba-0e55-5ce2-bdeb-1ac9efdf8635",
+            "evidence_ids": [
+              "c1d791ba-0e55-5ce2-bdeb-1ac9efdf8635"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine stoppage may have contributed to the production deficit.",
+            "evidence_ids": [
+              "c3aaeba2-8332-5396-9d8c-99fa545a2160"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What is the root cause of the machine stoppage?",
+            "required": false
+          },
+          {
+            "field": "repair_status",
+            "question": "What is the current repair status?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Inspect the machine to determine the root cause of the stoppage and assess repair status.",
+            "evidence_ids": [
+              "c3aaeba2-8332-5396-9d8c-99fa545a2160"
+            ]
+          },
+          {
+            "kind": "defer",
+            "text": "Defer the investigation until further information is available.",
+            "evidence_ids": []
+          },
+          {
+            "kind": "escalate",
+            "text": "Escalate the issue to a higher authority for resolution.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "b67ee0e1-c503-4fc5-8581-d3d4a313596b",
+          "line_id": "b67ee0e1-c503-4fc5-8581-d3d4a313596b",
+          "order_id": "2dbb5447-b2a0-475f-9808-e02e7a7c58a4",
+          "assignee_id": "313dd298-e62d-54cb-97bc-23ab78bbf4fa",
+          "template": "inspect_report_only",
+          "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures.",
+          "due_at": "2026-11-18T18:52:00Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-7"
+        },
+        "generated_at": "2026-11-11T18:52:00Z",
+        "expires_at": "2026-11-11T19:22:00Z",
+        "rationale": "The machine stoppage is classified as machine_fault and a confirmed assignee is available, satisfying the conditions for an inspection proposal."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "question_origins": [],
+      "result": {
+        "RunID": "3541a7f8-d4ce-4cfd-84d6-397b2ea581c2",
+        "State": "completed",
+        "Status": "proposed",
+        "Reasons": [],
+        "ArtifactID": "a11f2625-cc98-4bea-882c-9af4b1207986",
+        "Replayed": false
+      },
+      "run_id": "3541a7f8-d4ce-4cfd-84d6-397b2ea581c2",
+      "tool_version": "wis614-tools-7",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after",
+      "case_id": "dev-no-stop",
+      "database_case_id": "a77a6db5-3388-472c-b2bc-a172c38cfb73",
+      "expected_status": "needs_input",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+      "input_tokens": 9639,
+      "latency_ms": 5973,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 216,
+      "partition": "dev",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "a77a6db5-3388-472c-b2bc-a172c38cfb73",
+        "case_revision": 2,
+        "context_id": "09d56e80-193c-44f8-9a9a-04eb498abf3e",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "b85740f1-5446-5225-baae-e51d531be085",
+            "evidence_ids": [
+              "b85740f1-5446-5225-baae-e51d531be085"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "04151de1-c07d-5fa7-a4f6-5228e8e7637d",
+            "evidence_ids": [
+              "04151de1-c07d-5fa7-a4f6-5228e8e7637d"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [],
+        "unknowns": [
+          {
+            "field": "required_input_1",
+            "question": "Can the supervisor provide trustworthy machine-state evidence of an unexplained stoppage during the case windows?",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "clarify",
+            "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "clarify",
+        "task_payload": null,
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-7"
+        },
+        "generated_at": "2026-11-11T18:52:22.225454Z",
+        "expires_at": "2026-11-11T19:22:22.225454Z",
+        "rationale": "The supervisor must supply the missing input or reconcile the conflicting evidence before an inspection can proceed."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "question_origins": [
+        {
+          "field": "required_input_1",
+          "origin": "server_derived_from_forced_missing_key"
+        }
+      ],
+      "result": {
+        "RunID": "75ece3fe-2c8f-42eb-9d22-cf80d0f9da08",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "SPECIALIST_NEEDS_INPUT"
+        ],
+        "ArtifactID": "13016b77-5230-486d-904b-8f488622c3fe",
+        "Replayed": false
+      },
+      "run_id": "75ece3fe-2c8f-42eb-9d22-cf80d0f9da08",
+      "tool_version": "wis614-tools-7",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after",
+      "case_id": "dev-no-assignee",
+      "database_case_id": "93c5a30e-eac9-4fa2-8963-0b9c5f8ac8da",
+      "expected_status": "needs_input",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+      "input_tokens": 9862,
+      "latency_ms": 5947,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 296,
+      "partition": "dev",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "93c5a30e-eac9-4fa2-8963-0b9c5f8ac8da",
+        "case_revision": 2,
+        "context_id": "8a93404d-d038-4adf-b63f-c8219a20b476",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "bf8d19a1-3cf2-538d-a2fe-5264217b92c2",
+            "evidence_ids": [
+              "bf8d19a1-3cf2-538d-a2fe-5264217b92c2"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "619a51b6-7eb1-57d4-be3d-01cba9265b1d",
+            "evidence_ids": [
+              "619a51b6-7eb1-57d4-be3d-01cba9265b1d"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [],
+        "unknowns": [
+          {
+            "field": "required_input_1",
+            "question": "Which maintenance assignee can the supervisor confirm for this line?",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "clarify",
+            "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+            "evidence_ids": [
+              "aab9c20a-7fb2-56a6-b273-99921c0e3715",
+              "225451e8-5fc1-57d8-8ace-bc3da5b6e7f3",
+              "d95c20d1-8b06-5726-ac95-360b90da51d9"
+            ]
+          }
+        ],
+        "selected_option": "clarify",
+        "task_payload": null,
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-7"
+        },
+        "generated_at": "2026-11-11T18:52:28.797731Z",
+        "expires_at": "2026-11-11T19:22:28.797731Z",
+        "rationale": "The supervisor must supply the missing input or reconcile the conflicting evidence before an inspection can proceed."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "question_origins": [
+        {
+          "field": "required_input_1",
+          "origin": "server_derived_from_forced_missing_key"
+        }
+      ],
+      "result": {
+        "RunID": "de7ef49a-167a-470a-84c9-e799eb7ab17b",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "SPECIALIST_NEEDS_INPUT"
+        ],
+        "ArtifactID": "d040d6fd-99ed-48ce-a81f-6b37def4ed4c",
+        "Replayed": false
+      },
+      "run_id": "de7ef49a-167a-470a-84c9-e799eb7ab17b",
+      "tool_version": "wis614-tools-7",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after",
+      "case_id": "heldout-late-stop",
+      "database_case_id": "d1c56798-8aa7-4c5a-9cdb-b827550b3f97",
+      "expected_status": "proposed",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+      "input_tokens": 13738,
+      "latency_ms": 23062,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1490,
+      "partition": "heldout",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "d1c56798-8aa7-4c5a-9cdb-b827550b3f97",
+        "case_revision": 2,
+        "context_id": "84ba0df5-d5f7-4702-bcdc-27a0cf41d6ee",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "ece012f3-46f0-53cb-ba9b-9c0f3044949c",
+            "evidence_ids": [
+              "ece012f3-46f0-53cb-ba9b-9c0f3044949c",
+              "66b20a82-7e15-5457-89d7-58f61f1adc2c",
+              "8f5ba333-22cc-540c-a1f5-05887d4b7547"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          },
+          {
+            "measurement_id": "66b20a82-7e15-5457-89d7-58f61f1adc2c",
+            "evidence_ids": [
+              "ece012f3-46f0-53cb-ba9b-9c0f3044949c",
+              "66b20a82-7e15-5457-89d7-58f61f1adc2c",
+              "8f5ba333-22cc-540c-a1f5-05887d4b7547"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The machine stoppage may have contributed to the shortfall.",
+            "evidence_ids": [
+              "f55eb1b8-55c8-575b-846f-b3860b18e75a"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What is the root cause of the stoppage?",
+            "required": false
+          },
+          {
+            "field": "repair_status",
+            "question": "What is the current repair status?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Inspect the machine to determine the cause of the stoppage and its impact on production.",
+            "evidence_ids": [
+              "f55eb1b8-55c8-575b-846f-b3860b18e75a"
+            ]
+          },
+          {
+            "kind": "defer",
+            "text": "Defer the investigation until further information is available.",
+            "evidence_ids": []
+          },
+          {
+            "kind": "escalate",
+            "text": "Escalate the issue to a higher authority for review.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "740023f1-bf4f-4c35-8c3e-575c7c8c115e",
+          "line_id": "740023f1-bf4f-4c35-8c3e-575c7c8c115e",
+          "order_id": "9520373a-4db0-4cd0-86de-f5ca63720386",
+          "assignee_id": "78126674-04ac-56d6-b438-63ea96dbbe64",
+          "template": "inspect_report_only",
+          "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures.",
+          "due_at": "2026-11-18T18:52:35Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-7"
+        },
+        "generated_at": "2026-11-11T18:52:35Z",
+        "expires_at": "2026-11-11T19:22:35Z",
+        "rationale": "The stoppage is classified as machine_fault and an assignee is confirmed, allowing for an inspection proposal without conflicting evidence."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "question_origins": [],
+      "result": {
+        "RunID": "40c87519-9ba9-4abd-9b9c-c5fe0d4a9b5f",
+        "State": "completed",
+        "Status": "proposed",
+        "Reasons": [],
+        "ArtifactID": "d93bd596-dbf4-4a4f-a25b-b787f0acb9de",
+        "Replayed": false
+      },
+      "run_id": "40c87519-9ba9-4abd-9b9c-c5fe0d4a9b5f",
+      "tool_version": "wis614-tools-7",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after",
+      "case_id": "heldout-mixed-stops",
+      "database_case_id": "f9761b8e-a594-4e51-b46e-78b76f848ad9",
+      "expected_status": "proposed",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+      "input_tokens": 14089,
+      "latency_ms": 28719,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 1870,
+      "partition": "heldout",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "f9761b8e-a594-4e51-b46e-78b76f848ad9",
+        "case_revision": 2,
+        "context_id": "8ccc963b-5a33-41d5-9325-a5a940e87450",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "10271e51-220f-5fe2-b406-8831b953020f",
+            "evidence_ids": [
+              "10271e51-220f-5fe2-b406-8831b953020f",
+              "3e1c7e35-b47e-5c5d-8157-1186aba97c92",
+              "bbefd680-5b16-5b7c-99c6-6aa8759e7c8b"
+            ],
+            "metric_name": "expected_good_units",
+            "value_decimal": "100.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "3e1c7e35-b47e-5c5d-8157-1186aba97c92",
+            "evidence_ids": [
+              "10271e51-220f-5fe2-b406-8831b953020f",
+              "3e1c7e35-b47e-5c5d-8157-1186aba97c92",
+              "bbefd680-5b16-5b7c-99c6-6aa8759e7c8b"
+            ],
+            "metric_name": "actual_good_units",
+            "value_decimal": "80.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "bbefd680-5b16-5b7c-99c6-6aa8759e7c8b",
+            "evidence_ids": [
+              "10271e51-220f-5fe2-b406-8831b953020f",
+              "3e1c7e35-b47e-5c5d-8157-1186aba97c92",
+              "bbefd680-5b16-5b7c-99c6-6aa8759e7c8b"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          }
+        ],
+        "hypotheses": [
+          {
+            "text": "The unexplained machine fault stoppage may have contributed to the production deficit.",
+            "evidence_ids": [
+              "c92ce12c-ab2e-5aea-b8bc-2e123e87afec"
+            ],
+            "contradicting_evidence_ids": []
+          }
+        ],
+        "unknowns": [
+          {
+            "field": "root_cause",
+            "question": "What is the root cause of the machine fault stoppage?",
+            "required": false
+          },
+          {
+            "field": "repair_status",
+            "question": "What is the current repair status of the machine?",
+            "required": false
+          }
+        ],
+        "options": [
+          {
+            "kind": "maintenance_investigation",
+            "text": "Inspect the machine to determine the root cause of the fault and assess repair status.",
+            "evidence_ids": [
+              "c92ce12c-ab2e-5aea-b8bc-2e123e87afec"
+            ]
+          },
+          {
+            "kind": "defer",
+            "text": "Defer the investigation until further information is available.",
+            "evidence_ids": []
+          },
+          {
+            "kind": "escalate",
+            "text": "Escalate the issue to a higher authority for decision.",
+            "evidence_ids": []
+          }
+        ],
+        "selected_option": "maintenance_investigation",
+        "task_payload": {
+          "kind": "maintenance_investigation.create",
+          "asset_id": "f3f52a5f-4d5c-487b-aeaf-ad054859337e",
+          "line_id": "f3f52a5f-4d5c-487b-aeaf-ad054859337e",
+          "order_id": "9ed7cc0d-899c-49cf-99de-9df3f4dbd7da",
+          "assignee_id": "726d2754-75cc-5701-88cf-763f36bc80d0",
+          "template": "inspect_report_only",
+          "description": "Inspect the recorded machine stoppage and report findings to the supervisor under site procedures.",
+          "due_at": "2026-11-12T18:52:58Z"
+        },
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-7"
+        },
+        "generated_at": "2026-11-11T18:52:58Z",
+        "expires_at": "2026-11-11T19:22:58Z",
+        "rationale": "The investigation specialist has identified a production deficit and an unexplained machine fault stoppage. A confirmed assignee is available. The specialist proposes a maintenance investigation to inspect the machine and determine the root cause and repair status."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "question_origins": [],
+      "result": {
+        "RunID": "cc7afb12-76d4-4ca0-ab3f-08504793bc44",
+        "State": "completed",
+        "Status": "proposed",
+        "Reasons": [],
+        "ArtifactID": "449d12e7-8107-497b-8481-f213f4e7602a",
+        "Replayed": false
+      },
+      "run_id": "cc7afb12-76d4-4ca0-ab3f-08504793bc44",
+      "tool_version": "wis614-tools-7",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after",
+      "case_id": "heldout-material-stop",
+      "database_case_id": "f092e578-e58e-4ebd-970b-717a0b06d706",
+      "expected_status": "needs_input",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+      "input_tokens": 10030,
+      "latency_ms": 5995,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 281,
+      "partition": "heldout",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "f092e578-e58e-4ebd-970b-717a0b06d706",
+        "case_revision": 2,
+        "context_id": "f1e291dc-2900-48b5-9224-a3f5aa021971",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "fe525c7e-55c5-5419-8290-bab39d6b08a9",
+            "evidence_ids": [
+              "fe525c7e-55c5-5419-8290-bab39d6b08a9"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "9e57929c-d7fa-5b6c-9d53-6f2a37eb26a8",
+            "evidence_ids": [
+              "9e57929c-d7fa-5b6c-9d53-6f2a37eb26a8"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [],
+        "unknowns": [
+          {
+            "field": "required_input_1",
+            "question": "Can the supervisor provide trustworthy machine-state evidence of an unexplained stoppage during the case windows?",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "clarify",
+            "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+            "evidence_ids": [
+              "879065b5-6a3d-50c2-8763-27721a8d40eb"
+            ]
+          }
+        ],
+        "selected_option": "clarify",
+        "task_payload": null,
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-7"
+        },
+        "generated_at": "2026-11-11T18:53:28.308364Z",
+        "expires_at": "2026-11-11T19:23:28.308364Z",
+        "rationale": "The supervisor must supply the missing input or reconcile the conflicting evidence before an inspection can proceed."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "question_origins": [
+        {
+          "field": "required_input_1",
+          "origin": "server_derived_from_forced_missing_key"
+        }
+      ],
+      "result": {
+        "RunID": "1ed6a497-8019-4405-a216-d200763a16d3",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "SPECIALIST_NEEDS_INPUT"
+        ],
+        "ArtifactID": "6eebfd84-9ccd-44ed-a731-34f46ad4331d",
+        "Replayed": false
+      },
+      "run_id": "1ed6a497-8019-4405-a216-d200763a16d3",
+      "tool_version": "wis614-tools-7",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "phase": "after",
+      "case_id": "heldout-conflicting-log",
+      "database_case_id": "4cf0d46a-4ff1-4494-b231-a1dd7d3d6049",
+      "expected_status": "needs_input",
+      "failures": [],
+      "git_dirty": false,
+      "git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+      "input_tokens": 13752,
+      "latency_ms": 6322,
+      "manifest_sha256": "94e98f63975a3dc50979792e1e8c6c28d737c2a7b21ad79101d463ed2cf6521b",
+      "model": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+      "model_calls": 3,
+      "model_revision": "sha256:03b74727a860a56338e042c4420bb3f04b2fec5734175f4cb9fa853daf52b7e8",
+      "output_tokens": 277,
+      "partition": "heldout",
+      "prompt_version": "wisnew-investigation-13",
+      "proposal": {
+        "proposal_id": "",
+        "case_id": "4cf0d46a-4ff1-4494-b231-a1dd7d3d6049",
+        "case_revision": 2,
+        "context_id": "4d9290e9-0877-4bc5-b0db-e2f9770718b2",
+        "context_revision": 1,
+        "observations": [
+          {
+            "measurement_id": "44194d0a-7364-5463-a366-864969bc669e",
+            "evidence_ids": [
+              "44194d0a-7364-5463-a366-864969bc669e"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:00:00Z",
+            "window_end": "2026-09-27T00:15:00Z"
+          },
+          {
+            "measurement_id": "80cb1d7d-d2b3-510c-942d-61ad57fe6004",
+            "evidence_ids": [
+              "80cb1d7d-d2b3-510c-942d-61ad57fe6004"
+            ],
+            "metric_name": "deficit_good_units",
+            "value_decimal": "20.000000",
+            "unit": "count",
+            "window_start": "2026-09-27T00:15:00Z",
+            "window_end": "2026-09-27T00:30:00Z"
+          }
+        ],
+        "hypotheses": [],
+        "unknowns": [
+          {
+            "field": "conflicting_evidence_1",
+            "question": "The signed operator log states the press ran continuously without stopping, which conflicts with the stopped telemetry record and the machine fault classification for the same period.",
+            "required": true
+          }
+        ],
+        "options": [
+          {
+            "kind": "clarify",
+            "text": "Ask the supervisor to supply the missing input or reconcile the conflicting evidence.",
+            "evidence_ids": [
+              "5aa48a60-0620-580e-9ab8-142a8ce85810",
+              "7e89d8af-6e6b-4af1-a1c0-5000889c8b3b"
+            ]
+          }
+        ],
+        "selected_option": "clarify",
+        "task_payload": null,
+        "versions": {
+          "policy_revision": 1,
+          "plan_revision": 1,
+          "graph_revision": 11,
+          "model_version": "unsloth/Qwen3.5-9B-GGUF:Q4_K_M",
+          "prompt_version": "wisnew-investigation-13",
+          "tool_version": "wis614-tools-7"
+        },
+        "generated_at": "2026-11-11T18:53:34.831468Z",
+        "expires_at": "2026-11-11T19:23:34.831468Z",
+        "rationale": "The supervisor must supply the missing input or reconcile the conflicting evidence before an inspection can proceed."
+      },
+      "provider_actual": true,
+      "provider_schema_errors": 0,
+      "qualified": false,
+      "question_origins": [
+        {
+          "field": "conflicting_evidence_1",
+          "origin": "model_reported_conflict_explicit_in_fixture"
+        }
+      ],
+      "result": {
+        "RunID": "47f5b20d-5e82-4b62-9789-c76f5e668273",
+        "State": "completed",
+        "Status": "needs_input",
+        "Reasons": [
+          "CONTRADICTORY_EVIDENCE"
+        ],
+        "ArtifactID": "fb7044a3-11e1-4986-a8e4-683513f4f7b4",
+        "Replayed": false
+      },
+      "run_id": "47f5b20d-5e82-4b62-9789-c76f5e668273",
+      "tool_version": "wis614-tools-7",
+      "working_tree_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "branch": "fix/WIS-710-useful-investigations",
+  "production_git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+  "historical_gates_v13": [
+    {
+      "command": "make supervisor-check",
+      "exit_code": 0,
+      "log_sha256": "3214392c5464a6b982acb2f445cadd3ab678dc0986a389c20a6db7d6c26ff1db",
+      "tests_and_subtests_passed": 2263,
+      "skipped_tests": 0
+    },
+    {
+      "command": "make supervisor-contracts",
+      "exit_code": 0,
+      "log_sha256": "6de70086be5caa26b882410dc241c1b287d88f8189dc54ffafd0945253887772",
+      "tests_and_subtests_passed": 0,
+      "skipped_tests": 0
+    },
+    {
+      "command": "make supervisor-integration CASE=WIS-276",
+      "exit_code": 0,
+      "log_sha256": "c5179d909cbf442d31a18e490ef28af573a79f385cdeb3e797a3d177e3b8dc61",
+      "tests_and_subtests_passed": 1090,
+      "skipped_tests": 0
+    }
+  ],
+  "review_followup": {
+    "reviewed_sha": "903c902a16d8cc69754897c09ead5d8e33a2512e",
+    "review_verdict": "BLOCK",
+    "production_git_sha": "7c5f474d64206ccddb8a5b913fb8739c451a6d62",
+    "changes": [
+      "Preserve direct needs_input/original reasons when Judge refuses its Go-built clarification; store no rejected artifact.",
+      "Remove the Supervisor prefix. The exact 495-rune probe now fits and is validated/stored unchanged; the digit probe remains needs_input with no artifact. Neither creates an action.",
+      "Use a Go-written clarification rationale instead of persisting model number words.",
+      "Assert the actual per-run ResponseSchema; the always-maintenance mutation now fails.",
+      "Bump ToolVersion to wis614-tools-7; rename branch/tests to WIS-710.",
+      "Strip the historical prefix before checking for a human role and record question authorship."
+    ],
+    "red_logs": [
+      "review-red.log",
+      "review-rationale-red.log",
+      "wis710-schema-mutation-red.log"
+    ],
+    "green_log": "wis710-targeted-final.log"
+  },
+  "question_attribution": {
+    "metric_scope": "whole_pipeline_not_model_only",
+    "server_derived_cases": [
+      "dev-no-stop",
+      "dev-no-assignee",
+      "heldout-material-stop"
+    ],
+    "server_behavior": "At v13 and after review, grammar forces exact missing keys from Go state; Go writes the question sentence and names the supervisor. Model chooses needs_input/refused/failed. These three are not model question-writing successes.",
+    "model_reported_case": "heldout-conflicting-log",
+    "model_behavior": "The model reports a conflict already explicitly stated in the source. This does not show independent conflict discovery; labels and human-role regex can match that planted source sentence.",
+    "historical_prefix": "At v13 the Go Supervisor prefix made the human-role check pass for any question; removed in the review fix. The rerun strips it before checking even if it reappears.",
+    "v9_caveat": "In the first blind v9 run, the model selected two exact missing keys later rendered by Go. dev-no-stop used model text that named no human and passed only because of the prefix; the conflict output included duplicated/off-target questions.",
+    "final_counts": {
+      "server_derived": 3,
+      "model_reported_explicit_source_conflict": 1
+    },
+    "human_check_limit": "Role-word presence is a limited string check, not proof that the model independently assigned responsibility."
+  },
+  "generation_limits": {
+    "maintenance_unknowns": "The grammar forces required=false; Judge REQUIRED_INPUT_MISSING for required maintenance unknowns cannot fire on grammar-constrained maintenance output. Go still checks arbitrary provider output; this guard was not exercised by those constrained successes.",
+    "zero_known_gaps": "missing_required_fields has maxItems=0, so the model cannot add other missing keys. Other uncertainty must stay in non-maintenance choices or genuine contradiction reporting.",
+    "hosted_strict_schema": "Long regex acceptance/enforcement under hosted strict:true was not tested.",
+    "number_words": "The observed direct-clarification rationale leak is removed by a Go-written rationale. No general number-word detector was added to arbitrary model prose."
+  },
+  "gates": [
+    {
+      "command": "make supervisor-check",
+      "exit_code": 0,
+      "log_sha256": "6d9fef7876eda5def776ba32ebac7254738b36c24908362d48ea07ea430a3931",
+      "tests_and_subtests_passed": 2263,
+      "skipped_tests": 0
+    },
+    {
+      "command": "make supervisor-contracts",
+      "exit_code": 0,
+      "log_sha256": "2e921dfe7675c3bc53e4274e29d86049ee7d1c170ef174e5827d909a4b2fba9e",
+      "tests_and_subtests_passed": 0,
+      "skipped_tests": 0
+    },
+    {
+      "command": "make supervisor-integration CASE=WIS-276",
+      "exit_code": 0,
+      "log_sha256": "77afc2b52265074ee8f8d6641edeb256711aaf0a55866924d1396170e27b92de",
+      "tests_and_subtests_passed": 1093,
+      "skipped_tests": 0
+    }
+  ],
+  "gates_note": "Fresh review-follow-up gates at production 7c5f474d. Contract target uses plain-text package output, so its JSON event count is zero; all four package checks passed and generated contracts had no drift."
+}

@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "approved_cycle_times": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "approved_seconds": {
+            "type": "string"
+          },
+          "claim_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "job_order_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "job_order_seconds": {
+            "type": "string"
+          },
+          "operation_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "source_span_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_ids",
+          "job_order_id",
+          "operation_id",
+          "source_span_ids",
+          "status"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "assignments": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "fields": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "choices": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "required": {
+                  "type": "boolean"
+                },
+                "unit": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "label",
+                "name",
+                "required"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "instruction_document_id": {
+            "type": "string"
+          },
+          "instruction_revision": {
+            "type": "integer"
+          },
+          "instruction_sha256": {
+            "type": "string"
+          },
+          "item_code": {
+            "type": "string"
+          },
+          "job_order_id": {
+            "type": "string"
+          },
+          "job_order_revision": {
+            "type": "integer"
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "order_id": {
+            "type": "string"
+          },
+          "target_cycle_time_seconds": {
+            "type": "string"
+          },
+          "target_quantity": {
+            "type": "integer"
+          },
+          "template": {
+            "type": "string"
+          },
+          "workstation_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "fields",
+          "instruction_document_id",
+          "instruction_revision",
+          "instruction_sha256",
+          "item_code",
+          "job_order_id",
+          "job_order_revision",
+          "operation_id",
+          "order_id",
+          "target_quantity",
+          "template",
+          "workstation_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "fallback_reason": {
+      "type": "string"
+    },
+    "is_optimized": {
+      "type": "boolean"
+    },
+    "job_orders": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "current_order": {
+            "additionalProperties": false,
+            "properties": {
+              "due_at": {
+                "type": "string"
+              },
+              "fields": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "choices": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "kind": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unit": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "label",
+                    "name",
+                    "required"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "instruction_document_id": {
+                "type": "string"
+              },
+              "instruction_revision": {
+                "type": "integer"
+              },
+              "instruction_sha256": {
+                "type": "string"
+              },
+              "item_code": {
+                "type": "string"
+              },
+              "item_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "operation_id": {
+                "type": "string"
+              },
+              "order_id": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "integer"
+              },
+              "routing_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "schema_version": {
+                "type": "integer"
+              },
+              "step_number": {
+                "type": "integer"
+              },
+              "target_cycle_time_seconds": {
+                "type": "string"
+              },
+              "target_quantity": {
+                "type": "integer"
+              },
+              "template": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fields",
+              "instruction_document_id",
+              "instruction_revision",
+              "instruction_sha256",
+              "item_code",
+              "operation_id",
+              "order_id",
+              "schema_version",
+              "target_quantity",
+              "template"
+            ],
+            "type": "object"
+          },
+          "current_revision": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "current_revision",
+          "id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "method": {
+      "enum": [
+        "greedy",
+        "ortools_cp_sat"
+      ],
+      "type": "string"
+    },
+    "operations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "duration_basis": {
+            "type": "string"
+          },
+          "duration_seconds": {
+            "type": "integer"
+          },
+          "ends_at": {
+            "type": "string"
+          },
+          "job_order_id": {
+            "type": "string"
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "sequence": {
+            "type": "integer"
+          },
+          "starts_at": {
+            "type": "string"
+          },
+          "workstation_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "duration_basis",
+          "duration_seconds",
+          "ends_at",
+          "job_order_id",
+          "operation_id",
+          "sequence",
+          "starts_at",
+          "workstation_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "process_snapshot_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "type": "integer"
+    },
+    "solver_status": {
+      "type": "string"
+    },
+    "unplaced_orders": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "job_order_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "reason_code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "job_order_id",
+          "reason_code"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "approved_cycle_times",
+    "assignments",
+    "is_optimized",
+    "job_orders",
+    "method",
+    "operations",
+    "schema_version",
+    "unplaced_orders",
+    "warnings"
+  ],
+  "type": "object"
+}

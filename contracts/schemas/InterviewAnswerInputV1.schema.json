@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "client_answer_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "question_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "question_revision": {
+      "type": "integer"
+    },
+    "text": {
+      "maxLength": 8000,
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_answer_id",
+    "question_id",
+    "question_revision",
+    "text"
+  ],
+  "type": "object"
+}

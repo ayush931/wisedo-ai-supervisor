@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "dpa_reference": {
+      "maxLength": 200,
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "reason": {
+      "maxLength": 2000,
+      "type": "string"
+    }
+  },
+  "required": [
+    "enabled",
+    "reason"
+  ],
+  "type": "object"
+}

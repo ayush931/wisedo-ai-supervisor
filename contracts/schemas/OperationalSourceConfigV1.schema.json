@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "access_policy_revision": {
+      "type": "integer"
+    },
+    "authority_scope": {
+      "type": "string"
+    },
+    "clock_skew_seconds": {
+      "type": "integer"
+    },
+    "credential_ref": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "freshness_seconds": {
+      "type": "integer"
+    },
+    "source_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "csv",
+        "event_api",
+        "json",
+        "manual"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "access_policy_revision",
+    "authority_scope",
+    "clock_skew_seconds",
+    "enabled",
+    "freshness_seconds",
+    "source_id",
+    "type"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,100 @@
+# Monthly OEE training-data preparation (ADR 0004 Sec. 4/6: WIS-234).
+#
+# Trigger: monthly S3 aggregation of evidence exports, policy revision, or
+# manual dispatch. Produces anonymized datasets/<version>/{train,val,test}.jsonl
+# + manifest.json on the data-lake bucket — the exact prefix the SageMaker
+# launcher consumes. Training-job submission itself stays a manual,
+# human-approved step (evaluation gates, ADR Sec. 7/12).
+#
+# Required repository secrets:
+#   AWS_CI_LAUNCHER_ROLE_ARN — terraform output ci_launcher_role_arn
+#                             (enable_github_oidc=true, github_repo set)
+#   AWS_REGION               — e.g. ap-south-1 (must match Terraform aws_region)
+#   DATASET_BUCKET           — terraform output dataset_bucket
+#   KMS_KEY_ID               — terraform output kms_key_id
+
+name: AI Training Data Prep
+
+on:
+  schedule:
+    - cron: "0 2 1 * *" # 02:00 UTC on the 1st of each month
+  workflow_dispatch:
+    inputs:
+      raw-s3-uri:
+        description: "s3:// prefix of raw evidence JSONL exports"
+        required: false
+        default: ""
+      dataset-version:
+        description: "Release tag for this dataset (e.g. v1.1.0)"
+        required: true
+        default: "v1.0.0"
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: ai-data-prep
+  cancel-in-progress: false
+
+jobs:
+  prep:
+    name: Anonymize, filter, split, upload
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      # Expression-to-env only (never interpolated into `run:`). Empty on the
+      # monthly schedule; the prep step then derives a unique per-day version
+      # so scheduled runs can never overwrite an immutable released dataset.
+      DATASET_VERSION: ${{ inputs.dataset-version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Install boto3 (stdlib-only otherwise)
+        run: pip install -r deploy/aws/scripts/requirements-launcher.txt
+
+      - name: Assume CI launcher role (OIDC)
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ secrets.AWS_CI_LAUNCHER_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Build dataset splits and upload (SSE-KMS)
+        # All `${{ }}` input/secret references live in `env:` (never inside
+        # `run:`) so untrusted values can never reach the shell as syntax.
+        env:
+          RAW_S3_URI: ${{ inputs.raw-s3-uri }}
+          DATASET_BUCKET: ${{ secrets.DATASET_BUCKET }}
+          KMS_KEY_ID: ${{ secrets.KMS_KEY_ID }}
+        run: |
+          if [ -z "$DATASET_VERSION" ]; then
+            DATASET_VERSION="v-$(date -u +%Y%m%d)"
+            echo "Scheduled run (no dataset-version input); resolved to $DATASET_VERSION"
+          fi
+          if ! printf '%s' "$DATASET_VERSION" | grep -Eq '^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$'; then
+            echo "Invalid dataset-version '$DATASET_VERSION' (expected ^[A-Za-z0-9][A-Za-z0-9._-]{0,63}\$)" >&2
+            exit 1
+          fi
+          if [ -z "$RAW_S3_URI" ]; then
+            RAW_S3_URI="s3://${DATASET_BUCKET}/raw/$(date +%Y-%m)/"
+          fi
+          if ! printf '%s' "$RAW_S3_URI" | grep -Eq '^s3://[a-z0-9][a-z0-9.-]*/.*$'; then
+            echo "Invalid raw-s3-uri '$RAW_S3_URI' (expected ^s3://[a-z0-9][a-z0-9.-]*/.*\$)" >&2
+            exit 1
+          fi
+          echo "Using dataset version: $DATASET_VERSION"
+          echo "Using raw input prefix: $RAW_S3_URI"
+          python deploy/aws/training/preprocess.py \
+            --input "$RAW_S3_URI" \
+            --output-dir /tmp/oee-data \
+            --dataset-version "$DATASET_VERSION" \
+            --s3-upload "s3://${DATASET_BUCKET}/datasets/${DATASET_VERSION}/" \
+            --kms-key-id "$KMS_KEY_ID"

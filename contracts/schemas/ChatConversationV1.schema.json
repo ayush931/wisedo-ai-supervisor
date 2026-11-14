@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "conversation_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "title": {
+      "maxLength": 200,
+      "type": "string"
+    },
+    "updated_at": {
+      "format": "date-time",
+      "type": "string"
+    }
+  },
+  "required": [
+    "conversation_id",
+    "created_at",
+    "revision",
+    "title",
+    "updated_at"
+  ],
+  "type": "object"
+}

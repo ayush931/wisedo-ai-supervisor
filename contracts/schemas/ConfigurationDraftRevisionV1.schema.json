@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "description": "Any JSON value"
+    },
+    "body_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "citations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "available": {
+            "type": "boolean"
+          },
+          "path": {
+            "type": "string"
+          },
+          "source_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "source_revision": {
+            "type": "integer"
+          },
+          "span_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "unavailable_reason": {
+            "enum": [
+              "ACCESS_EPOCH_CHANGED",
+              "FIELD_CHANGED",
+              "SOURCE_REVOKED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "available",
+          "path",
+          "source_id",
+          "source_revision",
+          "span_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "dropped_citations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "reason": {
+            "enum": [
+              "ACCESS_EPOCH_CHANGED",
+              "FIELD_CHANGED",
+              "SOURCE_REVOKED"
+            ],
+            "type": "string"
+          },
+          "span_id": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "reason",
+          "span_id"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "edited_by_kind": {
+      "enum": [
+        "agent",
+        "human"
+      ],
+      "type": "string"
+    },
+    "editor": {
+      "additionalProperties": false,
+      "properties": {
+        "issuer": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "subject"
+      ],
+      "type": "object"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "run_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "body",
+    "body_digest",
+    "citations",
+    "created_at",
+    "dropped_citations",
+    "edited_by_kind",
+    "revision"
+  ],
+  "type": "object"
+}

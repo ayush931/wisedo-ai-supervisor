@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "current_revision": {
+      "type": "integer"
+    },
+    "id": {
+      "type": "string"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "revisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "canonical_payload_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "digest_schema_version": {
+            "type": "integer"
+          },
+          "order": {
+            "additionalProperties": false,
+            "properties": {
+              "due_at": {
+                "type": "string"
+              },
+              "fields": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "choices": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    },
+                    "kind": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unit": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "kind",
+                    "label",
+                    "name",
+                    "required"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "instruction_document_id": {
+                "type": "string"
+              },
+              "instruction_revision": {
+                "type": "integer"
+              },
+              "instruction_sha256": {
+                "type": "string"
+              },
+              "item_code": {
+                "type": "string"
+              },
+              "item_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "operation_id": {
+                "type": "string"
+              },
+              "order_id": {
+                "type": "string"
+              },
+              "priority": {
+                "type": "integer"
+              },
+              "routing_id": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "schema_version": {
+                "type": "integer"
+              },
+              "step_number": {
+                "type": "integer"
+              },
+              "target_cycle_time_seconds": {
+                "type": "string"
+              },
+              "target_quantity": {
+                "type": "integer"
+              },
+              "template": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fields",
+              "instruction_document_id",
+              "instruction_revision",
+              "instruction_sha256",
+              "item_code",
+              "operation_id",
+              "order_id",
+              "schema_version",
+              "target_quantity",
+              "template"
+            ],
+            "type": "object"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "state": {
+            "enum": [
+              "current",
+              "superseded"
+            ],
+            "type": "string"
+          },
+          "submitted_by": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "canonical_payload_digest",
+          "created_at",
+          "digest_schema_version",
+          "order",
+          "revision",
+          "state",
+          "submitted_by"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "current_revision",
+    "id",
+    "replayed",
+    "revisions"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "approval_eligible": {
+      "type": "boolean"
+    },
+    "authenticated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "authority_decision_id": {
+      "type": "string"
+    },
+    "authority_revision": {
+      "type": "integer"
+    },
+    "authority_source_id": {
+      "type": "string"
+    },
+    "authority_source_revision": {
+      "type": "integer"
+    },
+    "claim_id": {
+      "type": "string"
+    },
+    "claim_revision": {
+      "type": "integer"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "resolution_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "conflict_id": {
+            "type": "string"
+          },
+          "resolution_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "conflict_id",
+          "resolution_id",
+          "revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "review_id": {
+      "type": "string"
+    },
+    "revocation": {
+      "additionalProperties": false,
+      "properties": {
+        "actor_issuer": {
+          "type": "string"
+        },
+        "actor_subject": {
+          "type": "string"
+        },
+        "authenticated_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "claim_id": {
+          "type": "string"
+        },
+        "claim_revision": {
+          "type": "integer"
+        },
+        "created_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "review_id": {
+          "type": "string"
+        },
+        "revocation_id": {
+          "type": "string"
+        },
+        "schema_version": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "actor_issuer",
+        "actor_subject",
+        "authenticated_at",
+        "claim_id",
+        "claim_revision",
+        "created_at",
+        "reason",
+        "review_id",
+        "revocation_id",
+        "schema_version"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "verdict": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "actor_issuer",
+    "actor_subject",
+    "approval_eligible",
+    "authenticated_at",
+    "claim_id",
+    "claim_revision",
+    "created_at",
+    "reason",
+    "resolution_refs",
+    "review_id",
+    "schema_version",
+    "verdict"
+  ],
+  "type": "object"
+}

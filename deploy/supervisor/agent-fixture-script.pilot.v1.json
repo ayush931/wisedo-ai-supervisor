@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "purposes": [
+    {
+      "purpose": "interview",
+      "steps": [
+        {"tool_calls": [{"id": "read-sop", "name": "evidence.get", "arguments": {"evidence_id": {"$fixture": "first_required_evidence_ref"}}}]},
+        {
+          "content": {
+            "schema_version": 1,
+            "run_id": {"$fixture": "run_id"},
+            "role": "discovery/mapping",
+            "questions": [],
+            "entities": [
+              {"ref": "coil", "type": "material", "name": "Steel coil", "source_span_ids": {"$fixture": "previous_evidence_span_ids", "count": 1}},
+              {"ref": "mill", "type": "supplier", "name": "Deccan Steel", "source_span_ids": {"$fixture": "previous_evidence_span_ids", "count": 1}},
+              {"ref": "press", "type": "operation", "name": "Press", "source_span_ids": {"$fixture": "previous_evidence_span_ids", "count": 1}}
+            ],
+            "claims": [
+              {"predicate": "supplied_by", "subject": "coil", "object": "mill", "source_span_ids": {"$fixture": "previous_evidence_span_ids", "count": 1}},
+              {"predicate": "cycle_time_seconds", "subject": "press", "value": "45", "unit": "s", "source_span_ids": {"$fixture": "previous_evidence_span_ids", "count": 1}}
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "purpose": "chat",
+      "steps": [
+        {"tool_calls": [{"id": "read-passages", "name": "evidence.get", "arguments": {"evidence_id": {"$fixture": "first_fact_evidence_ref"}}}]},
+        {
+          "content": {
+            "schema_version": 2,
+            "run_id": {"$fixture": "run_id"},
+            "role": "discovery/mapping",
+            "status": "answered",
+            "statements": [
+              {"kind": "approved_fact", "text": {"$fixture": "tool_result", "tool": "evidence.get", "path": "passages[0].untrusted_source"}, "source_span_ids": {"$fixture": "previous_evidence_span_ids", "count": 1}, "claim_refs": [{"claim_id": {"$fixture": "brief", "path": "approved_facts[0].claim_id"}, "revision": {"$fixture": "brief", "path": "approved_facts[0].revision"}}]}
+            ],
+            "missing_inputs": []
+          }
+        }
+      ]
+    },
+    {
+      "purpose": "ocr",
+      "steps": [
+        {"content": {"schema_version": 1, "run_id": {"$fixture": "run_id"}, "status": "transcribed", "text": "Incoming inspection: check every steel coil for edge cracks before it is stored."}}
+      ]
+    }
+  ]
+}

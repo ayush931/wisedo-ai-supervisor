@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assignee_subject": {
+      "maxLength": 255,
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "confirm",
+        "withdraw"
+      ],
+      "type": "string"
+    },
+    "line_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "reason": {
+      "maxLength": 2000,
+      "type": "string"
+    }
+  },
+  "required": [
+    "assignee_subject",
+    "decision",
+    "line_id",
+    "reason"
+  ],
+  "type": "object"
+}

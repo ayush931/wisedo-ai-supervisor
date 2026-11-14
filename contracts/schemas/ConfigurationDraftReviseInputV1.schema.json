@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "description": "Any JSON value"
+    },
+    "field_spans": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "maxLength": 256,
+            "type": "string"
+          },
+          "span_id": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "span_id"
+        ],
+        "type": "object"
+      },
+      "maxItems": 500,
+      "type": "array"
+    }
+  },
+  "required": [
+    "body",
+    "field_spans"
+  ],
+  "type": "object"
+}

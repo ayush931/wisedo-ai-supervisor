@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "from_revision": {
+      "type": "integer"
+    },
+    "into_entity_id": {
+      "type": "string"
+    },
+    "into_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "from_revision",
+    "into_entity_id",
+    "into_revision",
+    "reason"
+  ],
+  "type": "object"
+}

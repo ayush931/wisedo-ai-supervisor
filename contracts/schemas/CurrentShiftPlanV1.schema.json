@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "plan_id": {
+      "type": "string"
+    },
+    "revision": {
+      "additionalProperties": false,
+      "properties": {
+        "approval": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "approved_at": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "approver": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "issuer": {
+                      "type": "string"
+                    },
+                    "subject": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "issuer",
+                    "subject"
+                  ],
+                  "type": "object"
+                },
+                "authenticated_at": {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "canonical_payload_digest": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                },
+                "policy_revision": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "approved_at",
+                "approver",
+                "authenticated_at",
+                "canonical_payload_digest",
+                "policy_revision"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "canonical_payload_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "created_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "digest_schema_version": {
+          "type": "integer"
+        },
+        "plan": {
+          "additionalProperties": false,
+          "properties": {
+            "assignments": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "fields": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "choices": {
+                          "items": {
+                            "type": "string"
+                          },
+                          "type": "array"
+                        },
+                        "kind": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "required": {
+                          "type": "boolean"
+                        },
+                        "unit": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "label",
+                        "name",
+                        "required"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "instruction_document_id": {
+                    "type": "string"
+                  },
+                  "instruction_revision": {
+                    "type": "integer"
+                  },
+                  "instruction_sha256": {
+                    "type": "string"
+                  },
+                  "item_code": {
+                    "type": "string"
+                  },
+                  "job_order_id": {
+                    "type": "string"
+                  },
+                  "job_order_revision": {
+                    "type": "integer"
+                  },
+                  "operation_id": {
+                    "type": "string"
+                  },
+                  "order_id": {
+                    "type": "string"
+                  },
+                  "target_cycle_time_seconds": {
+                    "type": "string"
+                  },
+                  "target_quantity": {
+                    "type": "integer"
+                  },
+                  "template": {
+                    "type": "string"
+                  },
+                  "workstation_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "fields",
+                  "instruction_document_id",
+                  "instruction_revision",
+                  "instruction_sha256",
+                  "item_code",
+                  "job_order_id",
+                  "job_order_revision",
+                  "operation_id",
+                  "order_id",
+                  "target_quantity",
+                  "template",
+                  "workstation_id"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "ends_at": {
+              "type": "string"
+            },
+            "line_id": {
+              "type": "string"
+            },
+            "schema_version": {
+              "type": "integer"
+            },
+            "starts_at": {
+              "type": "string"
+            },
+            "timezone": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "assignments",
+            "ends_at",
+            "line_id",
+            "schema_version",
+            "starts_at",
+            "timezone"
+          ],
+          "type": "object"
+        },
+        "revision": {
+          "type": "integer"
+        },
+        "state": {
+          "enum": [
+            "approved",
+            "draft",
+            "superseded"
+          ],
+          "type": "string"
+        },
+        "submitted_by": {
+          "additionalProperties": false,
+          "properties": {
+            "issuer": {
+              "type": "string"
+            },
+            "subject": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "issuer",
+            "subject"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "approval",
+        "canonical_payload_digest",
+        "created_at",
+        "digest_schema_version",
+        "plan",
+        "revision",
+        "state",
+        "submitted_by"
+      ],
+      "type": "object"
+    },
+    "state_revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "plan_id",
+    "revision",
+    "state_revision"
+  ],
+  "type": "object"
+}

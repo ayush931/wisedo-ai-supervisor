@@ -1,0 +1,51 @@
+name: GHCR Retention
+
+# Package retention for the two images in GitHub Container Registry, the
+# counterpart of an ECR lifecycle policy:
+#   - delete untagged versions (layers left behind by moved `latest` tags)
+#   - keep at most the 20 most recent tagged versions
+# Idempotent; runs after every successful main image build and weekly.
+
+on:
+  # After the main build has pushed images, never alongside it: on the first
+  # main build the packages do not exist until Build and Push finishes.
+  workflow_run:
+    workflows: ["Build and Push"]
+    types: [completed]
+    branches: [main]
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  retention:
+    name: Prune ${{ matrix.package }}
+    # GitHub-hosted jobs are not started while the organisation's Actions
+    # billing is blocked; the other workflows already use the workstation runner.
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [plantops-oee-intelligence, ai-supervisor]
+    steps:
+      # A package that has never been pushed is not a failure.
+      - name: Delete untagged versions
+        continue-on-error: true
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
+        with:
+          package-name: ${{ matrix.package }}
+          package-type: container
+          delete-only-untagged-versions: "true"
+          min-versions-to-keep: 0
+      - name: Keep the 20 most recent tagged versions
+        continue-on-error: true
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
+        with:
+          package-name: ${{ matrix.package }}
+          package-type: container
+          min-versions-to-keep: 20

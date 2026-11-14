@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "author": {
+      "additionalProperties": false,
+      "properties": {
+        "issuer": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "subject"
+      ],
+      "type": "object"
+    },
+    "author_kind": {
+      "enum": [
+        "assistant",
+        "human"
+      ],
+      "type": "string"
+    },
+    "body": {
+      "maxLength": 8000,
+      "type": "string"
+    },
+    "citations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "revision"
+        ],
+        "type": "object"
+      },
+      "maxItems": 50,
+      "type": "array"
+    },
+    "claim_citations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "source_span_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "statement": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "claim_id",
+          "revision",
+          "source_span_ids",
+          "statement"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "corrections": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "reviewed_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "reviewer": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "claim_id",
+          "reviewed_at",
+          "reviewer",
+          "revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "message_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "quantities": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "predicate": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "span_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "statement": {
+            "type": "integer"
+          },
+          "unit": {
+            "maxLength": 32,
+            "type": "string"
+          },
+          "value": {
+            "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id",
+          "predicate",
+          "span_id",
+          "statement",
+          "unit",
+          "value"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "reason_code": {
+      "enum": [
+        "ANSWER_INVALID",
+        "ASSISTANT_DISABLED",
+        "ASSISTANT_NOT_QUALIFIED",
+        "BUDGET_EXHAUSTED",
+        "CAPTURE_LIMIT",
+        "CHAT_ACTIVITY_FAILED",
+        "CITATION_NOT_IN_SCOPE",
+        "DEADLINE_EXCEEDED",
+        "EVIDENCE_REVOKED",
+        "EVIDENCE_UNAVAILABLE",
+        "FACT_NOT_APPROVED",
+        "MEMBERSHIP_REVOKED",
+        "MISSING_INPUT",
+        "MODE_DISABLED",
+        "NO_APPROVED_PROCESS",
+        "ANSWERS_BUSY",
+        "NO_READABLE_EVIDENCE",
+        "NUMBER_NOT_IN_SOURCE",
+        "QUANTITY_NOT_APPROVED",
+        "RUN_CANCELED",
+        "SCHEMA_INVALID",
+        "SCOPE_DENIED",
+        "SNAPSHOT_EVIDENCE_UNAVAILABLE",
+        "SPECIALIST_FAILED",
+        "STALE_SCOPE",
+        "STATEMENT_REJECTED",
+        "TOOL_ARGUMENT_REJECTED",
+        "TOOL_NOT_ALLOWED",
+        "TOOL_REF_NOT_IN_SCOPE"
+      ],
+      "type": "string"
+    },
+    "reply_to": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "request_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "retrieval": {
+      "enum": [
+        "hybrid",
+        "hybrid_unreranked",
+        "word",
+        "word_fallback"
+      ],
+      "type": "string"
+    },
+    "seq": {
+      "type": "integer"
+    },
+    "snapshot_created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "snapshot_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "snapshot_stale": {
+      "type": "boolean"
+    },
+    "state": {
+      "enum": [
+        "answered",
+        "canceled",
+        "failed",
+        "needs_input",
+        "pending",
+        "received",
+        "unavailable"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "author_kind",
+    "citations",
+    "created_at",
+    "message_id",
+    "seq",
+    "state"
+  ],
+  "type": "object"
+}

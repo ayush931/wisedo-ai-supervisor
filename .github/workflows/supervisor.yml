@@ -1,0 +1,223 @@
+name: Supervisor Go Foundation
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+# One run at a time per ref: the self-hosted workstation runner shares Docker
+# and loopback ports across jobs.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+# CI-only loopback ports, compose project and subnet. They differ from the
+# deploy/supervisor developer defaults so a developer stack running on the same
+# workstation is never bound, torn down or joined by CI. Every URL in the job
+# derives from these values.
+env:
+  COMPOSE_PROJECT_NAME: supervisor-ci
+  SUPERVISOR_PG_PORT: "45477"
+  SUPERVISOR_IDP_PORT: "48077"
+  SUPERVISOR_TEMPORAL_PORT: "47277"
+  SUPERVISOR_API_PORT: "48176"
+  SUPERVISOR_LOCAL_SUBNET: 10.253.78.0/24
+jobs:
+  foundation:
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 30
+    env:
+      # Ephemeral CI fixture credentials, never customer/deployment secrets.
+      POSTGRES_ADMIN_PASSWORD: ci-admin-fixture
+      SUPERVISOR_MIGRATION_PASSWORD: ci-migrator-fixture
+      SUPERVISOR_RUNTIME_PASSWORD: ci-runtime-fixture
+      KEYCLOAK_DB_PASSWORD: ci-keycloak-fixture
+      TEMPORAL_DB_PASSWORD: ci-temporal-fixture
+      KEYCLOAK_ADMIN_PASSWORD: ci-identity-fixture
+      SUPERVISOR_ENVIRONMENT: local
+      SUPERVISOR_OIDC_CLIENT_SECRET: ci-client-fixture
+      SUPERVISOR_RELAY_TENANT_IDS: '["00000000-0000-4000-8000-000000000290"]'
+      SUPERVISOR_LOCAL_ADMIN: local-admin
+      SUPERVISOR_LOCAL_ADMIN_PASSWORD: ci-identity-fixture
+      SUPERVISOR_LOCAL_USER_PASSWORD: ci-browser-fixture
+      # The default CI API has no agent provider; fixture-tagged specs run in dedicated phases below.
+      SUPERVISOR_E2E_AGENT: "off"
+    steps:
+      - name: Derive CI endpoints from the workflow-level ports
+        run: |
+          {
+            echo "SUPERVISOR_LISTEN_ADDRESS=127.0.0.1:$SUPERVISOR_API_PORT"
+            echo "SUPERVISOR_DATABASE_URL=postgresql://supervisor_runtime:$SUPERVISOR_RUNTIME_PASSWORD@127.0.0.1:$SUPERVISOR_PG_PORT/supervisor"
+            echo "SUPERVISOR_TEST_DATABASE_URL=postgresql://supervisor_runtime:$SUPERVISOR_RUNTIME_PASSWORD@127.0.0.1:$SUPERVISOR_PG_PORT/supervisor"
+            echo "SUPERVISOR_TEST_ADMIN_URL=postgresql://postgres:$POSTGRES_ADMIN_PASSWORD@127.0.0.1:$SUPERVISOR_PG_PORT/supervisor"
+            echo "SUPERVISOR_OIDC_ISSUER=http://127.0.0.1:$SUPERVISOR_IDP_PORT/realms/supervisor-local"
+            echo "SUPERVISOR_PUBLIC_ORIGIN=http://127.0.0.1:$SUPERVISOR_API_PORT"
+            echo "SUPERVISOR_TEMPORAL_ADDRESS=127.0.0.1:$SUPERVISOR_TEMPORAL_PORT"
+            echo "SUPERVISOR_TEST_TEMPORAL_ADDRESS=127.0.0.1:$SUPERVISOR_TEMPORAL_PORT"
+            # Keep workers from canceled runs off this run's Temporal task queue.
+            echo "SUPERVISOR_TEMPORAL_TASK_QUEUE=supervisor-ci-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT"
+            echo "SUPERVISOR_LOCAL_KEYCLOAK=http://127.0.0.1:$SUPERVISOR_IDP_PORT"
+          } >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      # The self-hosted runner keeps the Go and npm caches on disk; restoring the
+      # hosted Actions cache only stalls setup, so it is disabled.
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: go.mod
+          cache: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: '22'
+      - name: Unit, race, static and frontend gates
+        run: make supervisor-check supervisor-build
+      - name: Contract gate
+        run: make supervisor-contracts
+      - name: Start isolated dependencies and migrate built image
+        run: |
+          docker compose -f deploy/supervisor/compose.yml up -d postgres keycloak temporal
+          # --build: compose otherwise reuses an existing image, and the runner kept one from
+          # an older commit, so CI migrated with stale migrations.
+          docker compose -f deploy/supervisor/compose.yml --profile tools run --rm --build migrate
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:$SUPERVISOR_IDP_PORT/realms/master/.well-known/openid-configuration >/dev/null; then break; fi
+            sleep 2
+          done
+          curl -fsS http://127.0.0.1:$SUPERVISOR_IDP_PORT/realms/master/.well-known/openid-configuration >/dev/null
+          for i in $(seq 1 60); do
+            if docker compose -f deploy/supervisor/compose.yml exec -T temporal temporal --address temporal:7233 operator cluster health; then break; fi
+            sleep 2
+          done
+          docker compose -f deploy/supervisor/compose.yml exec -T temporal temporal --address temporal:7233 operator cluster health
+      - name: Real service isolation, identity, durable recovery and migration gates
+        run: make supervisor-integration
+      - name: Seed synthetic fixture and verify browser flow
+        run: |
+          go run ./cmd/supervisor-seed
+          # The shift and workstation specs sign in as the WIS-520 demo users.
+          go run ./cmd/supervisor-demo-seed
+          # No --with-deps: it needs root, which the workstation runner does not
+          # have; the browser OS dependencies are provisioned on the host.
+          (cd web && npx playwright install chromium)
+          api_pid=
+          worker_pid=
+          cleanup() {
+            local pids=()
+            if [[ -n "$api_pid" ]]; then pids+=("$api_pid"); fi
+            if [[ -n "$worker_pid" ]]; then pids+=("$worker_pid"); fi
+            if ((${#pids[@]})); then
+              kill "${pids[@]}" 2>/dev/null || true
+              wait "${pids[@]}" 2>/dev/null || true
+            fi
+          }
+          stop_api() {
+            if [[ -n "$api_pid" ]]; then
+              kill "$api_pid" 2>/dev/null || true
+              wait "$api_pid" 2>/dev/null || true
+              api_pid=
+            fi
+          }
+          stop_worker() {
+            if [[ -n "$worker_pid" ]]; then
+              kill "$worker_pid" 2>/dev/null || true
+              wait "$worker_pid" 2>/dev/null || true
+              worker_pid=
+            fi
+          }
+          stop_pair() { stop_api; stop_worker; }
+          # The runner is shared: an API orphaned by a cancelled run can still hold the port and
+          # answer readyz for a new API that failed to bind. Refuse to start on a held port, and
+          # check that our own API process is the one still alive after readiness.
+          if curl -fsS http://127.0.0.1:$SUPERVISOR_API_PORT/readyz >/dev/null 2>&1; then echo "port $SUPERVISOR_API_PORT already serves an API"; exit 1; fi
+          trap cleanup EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          ./build/supervisor api > /tmp/supervisor-api.log 2>&1 &
+          api_pid=$!
+          ./build/supervisor worker > /tmp/supervisor-worker.log 2>&1 &
+          worker_pid=$!
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:$SUPERVISOR_API_PORT/readyz >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:$SUPERVISOR_API_PORT/readyz || { tail -50 /tmp/supervisor-api.log; exit 1; }
+          kill -0 "$api_pid" || { tail -20 /tmp/supervisor-api.log; exit 1; }
+          # Phase 1: every spec under the default 15-minute recent-authentication window. The
+          # walkthrough holds a session for minutes before an approval, so a short window there
+          # would turn its self-approval refusal into a 428.
+          make supervisor-e2e E2E_ARGS='--grep-invert "@recent-auth|@agent-fixture|@agent-scripted|@onboarding-pilot|@feedback"'
+          # Phase 2: the configuration-draft 428 re-auth case against a 20s window.
+          stop_api
+          SUPERVISOR_SESSION_RECENT_AUTH=20s ./build/supervisor api >> /tmp/supervisor-api.log 2>&1 &
+          api_pid=$!
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:$SUPERVISOR_API_PORT/readyz >/dev/null; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:$SUPERVISOR_API_PORT/readyz || { tail -50 /tmp/supervisor-api.log; exit 1; }
+          kill -0 "$api_pid" || { tail -20 /tmp/supervisor-api.log; exit 1; }
+          SUPERVISOR_E2E_RECENT_AUTH_SECONDS=20 make supervisor-e2e E2E_ARGS='--grep @recent-auth'
+          # Fixture modes change both API and worker configuration; keep unscripted refusal
+          # expectations separate from the successful scripted responses.
+          restart_agent_pair() {
+            stop_pair
+            if curl -fsS http://127.0.0.1:$SUPERVISOR_API_PORT/readyz >/dev/null 2>&1; then echo "port $SUPERVISOR_API_PORT still serves an API"; exit 1; fi
+            env "$@" ./build/supervisor api >> /tmp/supervisor-api.log 2>&1 &
+            api_pid=$!
+            env "$@" ./build/supervisor worker >> /tmp/supervisor-worker.log 2>&1 &
+            worker_pid=$!
+            for i in $(seq 1 30); do
+              if curl -fsS http://127.0.0.1:$SUPERVISOR_API_PORT/readyz >/dev/null; then break; fi
+              sleep 1
+            done
+            curl -fsS http://127.0.0.1:$SUPERVISOR_API_PORT/readyz || { tail -50 /tmp/supervisor-api.log; exit 1; }
+            sleep 2
+            kill -0 "$api_pid" || { tail -20 /tmp/supervisor-api.log; exit 1; }
+            kill -0 "$worker_pid" || { tail -20 /tmp/supervisor-worker.log; exit 1; }
+          }
+          fixture_env=(SUPERVISOR_AGENT_PROVIDER=fixture SUPERVISOR_AGENT_MODEL=fixture-model SUPERVISOR_AGENT_MODEL_REVISION=sha256:fixture SUPERVISOR_AGENT_MODE_ENABLED=true)
+          restart_agent_pair "${fixture_env[@]}"
+          SUPERVISOR_E2E_AGENT=fixture make supervisor-e2e E2E_ARGS='--grep @agent-fixture'
+          # Task execution lets the executor turn the scripted investigation's approved proposal
+          # into the task that tasks-real-backend.spec.ts drives (WIS-635).
+          scripted_fixture_env=("${fixture_env[@]}" SUPERVISOR_AGENT_FIXTURE_SCRIPT=deploy/supervisor/agent-fixture-script.v1.json SUPERVISOR_TASK_EXECUTION_ENABLED=true)
+          restart_agent_pair "${scripted_fixture_env[@]}"
+          SUPERVISOR_E2E_AGENT=scripted make supervisor-e2e E2E_ARGS='--grep @agent-scripted'
+          # Phase 5 (WIS-631): the two-tenant onboarding pilot in the browser. Its own script proposes
+          # cited value-stream facts and answers chat; the worker's tenant scope adds the two pilot
+          # tenants supervisor-demo-seed created.
+          # WIS-643: a fixture vision model, so the pilot's page photo is read by the script's "ocr"
+          # purpose and the owner designates it through the screen.
+          pilot_env=("${fixture_env[@]}" SUPERVISOR_AGENT_FIXTURE_SCRIPT=deploy/supervisor/agent-fixture-script.pilot.v1.json SUPERVISOR_CHAT_ANSWERING_ENABLED=true
+            SUPERVISOR_AGENT_VISION_MODEL=fixture-vision SUPERVISOR_AGENT_VISION_MODEL_REVISION=sha256:vision
+            'SUPERVISOR_RELAY_TENANT_IDS=["00000000-0000-4000-8000-000000000290","00000000-0000-4000-8000-000000000631","00000000-0000-4000-8000-000000000633"]')
+          restart_agent_pair "${pilot_env[@]}"
+          SUPERVISOR_E2E_AGENT=pilot make supervisor-e2e CASE=onboarding-pilot
+          SUPERVISOR_E2E_AGENT=pilot make supervisor-e2e CASE=feedback
+      # Rule 09: retain the SHA, command and failure logs. Logs hold no
+      # fixture secrets because the services never print their environment.
+      - name: Retain run evidence
+        if: always()
+        run: |
+          mkdir -p ci-evidence
+          {
+            echo "sha=$GITHUB_SHA"
+            echo "run_id=$GITHUB_RUN_ID"
+            echo "commands=make supervisor-check supervisor-build; make supervisor-contracts; make supervisor-integration; make supervisor-e2e (five phases: default --grep-invert @recent-auth|@agent-fixture|@agent-scripted|@onboarding-pilot, --grep @recent-auth at 20s, @agent-fixture with unscripted fixture worker, @agent-scripted with scripted fixture worker and task execution, CASE=onboarding-pilot with the pilot fixture script and chat answering)"
+            go version
+            node --version
+          } > ci-evidence/manifest.txt
+          cp /tmp/supervisor-api.log /tmp/supervisor-worker.log ci-evidence/ 2>/dev/null || true
+      - name: Upload run evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: supervisor-ci-evidence
+          path: ci-evidence
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Local fixture cleanup
+        if: always()
+        # Scoped by COMPOSE_PROJECT_NAME; a developer stack on this host is untouched.
+        run: |
+          docker compose -f deploy/supervisor/compose.yml down --volumes --remove-orphans
+          rm -rf build web/dist ci-evidence

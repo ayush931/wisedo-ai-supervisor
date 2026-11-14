@@ -1,0 +1,398 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "case_revision": {
+      "type": "integer"
+    },
+    "facts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "effective_from": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "effective_to": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "object_entity_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "object_name": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "predicate": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "span_ids": {
+            "format": "uuid",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "subject_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "subject_name": {
+            "maxLength": 200,
+            "type": "string"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "maxLength": 32,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "value": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "claim_id",
+          "effective_from",
+          "effective_to",
+          "object_entity_id",
+          "object_name",
+          "predicate",
+          "span_ids",
+          "subject_id",
+          "subject_name",
+          "unit",
+          "value"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "hypotheses": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "contradicting_evidence_ids": {
+            "format": "uuid",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "evidence_ids": {
+            "format": "uuid",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "text": {
+            "maxLength": 1000,
+            "type": "string"
+          }
+        },
+        "required": [
+          "contradicting_evidence_ids",
+          "evidence_ids",
+          "text"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "investigation": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "case_revision": {
+              "type": "integer"
+            },
+            "model": {
+              "maxLength": 200,
+              "type": "string"
+            },
+            "provider_actual": {
+              "type": "boolean"
+            },
+            "reasons": {
+              "items": {
+                "type": "string"
+              },
+              "maxLength": 64,
+              "type": "array"
+            },
+            "run_id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "state": {
+              "maxLength": 32,
+              "type": "string"
+            },
+            "status": {
+              "maxLength": 32,
+              "type": "string"
+            }
+          },
+          "required": [
+            "case_revision",
+            "model",
+            "provider_actual",
+            "reasons",
+            "run_id",
+            "state",
+            "status"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "observations": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "context_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "measurement_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "metric_name": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "unit": {
+            "maxLength": 32,
+            "type": "string"
+          },
+          "value_decimal": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "window_end": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "window_start": {
+            "maxLength": 40,
+            "type": "string"
+          }
+        },
+        "required": [
+          "context_id",
+          "measurement_id",
+          "metric_name",
+          "unit",
+          "value_decimal",
+          "window_end",
+          "window_start"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "passages": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "revision": {
+            "type": "integer"
+          },
+          "source_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "span_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "text": {
+            "maxLength": 262144,
+            "type": "string"
+          }
+        },
+        "required": [
+          "revision",
+          "source_id",
+          "span_id",
+          "text"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "plan": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "approval_id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "plan_revision": {
+              "type": "integer"
+            },
+            "plan_revision_id": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "approval_id",
+            "plan_revision",
+            "plan_revision_id"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "readiness": {
+      "maxLength": 16,
+      "type": "string"
+    },
+    "reasons": {
+      "items": {
+        "type": "string"
+      },
+      "maxLength": 64,
+      "type": "array"
+    },
+    "rule_version": {
+      "maxLength": 64,
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "snapshot": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "created_at": {
+              "maxLength": 40,
+              "type": "string"
+            },
+            "inventory_revision": {
+              "type": "integer"
+            },
+            "snapshot_id": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "stale": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "created_at",
+            "inventory_revision",
+            "snapshot_id",
+            "stale"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "unknowns": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "question": {
+            "maxLength": 1000,
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "field",
+          "question",
+          "required"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "case_id",
+    "case_revision",
+    "facts",
+    "hypotheses",
+    "investigation",
+    "observations",
+    "passages",
+    "plan",
+    "readiness",
+    "reasons",
+    "rule_version",
+    "schema_version",
+    "snapshot",
+    "unknowns"
+  ],
+  "type": "object"
+}

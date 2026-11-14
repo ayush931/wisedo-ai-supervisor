@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "next_cursor": {
+      "type": "string"
+    },
+    "sessions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "participant_actor_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "process_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "role": {
+            "enum": [
+              "owner",
+              "supervisor",
+              "operator"
+            ],
+            "type": "string"
+          },
+          "session_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "paused",
+              "submitted",
+              "closed"
+            ],
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "created_at",
+          "participant_actor_id",
+          "revision",
+          "role",
+          "session_id",
+          "status",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "sessions"
+  ],
+  "type": "object"
+}

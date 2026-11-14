@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "handovers": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "canonical_payload_digest": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "generated_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "generated_by": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "type": "string"
+              },
+              "subject": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "revision": {
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "adopted",
+              "draft"
+            ],
+            "type": "string"
+          },
+          "summary_revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "canonical_payload_digest",
+          "generated_at",
+          "generated_by",
+          "revision",
+          "status",
+          "summary_revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "next_cursor": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "handovers"
+  ],
+  "type": "object"
+}

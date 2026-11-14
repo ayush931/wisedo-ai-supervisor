@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "next_shift": {
+      "additionalProperties": false,
+      "properties": {
+        "ends_at": {
+          "type": "string"
+        },
+        "line_id": {
+          "type": "string"
+        },
+        "starts_at": {
+          "type": "string"
+        },
+        "timezone": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "ends_at",
+        "line_id",
+        "starts_at",
+        "timezone"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "summary_revision": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "next_shift",
+    "schema_version",
+    "summary_revision"
+  ],
+  "type": "object"
+}

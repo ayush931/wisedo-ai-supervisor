@@ -1,0 +1,819 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "adoption": {
+      "anyOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "adopted_at": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "adopted_by": {
+              "additionalProperties": false,
+              "properties": {
+                "issuer": {
+                  "type": "string"
+                },
+                "subject": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "issuer",
+                "subject"
+              ],
+              "type": "object"
+            },
+            "plan_id": {
+              "type": "string"
+            },
+            "plan_revision": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "adopted_at",
+            "adopted_by",
+            "plan_id",
+            "plan_revision"
+          ],
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "canonical_payload_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "digest_schema_version": {
+      "type": "integer"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "generated_by": {
+      "additionalProperties": false,
+      "properties": {
+        "issuer": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "issuer",
+        "subject"
+      ],
+      "type": "object"
+    },
+    "handover": {
+      "additionalProperties": false,
+      "properties": {
+        "ends_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "formula_version": {
+          "type": "integer"
+        },
+        "jobs": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "completion_state": {
+                "enum": [
+                  "completed",
+                  "in_progress",
+                  "not_started",
+                  "unknown"
+                ],
+                "type": "string"
+              },
+              "corrections": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "record_id": {
+                      "type": "string"
+                    },
+                    "supersedes": {
+                      "items": {
+                        "type": "string"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "record_id",
+                    "supersedes"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "current_job_order_revision": {
+                "type": "integer"
+              },
+              "good_quantity": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "instruction": {
+                "additionalProperties": false,
+                "properties": {
+                  "approved": {
+                    "type": "boolean"
+                  },
+                  "changed_since_pin": {
+                    "type": "boolean"
+                  },
+                  "document_id": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "enum": [
+                      "INSTRUCTION_NOT_CONFIRMED",
+                      "INSTRUCTION_REVOKED",
+                      "INSTRUCTION_SUPERSEDED"
+                    ],
+                    "type": "string"
+                  },
+                  "revision": {
+                    "type": "integer"
+                  },
+                  "sha256": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "approved",
+                  "changed_since_pin",
+                  "document_id",
+                  "revision",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              "job_order_changed": {
+                "type": "boolean"
+              },
+              "job_order_id": {
+                "type": "string"
+              },
+              "late_record_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "material_exceptions": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "comment": {
+                      "type": "string"
+                    },
+                    "event_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "issue": {
+                      "enum": [
+                        "damaged",
+                        "other",
+                        "shortage",
+                        "wrong_material"
+                      ],
+                      "type": "string"
+                    },
+                    "material_code": {
+                      "type": "string"
+                    },
+                    "record_id": {
+                      "type": "string"
+                    },
+                    "recorded_by": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "issuer": {
+                          "type": "string"
+                        },
+                        "subject": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "issuer",
+                        "subject"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "event_at",
+                    "issue",
+                    "material_code",
+                    "record_id",
+                    "recorded_by"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "not_proposed_reason": {
+                "enum": [
+                  "COMPLETED",
+                  "INSTRUCTION_UNAVAILABLE",
+                  "NOTHING_REMAINING",
+                  "REMAINING_EXCEEDS_ORDER_TARGET",
+                  "REMAINING_UNKNOWN"
+                ],
+                "type": "string"
+              },
+              "open_blockers": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "duration_seconds": {
+                      "anyOf": [
+                        {
+                          "pattern": "^-?[0-9]+(\\.[0-9]{1,6})?$",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "end_record_id": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "ends_at": {
+                      "anyOf": [
+                        {
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "kind": {
+                      "enum": [
+                        "acknowledged",
+                        "started",
+                        "paused",
+                        "blocked",
+                        "resumed",
+                        "quantity",
+                        "cycle_time",
+                        "quality_measurement",
+                        "quality_disposition_recorded",
+                        "material_exception",
+                        "completion_evidence",
+                        "note"
+                      ],
+                      "type": "string"
+                    },
+                    "open": {
+                      "type": "boolean"
+                    },
+                    "reason": {
+                      "type": "string"
+                    },
+                    "recorded_by": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "issuer": {
+                          "type": "string"
+                        },
+                        "subject": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "issuer",
+                        "subject"
+                      ],
+                      "type": "object"
+                    },
+                    "start_record_id": {
+                      "type": "string"
+                    },
+                    "starts_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "duration_seconds",
+                    "end_record_id",
+                    "ends_at",
+                    "kind",
+                    "open",
+                    "reason",
+                    "recorded_by",
+                    "start_record_id",
+                    "starts_at"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "pinned_job_order_revision": {
+                "type": "integer"
+              },
+              "proposed": {
+                "type": "boolean"
+              },
+              "quality_holds_as_recorded": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "comment": {
+                      "type": "string"
+                    },
+                    "disposition": {
+                      "enum": [
+                        "accept",
+                        "hold",
+                        "reject"
+                      ],
+                      "type": "string"
+                    },
+                    "event_at": {
+                      "format": "date-time",
+                      "type": "string"
+                    },
+                    "record_id": {
+                      "type": "string"
+                    },
+                    "recorded_by": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "issuer": {
+                          "type": "string"
+                        },
+                        "subject": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "issuer",
+                        "subject"
+                      ],
+                      "type": "object"
+                    }
+                  },
+                  "required": [
+                    "disposition",
+                    "event_at",
+                    "record_id",
+                    "recorded_by"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "record_ids": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "remaining_quantity": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "shift_target_quantity": {
+                "type": "integer"
+              },
+              "station_readiness": {
+                "enum": [
+                  "INVALID",
+                  "LIMITED",
+                  "NOT_READY",
+                  "READY"
+                ],
+                "type": "string"
+              },
+              "station_reasons": {
+                "items": {
+                  "enum": [
+                    "CORRECTIONS_PRESENT",
+                    "INVALID_RECORDED_VALUE",
+                    "LATE_ENTRIES",
+                    "NOT_IN_APPROVED_PLAN",
+                    "NO_CYCLE_TIME_RECORDS",
+                    "NO_QUANTITY_RECORDS",
+                    "NO_RECORDS",
+                    "OVER_PRODUCTION",
+                    "QUANTITY_OVERFLOW",
+                    "RECORDED_AFTER_RUN_END",
+                    "SHIFT_IN_PROGRESS",
+                    "STALE_INPUT",
+                    "SUPERSEDED_PLAN_BINDING",
+                    "UNCLOSED_DOWNTIME"
+                  ],
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "workstation_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "completion_state",
+              "corrections",
+              "current_job_order_revision",
+              "good_quantity",
+              "instruction",
+              "job_order_changed",
+              "job_order_id",
+              "late_record_ids",
+              "material_exceptions",
+              "open_blockers",
+              "pinned_job_order_revision",
+              "proposed",
+              "quality_holds_as_recorded",
+              "record_ids",
+              "remaining_quantity",
+              "shift_target_quantity",
+              "station_readiness",
+              "station_reasons",
+              "workstation_id"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "line_id": {
+          "type": "string"
+        },
+        "next_shift": {
+          "additionalProperties": false,
+          "properties": {
+            "ends_at": {
+              "type": "string"
+            },
+            "line_id": {
+              "type": "string"
+            },
+            "starts_at": {
+              "type": "string"
+            },
+            "timezone": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ends_at",
+            "line_id",
+            "starts_at",
+            "timezone"
+          ],
+          "type": "object"
+        },
+        "notes": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "comment": {
+                "type": "string"
+              },
+              "event_at": {
+                "format": "date-time",
+                "type": "string"
+              },
+              "job_order_id": {
+                "type": "string"
+              },
+              "late": {
+                "type": "boolean"
+              },
+              "record_id": {
+                "type": "string"
+              },
+              "recorded_by": {
+                "additionalProperties": false,
+                "properties": {
+                  "issuer": {
+                    "type": "string"
+                  },
+                  "subject": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "issuer",
+                  "subject"
+                ],
+                "type": "object"
+              },
+              "workstation_id": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "comment",
+              "event_at",
+              "job_order_id",
+              "late",
+              "record_id",
+              "recorded_by",
+              "workstation_id"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "plan_id": {
+          "type": "string"
+        },
+        "plan_revision": {
+          "type": "integer"
+        },
+        "plan_revision_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "proposed_plan": {
+          "anyOf": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "assignments": {
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "fields": {
+                        "items": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "choices": {
+                              "items": {
+                                "type": "string"
+                              },
+                              "type": "array"
+                            },
+                            "kind": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "required": {
+                              "type": "boolean"
+                            },
+                            "unit": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "kind",
+                            "label",
+                            "name",
+                            "required"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "instruction_document_id": {
+                        "type": "string"
+                      },
+                      "instruction_revision": {
+                        "type": "integer"
+                      },
+                      "instruction_sha256": {
+                        "type": "string"
+                      },
+                      "item_code": {
+                        "type": "string"
+                      },
+                      "job_order_id": {
+                        "type": "string"
+                      },
+                      "job_order_revision": {
+                        "type": "integer"
+                      },
+                      "operation_id": {
+                        "type": "string"
+                      },
+                      "order_id": {
+                        "type": "string"
+                      },
+                      "target_cycle_time_seconds": {
+                        "type": "string"
+                      },
+                      "target_quantity": {
+                        "type": "integer"
+                      },
+                      "template": {
+                        "type": "string"
+                      },
+                      "workstation_id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "fields",
+                      "instruction_document_id",
+                      "instruction_revision",
+                      "instruction_sha256",
+                      "item_code",
+                      "job_order_id",
+                      "job_order_revision",
+                      "operation_id",
+                      "order_id",
+                      "target_quantity",
+                      "template",
+                      "workstation_id"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "ends_at": {
+                  "type": "string"
+                },
+                "line_id": {
+                  "type": "string"
+                },
+                "schema_version": {
+                  "type": "integer"
+                },
+                "starts_at": {
+                  "type": "string"
+                },
+                "timezone": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "assignments",
+                "ends_at",
+                "line_id",
+                "schema_version",
+                "starts_at",
+                "timezone"
+              ],
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "schema_version": {
+          "type": "integer"
+        },
+        "source": {
+          "additionalProperties": false,
+          "properties": {
+            "as_of": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "readiness": {
+              "enum": [
+                "INVALID",
+                "LIMITED",
+                "NOT_READY",
+                "READY"
+              ],
+              "type": "string"
+            },
+            "reasons": {
+              "items": {
+                "enum": [
+                  "CORRECTIONS_PRESENT",
+                  "INVALID_RECORDED_VALUE",
+                  "LATE_ENTRIES",
+                  "NOT_IN_APPROVED_PLAN",
+                  "NO_CYCLE_TIME_RECORDS",
+                  "NO_QUANTITY_RECORDS",
+                  "NO_RECORDS",
+                  "OVER_PRODUCTION",
+                  "QUANTITY_OVERFLOW",
+                  "RECORDED_AFTER_RUN_END",
+                  "SHIFT_IN_PROGRESS",
+                  "STALE_INPUT",
+                  "SUPERSEDED_PLAN_BINDING",
+                  "UNCLOSED_DOWNTIME"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "shift_ended": {
+              "type": "boolean"
+            },
+            "source_record_count": {
+              "type": "integer"
+            }
+          },
+          "required": [
+            "as_of",
+            "readiness",
+            "reasons",
+            "shift_ended",
+            "source_record_count"
+          ],
+          "type": "object"
+        },
+        "starts_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "summary_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "summary_revision": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ends_at",
+        "formula_version",
+        "jobs",
+        "line_id",
+        "next_shift",
+        "notes",
+        "plan_id",
+        "plan_revision",
+        "plan_revision_digest",
+        "proposed_plan",
+        "schema_version",
+        "source",
+        "starts_at",
+        "summary_digest",
+        "summary_revision"
+      ],
+      "type": "object"
+    },
+    "plan_id": {
+      "type": "string"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "status": {
+      "enum": [
+        "adopted",
+        "draft"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "adoption",
+    "canonical_payload_digest",
+    "digest_schema_version",
+    "generated_at",
+    "generated_by",
+    "handover",
+    "plan_id",
+    "replayed",
+    "revision",
+    "status"
+  ],
+  "type": "object"
+}

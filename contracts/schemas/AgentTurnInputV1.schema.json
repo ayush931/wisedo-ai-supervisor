@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "request_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "source_span_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "maxItems": 8,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "request_id"
+  ],
+  "type": "object"
+}

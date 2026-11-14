@@ -1,0 +1,64 @@
+{
+  "fixture_provider": {
+    "run": "20261111T160140Z",
+    "question": "What is the rated cycle time of CNC KN-03 in its fictional CNC machine manual?",
+    "expected_value": "45",
+    "expected_span": "368ac892-469a-4880-8485-c5213280c28d",
+    "reply": {
+      "message_id": "b53fd52b-bbd5-4474-93d6-3adef141b9e5",
+      "seq": 2,
+      "author_kind": "assistant",
+      "reply_to": "8ef45cb9-8e5c-4ac1-92c4-fc65eb3cf444",
+      "body": "- [Approved process] Station: Assembly HB-03\nRated cycle time: 157 seconds. [1]",
+      "state": "answered",
+      "citations": [
+        {
+          "kind": "evidence_span",
+          "id": "f49bf84c-c632-494b-94a1-2149bdb51fbb",
+          "revision": 1
+        }
+      ],
+      "snapshot_id": "0f334424-14b8-5f95-81e0-5e4966a9a2fe",
+      "snapshot_created_at": "2026-11-11T16:10:20.976424Z",
+      "snapshot_stale": false,
+      "retrieval": "word",
+      "created_at": "2026-11-11T16:10:21.035988Z"
+    }
+  },
+  "local_qwen": {
+    "run": "20261111T162352Z",
+    "question": "What is the rated cycle time of CNC KN-03 in its fictional CNC machine manual?",
+    "expected_value": "45",
+    "expected_span": "626ad3f6-9770-4eeb-96e5-c67367fd86f0",
+    "reply": {
+      "message_id": "bdc86029-2e18-481b-8f51-bc1a3e9b8a4a",
+      "seq": 2,
+      "author_kind": "assistant",
+      "reply_to": "be2da8cf-2e51-435d-af64-db550648f582",
+      "body": "- [Approved process] The rated cycle time of CNC KN-03 is 45 seconds. [1]",
+      "state": "answered",
+      "citations": [
+        {
+          "kind": "evidence_span",
+          "id": "626ad3f6-9770-4eeb-96e5-c67367fd86f0",
+          "revision": 1
+        }
+      ],
+      "snapshot_id": "0f334424-14b8-5f95-81e0-5e4966a9a2fe",
+      "snapshot_created_at": "2026-11-11T16:26:29.297768Z",
+      "snapshot_stale": false,
+      "retrieval": "word",
+      "quantities": [
+        {
+          "statement": 0,
+          "claim_id": "33a64ffa-2ace-5627-9e57-40aecf93abec",
+          "predicate": "cycle_time_seconds",
+          "value": "45",
+          "unit": "s",
+          "span_id": "626ad3f6-9770-4eeb-96e5-c67367fd86f0"
+        }
+      ],
+      "created_at": "2026-11-11T16:26:29.348343Z"
+    }
+  }
+}

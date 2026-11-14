@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "effective_end": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "effective_start": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "policy": {
+      "additionalProperties": false,
+      "properties": {
+        "max_source_silence_seconds": {
+          "type": "integer"
+        },
+        "microstop_threshold_seconds": {
+          "type": "string"
+        },
+        "min_coverage": {
+          "type": "string"
+        },
+        "performance_cap_rule": {
+          "type": "string"
+        },
+        "policy_version": {
+          "type": "string"
+        },
+        "precedence_order": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rework_counts_as_good": {
+          "type": "boolean"
+        },
+        "rounding_mode": {
+          "type": "string"
+        },
+        "rounding_scale": {
+          "type": "integer"
+        },
+        "state_buckets": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "bucket": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "bucket",
+              "state"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "zero_denominator_rule": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "max_source_silence_seconds",
+        "microstop_threshold_seconds",
+        "min_coverage",
+        "performance_cap_rule",
+        "policy_version",
+        "precedence_order",
+        "rework_counts_as_good",
+        "rounding_mode",
+        "rounding_scale",
+        "state_buckets",
+        "zero_denominator_rule"
+      ],
+      "type": "object"
+    },
+    "policy_code": {
+      "maxLength": 128,
+      "type": "string"
+    }
+  },
+  "required": [
+    "effective_start",
+    "policy",
+    "policy_code"
+  ],
+  "type": "object"
+}

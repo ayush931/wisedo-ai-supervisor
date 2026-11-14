@@ -1,0 +1,473 @@
+{
+  "schema_version": 1,
+  "evidence_id": "0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d",
+  "run_id": "0e0e0e0e-0e0e-4e0e-8e0e-0e0e0e0e0e0e",
+  "site_id": "1a1a1a1a-1a1a-4a1a-8a1a-1a1a1a1a1a1a",
+  "window_start": "2026-10-01T08:00:00Z",
+  "window_end": "2026-10-01T16:00:00Z",
+  "calculated_at": "2026-10-01T17:00:00Z",
+  "status": "READY",
+  "reason_codes": [],
+  "kpis": {
+    "availability": {
+      "value": "0.916667",
+      "numerator": "26400",
+      "denominator": "28800"
+    },
+    "performance": {
+      "value": "0.738636",
+      "numerator": "19500",
+      "denominator": "26400"
+    },
+    "quality": {
+      "value": "0.984615",
+      "numerator": "19200",
+      "denominator": "19500"
+    },
+    "oee": {
+      "value": "0.666667",
+      "numerator": "9884160000000",
+      "denominator": "14826240000000"
+    },
+    "loading": {
+      "value": "1.000000",
+      "numerator": "28800",
+      "denominator": "28800"
+    },
+    "teep": {
+      "value": "0.666667",
+      "numerator": "284663808000000000",
+      "denominator": "426995712000000000"
+    }
+  },
+  "durations": {
+    "calendar": "28800",
+    "planned_exclusion": "0",
+    "planned_production": "28800",
+    "run": "26400",
+    "stop": "2400",
+    "microstop": "0",
+    "gap": "0",
+    "planned_loss": "0",
+    "unplanned_loss": "2400",
+    "unclassified_loss": "0"
+  },
+  "downtime_pareto": [
+    {
+      "rank": 1,
+      "reason_code": "MECH_BREAKDOWN",
+      "name": "Mechanical Breakdown",
+      "loss_category": "AVAILABILITY",
+      "classification": "UNPLANNED",
+      "duration_seconds": "2400",
+      "lost_quantity": "0",
+      "percentage": "100.000000%",
+      "cumulative_percentage": "100.000000%"
+    },
+    {
+      "rank": 2,
+      "reason_code": "SCRAP",
+      "name": "Defective Scrap Output",
+      "loss_category": "QUALITY",
+      "classification": "UNPLANNED",
+      "duration_seconds": "0",
+      "lost_quantity": "300",
+      "percentage": "0.000000%",
+      "cumulative_percentage": "100.000000%"
+    }
+  ],
+  "loss_tree": [
+    {
+      "path": "TOTAL_LOSS",
+      "reason_code": "TOTAL_LOSS",
+      "loss_category": "ALL",
+      "classification": "ALL",
+      "total_duration_seconds": "2400",
+      "total_lost_quantity": "300",
+      "contribution_count": 2
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY",
+      "reason_code": "AVAILABILITY",
+      "loss_category": "AVAILABILITY",
+      "classification": "ALL",
+      "total_duration_seconds": "2400",
+      "total_lost_quantity": "0",
+      "contribution_count": 1
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/PLANNED",
+      "reason_code": "PLANNED",
+      "loss_category": "AVAILABILITY",
+      "classification": "PLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/PLANNED/PLANNED_STOP",
+      "reason_code": "PLANNED_STOP",
+      "loss_category": "AVAILABILITY",
+      "classification": "PLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/PLANNED/PLANNED_STOP/CHANGEOVER",
+      "reason_code": "CHANGEOVER",
+      "loss_category": "AVAILABILITY",
+      "classification": "PLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/PLANNED/PLANNED_STOP/PLANNED_MAINT",
+      "reason_code": "PLANNED_MAINT",
+      "loss_category": "AVAILABILITY",
+      "classification": "PLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/UNCLASSIFIED",
+      "reason_code": "UNCLASSIFIED",
+      "loss_category": "AVAILABILITY",
+      "classification": "UNCLASSIFIED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/UNPLANNED",
+      "reason_code": "UNPLANNED",
+      "loss_category": "AVAILABILITY",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "2400",
+      "total_lost_quantity": "0",
+      "contribution_count": 1
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/UNPLANNED/LEGACY_CODE",
+      "reason_code": "LEGACY_CODE",
+      "loss_category": "AVAILABILITY",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/UNPLANNED/UNPLANNED_STOP",
+      "reason_code": "UNPLANNED_STOP",
+      "loss_category": "AVAILABILITY",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "2400",
+      "total_lost_quantity": "0",
+      "contribution_count": 1
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/UNPLANNED/UNPLANNED_STOP/ELEC_BREAKDOWN",
+      "reason_code": "ELEC_BREAKDOWN",
+      "loss_category": "AVAILABILITY",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/AVAILABILITY/UNPLANNED/UNPLANNED_STOP/MECH_BREAKDOWN",
+      "reason_code": "MECH_BREAKDOWN",
+      "loss_category": "AVAILABILITY",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "2400",
+      "total_lost_quantity": "0",
+      "contribution_count": 1
+    },
+    {
+      "path": "TOTAL_LOSS/PERFORMANCE",
+      "reason_code": "PERFORMANCE",
+      "loss_category": "PERFORMANCE",
+      "classification": "ALL",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/PERFORMANCE/PLANNED",
+      "reason_code": "PLANNED",
+      "loss_category": "PERFORMANCE",
+      "classification": "PLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/PERFORMANCE/UNCLASSIFIED",
+      "reason_code": "UNCLASSIFIED",
+      "loss_category": "PERFORMANCE",
+      "classification": "UNCLASSIFIED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/PERFORMANCE/UNPLANNED",
+      "reason_code": "UNPLANNED",
+      "loss_category": "PERFORMANCE",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/PERFORMANCE/UNPLANNED/MICROSTOP",
+      "reason_code": "MICROSTOP",
+      "loss_category": "PERFORMANCE",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/PERFORMANCE/UNPLANNED/SPEED_LOSS",
+      "reason_code": "SPEED_LOSS",
+      "loss_category": "PERFORMANCE",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/QUALITY",
+      "reason_code": "QUALITY",
+      "loss_category": "QUALITY",
+      "classification": "ALL",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "300",
+      "contribution_count": 1
+    },
+    {
+      "path": "TOTAL_LOSS/QUALITY/PLANNED",
+      "reason_code": "PLANNED",
+      "loss_category": "QUALITY",
+      "classification": "PLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/QUALITY/UNCLASSIFIED",
+      "reason_code": "UNCLASSIFIED",
+      "loss_category": "QUALITY",
+      "classification": "UNCLASSIFIED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/QUALITY/UNPLANNED",
+      "reason_code": "UNPLANNED",
+      "loss_category": "QUALITY",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "300",
+      "contribution_count": 1
+    },
+    {
+      "path": "TOTAL_LOSS/QUALITY/UNPLANNED/REWORK",
+      "reason_code": "REWORK",
+      "loss_category": "QUALITY",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "0",
+      "contribution_count": 0
+    },
+    {
+      "path": "TOTAL_LOSS/QUALITY/UNPLANNED/SCRAP",
+      "reason_code": "SCRAP",
+      "loss_category": "QUALITY",
+      "classification": "UNPLANNED",
+      "total_duration_seconds": "0",
+      "total_lost_quantity": "300",
+      "contribution_count": 1
+    }
+  ],
+  "cost": {
+    "currency": "USD",
+    "minor_units": 2,
+    "policy_revision": 3,
+    "status": "READY",
+    "modeled_opportunity": "2050.00",
+    "exact_amount": "2050",
+    "avoided_loss": null,
+    "realized_savings": null,
+    "not_computed": [
+      "avoided_loss: requires a measured post-action outcome; the core never infers it",
+      "realized_savings: requires finance-ledger confirmation; the core never infers it"
+    ],
+    "lines": [
+      {
+        "contribution_id": "avail-bd198e9e-0a9f-527e-a38f-c8d0c7e30ea8",
+        "reason_code": "MECH_BREAKDOWN",
+        "loss_category": "AVAILABILITY",
+        "classification": "UNPLANNED",
+        "line_id": "11111111-1111-4111-8111-111111111111",
+        "asset_id": "22222222-2222-4222-8222-222222222222",
+        "product_id": "P-1",
+        "order_id": "O-7",
+        "basis": "LOST_TIME_HOURS",
+        "measure_exact": "2/3",
+        "rate_id": "44444444-4444-4444-8444-444444444444",
+        "rate_revision": 1,
+        "modeled_opportunity": "1000.00",
+        "exact_amount": "1000",
+        "cost_reason_codes": []
+      },
+      {
+        "contribution_id": "qual-e04c7702-cadc-5830-af34-79526ff411f0",
+        "reason_code": "SCRAP",
+        "loss_category": "QUALITY",
+        "classification": "UNPLANNED",
+        "line_id": "11111111-1111-4111-8111-111111111111",
+        "asset_id": "22222222-2222-4222-8222-222222222222",
+        "product_id": "P-1",
+        "order_id": "O-7",
+        "basis": "LOST_UNITS",
+        "measure_exact": "300",
+        "rate_id": "44444444-4444-4444-8444-444444444444",
+        "rate_revision": 1,
+        "modeled_opportunity": "1050.00",
+        "exact_amount": "1050",
+        "cost_reason_codes": []
+      }
+    ],
+    "allocation": [
+      {
+        "path": "total=total",
+        "parent_path": "",
+        "level": "total",
+        "key": "total",
+        "exact_amount": "2050",
+        "amount": "2050.00"
+      },
+      {
+        "path": "total=total/line=11111111-1111-4111-8111-111111111111",
+        "parent_path": "total=total",
+        "level": "line",
+        "key": "11111111-1111-4111-8111-111111111111",
+        "exact_amount": "2050",
+        "amount": "2050.00"
+      },
+      {
+        "path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222",
+        "parent_path": "total=total/line=11111111-1111-4111-8111-111111111111",
+        "level": "asset",
+        "key": "22222222-2222-4222-8222-222222222222",
+        "exact_amount": "2050",
+        "amount": "2050.00"
+      },
+      {
+        "path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1",
+        "parent_path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222",
+        "level": "product",
+        "key": "P-1",
+        "exact_amount": "2050",
+        "amount": "2050.00"
+      },
+      {
+        "path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7",
+        "parent_path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1",
+        "level": "order",
+        "key": "O-7",
+        "exact_amount": "2050",
+        "amount": "2050.00"
+      },
+      {
+        "path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7/reason=MECH_BREAKDOWN",
+        "parent_path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7",
+        "level": "reason",
+        "key": "MECH_BREAKDOWN",
+        "exact_amount": "1000",
+        "amount": "1000.00"
+      },
+      {
+        "path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7/reason=MECH_BREAKDOWN/contribution=avail-bd198e9e-0a9f-527e-a38f-c8d0c7e30ea8",
+        "parent_path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7/reason=MECH_BREAKDOWN",
+        "level": "contribution",
+        "key": "avail-bd198e9e-0a9f-527e-a38f-c8d0c7e30ea8",
+        "exact_amount": "1000",
+        "amount": "1000.00"
+      },
+      {
+        "path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7/reason=SCRAP",
+        "parent_path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7",
+        "level": "reason",
+        "key": "SCRAP",
+        "exact_amount": "1050",
+        "amount": "1050.00"
+      },
+      {
+        "path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7/reason=SCRAP/contribution=qual-e04c7702-cadc-5830-af34-79526ff411f0",
+        "parent_path": "total=total/line=11111111-1111-4111-8111-111111111111/asset=22222222-2222-4222-8222-222222222222/product=P-1/order=O-7/reason=SCRAP",
+        "level": "contribution",
+        "key": "qual-e04c7702-cadc-5830-af34-79526ff411f0",
+        "exact_amount": "1050",
+        "amount": "1050.00"
+      }
+    ],
+    "rate_assumptions": [
+      {
+        "rate_id": "44444444-4444-4444-8444-444444444444",
+        "revision": 1,
+        "asset_id": "22222222-2222-4222-8222-222222222222",
+        "currency": "USD",
+        "hourly_rate": "1200",
+        "burden_ratio": "0.25",
+        "unit_margin": "3.5",
+        "effective_start": "2026-09-30T08:00:00Z",
+        "effective_end": "2026-10-31T08:00:00Z"
+      }
+    ],
+    "fx_assumptions": [],
+    "cost_reason_codes": []
+  },
+  "data_quality": {
+    "coverage_ratio": "1",
+    "gap_seconds": "0",
+    "status": "READY",
+    "reason_codes": []
+  },
+  "versions": {
+    "formula_version": "2026.1-nakajima-iso22400",
+    "policy_version": "1.0.0",
+    "kernel_version": "v1.0.0",
+    "policy_digest": "89885b8959b9bdc253730d95a0db4ca93bfae36522d39702b5c9f9ad21c061d0",
+    "rework_counts_as_good": false,
+    "microstop_threshold_sec": "300",
+    "taxonomy_revision": "1",
+    "taxonomy_digest": "8e6ab3b9783585a57e50750d0dcdf47272a1c6ad230e2c9e2cbfc0c66aaa9a93",
+    "cost_policy_revision": 3,
+    "rate_revisions": [
+      "44444444-4444-4444-8444-444444444444@1"
+    ],
+    "fx_revisions": []
+  },
+  "sources": {
+    "source_event_ids": [
+      "evt-down",
+      "evt-scrap"
+    ],
+    "contribution_digests": [
+      "303c387edda3e84a27ef80b6cba5acf0cd4026d47d602973c0b7651c29544847",
+      "a2e80bfd0f74d87c15574452e6867d128363780f8aaae2da7e88f0c1930fda0b"
+    ]
+  },
+  "digests": {
+    "normalized_input": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "calculation": "a1f18b1fe43054b793a047147b9c8c16659d844c2a2aeb2fcd855346e81f8360",
+    "classification": "05fa96b9a3aa794600e99a9fce3111d9f24a39a08987869dd321c598050e3ddf"
+  },
+  "digest": "fa5b86dbab7d2eab535344a8e7d91c24300c09c70db98b773f16a2b6aab22de5"
+}

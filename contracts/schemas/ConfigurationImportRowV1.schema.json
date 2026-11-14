@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "display_name": {
+      "type": "string"
+    },
+    "expected_revision": {
+      "type": "integer"
+    },
+    "kind": {
+      "type": "string"
+    },
+    "object_id": {
+      "type": "string"
+    },
+    "path": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "ref": {
+      "type": "string"
+    },
+    "row": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "kind",
+    "row",
+    "status"
+  ],
+  "type": "object"
+}

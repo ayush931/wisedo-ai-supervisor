@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "access_policy_revision": {
+      "type": "integer"
+    },
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "authority_scope": {
+      "maxLength": 255,
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "mapping_count": {
+      "type": "integer"
+    },
+    "mapping_revision": {
+      "type": "integer"
+    },
+    "review_source_revision": {
+      "type": "integer"
+    },
+    "review_verdict": {
+      "enum": [
+        "approved",
+        "rejected"
+      ],
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "source_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "type": {
+      "enum": [
+        "csv",
+        "event_api",
+        "json",
+        "manual"
+      ],
+      "type": "string"
+    }
+  },
+  "required": [
+    "access_policy_revision",
+    "actor_issuer",
+    "actor_subject",
+    "authority_scope",
+    "created_at",
+    "enabled",
+    "mapping_count",
+    "mapping_revision",
+    "revision",
+    "source_id",
+    "type"
+  ],
+  "type": "object"
+}

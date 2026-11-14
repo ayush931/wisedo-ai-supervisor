@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "display_name": {
+      "maxLength": 128,
+      "type": "string"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "shifts": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "day_of_week": {
+            "type": "integer"
+          },
+          "end_local": {
+            "type": "string"
+          },
+          "start_local": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "day_of_week",
+          "end_local",
+          "start_local"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "time_zone": {
+      "maxLength": 64,
+      "type": "string"
+    }
+  },
+  "required": [
+    "display_name",
+    "schema_version",
+    "shifts",
+    "time_zone"
+  ],
+  "type": "object"
+}

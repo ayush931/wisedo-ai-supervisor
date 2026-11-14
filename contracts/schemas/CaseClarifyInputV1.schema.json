@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "type": "string"
+    },
+    "expected_revision": {
+      "type": "integer"
+    },
+    "new_context_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": [
+    "body",
+    "expected_revision",
+    "new_context_id"
+  ],
+  "type": "object"
+}

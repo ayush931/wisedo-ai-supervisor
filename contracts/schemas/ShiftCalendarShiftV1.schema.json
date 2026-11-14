@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "day_of_week": {
+      "type": "integer"
+    },
+    "end_local": {
+      "type": "string"
+    },
+    "start_local": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "day_of_week",
+    "end_local",
+    "start_local"
+  ],
+  "type": "object"
+}

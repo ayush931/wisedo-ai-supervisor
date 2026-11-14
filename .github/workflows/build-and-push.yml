@@ -1,0 +1,267 @@
+name: Build and Push
+
+# ─────────────────────────────────────────────────────────────────────────
+# Single-arch (linux/amd64) image pipeline for deployable image:
+#   - ai-supervisor              (Dockerfile, Go + web)
+#
+# Runs on the self-hosted workstation runner. No buildx / QEMU / multi-arch:
+# targets the host architecture and uses the plain docker builder,
+# whose local layer cache persists between runs on the same host.
+# ─────────────────────────────────────────────────────────────────────────
+
+on:
+  # Pushes to main cut a git tag and push the image. Feature
+  # branches build via the pull_request event only; listing branch globs here
+  # too would start a second run per push that contends for the single runner.
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Serialize builds per-ref. cancel-in-progress is PR-only: a new push to a PR
+# kills the stale in-flight build, but main builds must run to completion
+# because they tag and push.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Read-only by default; only the jobs that push get write, each only what it pushes (security
+# audit run 1, WIS-697). Job-level permissions replace this block, so each lists contents: read.
+permissions:
+  contents: read
+
+env:
+  # Images publish to GitHub Container Registry under the organisation.
+  # GITHUB_TOKEN is the only credential needed; no repository variables.
+  REGISTRY: ghcr.io/wisedo-technology
+
+jobs:
+  # ── Prepare: version ─────────────────────────────────────────────────
+  # Emits version: semver on main (bumped by #major / #minor in the commit
+  # message, patch otherwise), pr-N-sha on PRs, branch_sha elsewhere.
+  prepare:
+    permissions:
+      contents: write
+    runs-on: [self-hosted, linux, x64]
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Calculate version
+        id: version
+        # Context values are passed via env, never inlined into the script:
+        # commit messages can carry shell metacharacters.
+        env:
+          BRANCH: ${{ github.ref_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          EVENT_NAME: ${{ github.event_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          SHORT_SHA="${SHA:0:7}"
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            NEW_VERSION="pr-${PR_NUMBER}-${SHORT_SHA}"
+          elif [[ "$BRANCH" == "main" ]]; then
+            LATEST_TAG=$(git tag -l 'v*.*.*' --sort=-version:refname | head -1)
+            [ -n "$LATEST_TAG" ] || LATEST_TAG="v0.0.0"
+            VERSION="${LATEST_TAG#v}"
+            MAJOR=$(echo "$VERSION" | cut -d. -f1)
+            MINOR=$(echo "$VERSION" | cut -d. -f2)
+            PATCH=$(echo "$VERSION" | cut -d. -f3)
+            if printf '%s' "$COMMIT_MSG" | grep -q '#major'; then
+              MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0
+            elif printf '%s' "$COMMIT_MSG" | grep -q '#minor'; then
+              MINOR=$((MINOR + 1)); PATCH=0
+            else
+              PATCH=$((PATCH + 1))
+            fi
+            NEW_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
+          else
+            TAG_PREFIX=$(echo "$BRANCH" | tr '/' '_' | tr '[:upper:]' '[:lower:]')
+            NEW_VERSION="${TAG_PREFIX}_${SHORT_SHA}"
+          fi
+
+          # Tag on push and workflow_dispatch from main. Idempotent: an existing
+          # tag locally or on origin is skipped, any other error is fatal.
+          if [[ "$BRANCH" == "main" && ( "$EVENT_NAME" == "push" || "$EVENT_NAME" == "workflow_dispatch" ) ]]; then
+            TAG_OUT=$(git tag "$NEW_VERSION" 2>&1) || {
+              if echo "$TAG_OUT" | grep -q "already exists"; then
+                echo "Tag $NEW_VERSION already exists locally — skipping."
+              else
+                echo "$TAG_OUT" >&2; exit 1
+              fi
+            }
+            PUSH_OUT=$(git push origin "$NEW_VERSION" 2>&1) || {
+              if echo "$PUSH_OUT" | grep -q "already exists"; then
+                echo "Tag $NEW_VERSION already on origin — skipping."
+              else
+                echo "$PUSH_OUT" >&2; exit 1
+              fi
+            }
+          fi
+          echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Calculated version: ${NEW_VERSION}"
+
+  # ── Validate: Dockerfile lint ─────────────────────────────────────────
+  # Language-level lint and tests live in the CI Quality, Security & SAST
+  # and Supervisor Go Foundation workflows; this job only gates the images.
+  validate:
+    runs-on: [self-hosted, linux, x64]
+    needs: prepare
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Static binary into the job temp dir: the runner has no passwordless
+      # sudo and hadolint-action would need a container build.
+      - name: Install hadolint
+        run: |
+          curl -sSfL https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64 \
+            -o "$RUNNER_TEMP/hadolint"
+          # Published SHA-256 of v2.12.0 (hadolint-Linux-x86_64.sha256); a changed binary fails here.
+          echo "56de6d5e5ec427e17b74fa48d51271c7fc0d61244bf5c90e828aab8362d55010  $RUNNER_TEMP/hadolint" | sha256sum -c -
+          chmod +x "$RUNNER_TEMP/hadolint"
+
+      - name: Dockerfile lint (ai-supervisor)
+        run: $RUNNER_TEMP/hadolint --failure-threshold error Dockerfile
+
+  # ── Build: ai-supervisor (linux/amd64, native) ────────────────────────
+  build:
+    name: Build ${{ matrix.image }}
+    permissions:
+      contents: read
+      packages: write
+    runs-on: [self-hosted, linux, x64]
+    needs: [prepare, validate]
+    timeout-minutes: 45
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        include:
+          - image: ai-supervisor
+            dockerfile: Dockerfile
+            smoke: supervisor
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Login to GitHub Container Registry
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build ${{ matrix.image }} (linux/amd64)
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          docker build --pull \
+            --label "org.opencontainers.image.revision=${GITHUB_SHA}" \
+            --label "org.opencontainers.image.version=${VERSION}" \
+            -f "${{ matrix.dockerfile }}" \
+            -t "${{ matrix.image }}:${VERSION}" .
+
+      # GPU-free, dependency-free checks that prove the image starts and
+      # fails closed without configuration.
+      - name: Smoke-test ${{ matrix.image }}
+        env:
+          IMAGE: ${{ matrix.image }}:${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          USER_ID=$(docker image inspect "$IMAGE" --format '{{.Config.User}}')
+          [ "$USER_ID" = "10001:10001" ] || { echo "image must run as 10001:10001, got '$USER_ID'" >&2; exit 1; }
+          case "${{ matrix.smoke }}" in
+            supervisor)
+              set +e
+              OUT=$(docker run --rm "$IMAGE" migrate 2>&1); CODE=$?
+              set -e
+              echo "$OUT"
+              [ "$CODE" -eq 1 ] || { echo "supervisor migrate without a DSN must exit 1, got $CODE" >&2; exit 1; }
+              echo "$OUT" | grep -q "supervisor migration failed" || { echo "expected sanitized fail-closed log line" >&2; exit 1; }
+              ;;
+          esac
+
+      # GHCR has no tag immutability, so version tags are treated as immutable
+      # here: an existing manifest is never overwritten. `latest` is the only
+      # tag that moves, and only from main.
+      - name: Push ${{ matrix.image }} to GitHub Container Registry
+        if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          LOCAL_IMAGE="${{ matrix.image }}:${VERSION}"
+          REMOTE_IMAGE="${REGISTRY}/${{ matrix.image }}"
+          if docker manifest inspect "$REMOTE_IMAGE:$VERSION" >/dev/null 2>&1; then
+            echo "Image tag ${VERSION} already exists in GHCR (treated as immutable). Skipping push."
+          else
+            docker tag "$LOCAL_IMAGE" "$REMOTE_IMAGE:$VERSION"
+            docker push "$REMOTE_IMAGE:$VERSION"
+          fi
+          if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
+            # Copy registry-side from the version tag so latest == that digest,
+            # even on reruns where the version push was skipped. Non-fatal.
+            docker pull "$REMOTE_IMAGE:$VERSION" >/dev/null
+            docker tag "$REMOTE_IMAGE:$VERSION" "$REMOTE_IMAGE:latest"
+            if LATEST_OUT=$(docker push "$REMOTE_IMAGE:latest" 2>&1); then
+              echo "$LATEST_OUT"
+            else
+              echo "::warning::could not move latest tag (continuing; version image is pushed): $LATEST_OUT"
+            fi
+          else
+            echo "Not a main build (${GITHUB_REF}) — leaving latest untouched."
+          fi
+
+      - name: Remove local build tags
+        if: always()
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          docker image rm -f "${{ matrix.image }}:${VERSION}" "${REGISTRY}/${{ matrix.image }}:${VERSION}" "${REGISTRY}/${{ matrix.image }}:latest" >/dev/null 2>&1 || true
+
+  # ── Deploy bundle ─────────────────────────────────────────────────────
+  # Zips what an operator needs to run the released images with compose,
+  # with IMAGE_TAG pre-pinned. Uploaded as a run artifact only: a GitHub
+  # Release would attach GitHub's automatic "Source code" downloads, which
+  # must not ship with the bundle for now. main pushes still cut the tag.
+  package-deploy-bundle:
+    name: Package wisedo_deploy.zip
+    runs-on: [self-hosted, linux, x64]
+    needs: [prepare, build]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Stage deploy folder
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: ./scripts/stage_deploy_folder.sh
+
+      - name: Create zip
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          zip -r "wisedo_deploy-${VERSION}.zip" wisedo_deploy/
+          ls -lh "wisedo_deploy-${VERSION}.zip"
+
+      - name: Upload deploy bundle artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: wisedo_deploy-${{ needs.prepare.outputs.version }}
+          path: wisedo_deploy-${{ needs.prepare.outputs.version }}.zip
+          if-no-files-found: error
+          retention-days: 90

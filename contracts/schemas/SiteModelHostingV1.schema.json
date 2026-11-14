@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "decisions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actor": {
+            "additionalProperties": false,
+            "properties": {
+              "issuer": {
+                "maxLength": 512,
+                "type": "string"
+              },
+              "subject": {
+                "maxLength": 255,
+                "type": "string"
+              }
+            },
+            "required": [
+              "issuer",
+              "subject"
+            ],
+            "type": "object"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "dpa_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "actor",
+          "created_at",
+          "dpa_reference",
+          "enabled",
+          "reason",
+          "revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "dpa_reference": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "replayed": {
+      "type": "boolean"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "schema_version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "decisions",
+    "dpa_reference",
+    "enabled",
+    "replayed",
+    "revision",
+    "schema_version"
+  ],
+  "type": "object"
+}

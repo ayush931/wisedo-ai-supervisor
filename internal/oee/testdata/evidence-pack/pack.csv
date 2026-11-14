@@ -1,0 +1,23 @@
+section,key,value
+pack,evidence_id,0d0d0d0d-0d0d-4d0d-8d0d-0d0d0d0d0d0d
+pack,window,2026-10-01T08:00:00Z/2026-10-01T16:00:00Z
+pack,status,READY
+pack,digest,fa5b86dbab7d2eab535344a8e7d91c24300c09c70db98b773f16a2b6aab22de5
+kpi,availability,0.916667
+kpi,performance,0.738636
+kpi,quality,0.984615
+kpi,oee,0.666667
+kpi,loading,1.000000
+kpi,teep,0.666667
+duration,planned_loss_seconds,0
+duration,unplanned_loss_seconds,2400
+duration,unclassified_loss_seconds,0
+pareto,1 MECH_BREAKDOWN,Mechanical Breakdown | 2400s | 100.000000%
+pareto,2 SCRAP,Defective Scrap Output | 0s | 0.000000%
+cost,currency,USD
+cost,modeled_opportunity,2050.00
+cost,avoided_loss,not computed
+cost,realized_savings,not computed
+cost_line,avail-bd198e9e-0a9f-527e-a38f-c8d0c7e30ea8 MECH_BREAKDOWN,1000.00
+cost_line,qual-e04c7702-cadc-5830-af34-79526ff411f0 SCRAP,1050.00
+assumption,44444444-4444-4444-8444-444444444444@1,USD hourly=1200 burden=0.25 unit_margin=3.5 2026-09-30T08:00:00Z..2026-10-31T08:00:00Z

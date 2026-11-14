@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor_issuer": {
+      "type": "string"
+    },
+    "actor_subject": {
+      "type": "string"
+    },
+    "as_of": {
+      "type": "string"
+    },
+    "authenticated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "claim_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "claim_id",
+          "revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "current_revision": {
+      "type": "integer"
+    },
+    "decision_eligible": {
+      "type": "boolean"
+    },
+    "decision_id": {
+      "type": "string"
+    },
+    "freshness_policy_revision": {
+      "type": "integer"
+    },
+    "inventory_id": {
+      "type": "string"
+    },
+    "inventory_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "requirement_id": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "schema_version": {
+      "type": "integer"
+    },
+    "snapshot_id": {
+      "type": "string"
+    },
+    "snapshot_inventory_revision": {
+      "type": "integer"
+    },
+    "snapshot_sha256": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string"
+    },
+    "verification_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "source_id": {
+            "type": "string"
+          },
+          "verification_id": {
+            "type": "string"
+          },
+          "verification_revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "source_id",
+          "verification_id",
+          "verification_revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "actor_issuer",
+    "actor_subject",
+    "authenticated_at",
+    "claim_refs",
+    "created_at",
+    "current_revision",
+    "decision_eligible",
+    "decision_id",
+    "inventory_id",
+    "inventory_revision",
+    "reason",
+    "requirement_id",
+    "revision",
+    "schema_version",
+    "verdict"
+  ],
+  "type": "object"
+}

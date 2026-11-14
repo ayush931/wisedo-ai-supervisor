@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "client_answer_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "question_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "revision": {
+      "type": "integer"
+    },
+    "source_id": {
+      "format": "uuid",
+      "type": "string"
+    },
+    "source_revision": {
+      "type": "integer"
+    },
+    "source_span_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "client_answer_id",
+    "created_at",
+    "question_id",
+    "revision",
+    "source_id",
+    "source_revision",
+    "source_span_id"
+  ],
+  "type": "object"
+}

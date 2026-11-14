@@ -1,0 +1,3 @@
+# Standalone launcher dependencies — intentionally SEPARATE from the OEE core
+# pyproject.toml (ADR 0002 Sec. 2.2 excludes ML from the core runtime).
+boto3>=1.34,<2

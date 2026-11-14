@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "created_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "finished_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "height": {
+      "type": "integer"
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "media_type": {
+      "type": "string"
+    },
+    "original_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "quarantine_reason": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "width": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "created_at",
+    "height",
+    "job_id",
+    "media_type",
+    "original_sha256",
+    "run_id",
+    "state",
+    "title",
+    "width"
+  ],
+  "type": "object"
+}

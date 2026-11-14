@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "as_of": {
+      "type": "string"
+    },
+    "claim_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "claim_id",
+          "revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "freshness_policy_revision": {
+      "type": "integer"
+    },
+    "inventory_revision": {
+      "type": "integer"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "snapshot_id": {
+      "type": "string"
+    },
+    "verdict": {
+      "type": "string"
+    },
+    "verification_refs": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "source_id": {
+            "type": "string"
+          },
+          "verification_id": {
+            "type": "string"
+          },
+          "verification_revision": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "source_id",
+          "verification_id",
+          "verification_revision"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "inventory_revision",
+    "reason",
+    "verdict"
+  ],
+  "type": "object"
+}

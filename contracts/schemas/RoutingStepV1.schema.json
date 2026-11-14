@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "step_number": {
+      "type": "integer"
+    },
+    "workstation_id": {
+      "format": "uuid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "step_number",
+    "workstation_id"
+  ],
+  "type": "object"
+}
