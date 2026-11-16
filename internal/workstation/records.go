@@ -306,9 +306,18 @@ type StationRecordDetailV1 struct {
 	Chain  []StationRecordV1 `json:"chain"`
 }
 
+// StationRecordTotalsV1 is the shift total for the same binding as the page, so a client does
+// not have to page every record to know it. Only records in force count: a corrected record is
+// replaced by its correction.
+type StationRecordTotalsV1 struct {
+	GoodQuantity   int64 `json:"good_quantity"`
+	RejectQuantity int64 `json:"reject_quantity"`
+}
+
 type StationRecordPageV1 struct {
-	Records    []StationRecordV1 `json:"records"`
-	NextCursor string            `json:"next_cursor,omitempty"`
+	Records    []StationRecordV1      `json:"records"`
+	NextCursor string                 `json:"next_cursor,omitempty"`
+	Totals     *StationRecordTotalsV1 `json:"totals,omitempty"`
 }
 
 type AuthorizationAction string
@@ -755,12 +764,12 @@ func (s *StationRecordService) Get(ctx context.Context, a Actor, sc Scope, works
 
 // List pages a workstation's records in received order, optionally for one job order.
 // Superseded records stay listed with their state and correction.
-func (s *StationRecordService) List(ctx context.Context, a Actor, sc Scope, workstationID, jobOrderID string, limit int, cursor string) (StationRecordPageV1, error) {
+func (s *StationRecordService) List(ctx context.Context, a Actor, sc Scope, workstationID, jobOrderID, planID string, limit int, cursor string) (StationRecordPageV1, error) {
 	out := StationRecordPageV1{Records: []StationRecordV1{}}
 	if !canonicalID(workstationID) {
 		return out, ErrNotFound
 	}
-	if limit < 1 || limit > 100 || (cursor != "" && !canonicalID(cursor)) || (jobOrderID != "" && !canonicalID(jobOrderID)) {
+	if limit < 1 || limit > 100 || (cursor != "" && !canonicalID(cursor)) || (jobOrderID != "" && !canonicalID(jobOrderID)) || (planID != "" && !canonicalID(planID)) {
 		return out, recordAt("")
 	}
 	tx, _, _, err := s.plans.begin(ctx, a, sc, shiftRead)
@@ -769,7 +778,8 @@ func (s *StationRecordService) List(ctx context.Context, a Actor, sc Scope, work
 	}
 	defer tx.Rollback()
 	rows, err := tx.QueryContext(ctx, recordSelect+` AND ($4='' OR r.job_order_id::text=$4)
- AND ($5='' OR (r.received_at,r.id)>(SELECT received_at,id FROM supervisor.station_records WHERE tenant_id=$1 AND site_id=$2 AND id::text=$5)) ORDER BY r.received_at,r.id LIMIT $6`, sc.TenantID, sc.SiteID, workstationID, jobOrderID, cursor, limit+1)
+ AND ($5='' OR r.plan_id::text=$5)
+ AND ($6='' OR (r.received_at,r.id)>(SELECT received_at,id FROM supervisor.station_records WHERE tenant_id=$1 AND site_id=$2 AND id::text=$6)) ORDER BY r.received_at,r.id LIMIT $7`, sc.TenantID, sc.SiteID, workstationID, jobOrderID, planID, cursor, limit+1)
 	if err != nil {
 		return out, err
 	}
@@ -788,6 +798,23 @@ func (s *StationRecordService) List(ctx context.Context, a Actor, sc Scope, work
 		out.Records = out.Records[:limit]
 		out.NextCursor = out.Records[limit-1].ID
 	}
+	totals := StationRecordTotalsV1{}
+	if err = tx.QueryRowContext(ctx, `SELECT
+ COALESCE(SUM(CASE WHEN r.kind='quantity' AND NOT EXISTS (
+  SELECT 1 FROM supervisor.station_records c
+  WHERE c.tenant_id=r.tenant_id AND c.site_id=r.site_id AND c.corrects_record_id=r.id
+ ) THEN COALESCE((r.payload->>'good_quantity')::bigint,0) ELSE 0 END),0)::bigint,
+ COALESCE(SUM(CASE WHEN r.kind='quantity' AND NOT EXISTS (
+  SELECT 1 FROM supervisor.station_records c
+  WHERE c.tenant_id=r.tenant_id AND c.site_id=r.site_id AND c.corrects_record_id=r.id
+ ) THEN COALESCE((r.payload->>'reject_quantity')::bigint,0) ELSE 0 END),0)::bigint
+ FROM supervisor.station_records r
+ WHERE r.tenant_id=$1 AND r.site_id=$2 AND r.workstation_id=$3
+ AND ($4='' OR r.job_order_id::text=$4)
+ AND ($5='' OR r.plan_id::text=$5)`, sc.TenantID, sc.SiteID, workstationID, jobOrderID, planID).Scan(&totals.GoodQuantity, &totals.RejectQuantity); err != nil {
+		return out, err
+	}
+	out.Totals = &totals
 	if err = stationAudit(ctx, tx, a, sc, workstationID, "", "station_record.listed"); err != nil {
 		return out, err
 	}

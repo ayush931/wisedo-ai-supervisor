@@ -190,7 +190,7 @@ func stationRecordPaths() map[string]any {
 	return map[string]any{
 		"/v1/sites/{site}/workstations/{workstation}/records": map[string]any{
 			"post": op("submitStationRecord", []any{site, station, key}, "StationRecordBodyV1", merge(map[string]any{"201": json200("Record appended, or replayed", "StationRecordV1")}, writes)),
-			"get": op("listStationRecords", []any{site, station, param("job_order_id", "query", false, id), limit, param("cursor", "query", false, id)}, "",
+			"get": op("listStationRecords", []any{site, station, param("job_order_id", "query", false, id), param("plan_id", "query", false, id), limit, param("cursor", "query", false, id)}, "",
 				merge(map[string]any{"200": json200("Records in received order, superseded ones included", "StationRecordPageV1")}, reads)),
 		},
 		"/v1/sites/{site}/workstations/{workstation}/records/{record}": map[string]any{

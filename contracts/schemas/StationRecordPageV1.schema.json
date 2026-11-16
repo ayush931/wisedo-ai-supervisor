@@ -202,6 +202,22 @@
         "type": "object"
       },
       "type": "array"
+    },
+    "totals": {
+      "additionalProperties": false,
+      "properties": {
+        "good_quantity": {
+          "type": "integer"
+        },
+        "reject_quantity": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "good_quantity",
+        "reject_quantity"
+      ],
+      "type": "object"
     }
   },
   "required": [

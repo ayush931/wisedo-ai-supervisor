@@ -19998,10 +19998,42 @@
               "type": "object"
             },
             "type": "array"
+          },
+          "totals": {
+            "additionalProperties": false,
+            "properties": {
+              "good_quantity": {
+                "type": "integer"
+              },
+              "reject_quantity": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "good_quantity",
+              "reject_quantity"
+            ],
+            "type": "object"
           }
         },
         "required": [
           "records"
+        ],
+        "type": "object"
+      },
+      "StationRecordTotalsV1": {
+        "additionalProperties": false,
+        "properties": {
+          "good_quantity": {
+            "type": "integer"
+          },
+          "reject_quantity": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "good_quantity",
+          "reject_quantity"
         ],
         "type": "object"
       },
@@ -44372,6 +44404,15 @@
           {
             "in": "query",
             "name": "job_order_id",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "plan_id",
             "required": false,
             "schema": {
               "format": "uuid",

@@ -78,6 +78,7 @@ func oeeCatalog() []named {
 		{"StationRecordBodyV1", reflect.TypeOf(workstation.StationRecordBodyV1{})},
 		{"StationRecordDetailV1", reflect.TypeOf(workstation.StationRecordDetailV1{})},
 		{"StationRecordPageV1", reflect.TypeOf(workstation.StationRecordPageV1{})},
+		{"StationRecordTotalsV1", reflect.TypeOf(workstation.StationRecordTotalsV1{})},
 		{"StationRecordV1", reflect.TypeOf(workstation.StationRecordV1{})},
 		{"ShiftSummaryRequestV1", reflect.TypeOf(workstation.ShiftSummaryRequestV1{})},
 		{"ShiftSummarySnapshotV1", reflect.TypeOf(workstation.ShiftSummarySnapshotV1{})},

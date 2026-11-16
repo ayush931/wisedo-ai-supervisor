@@ -4391,6 +4391,15 @@ export type StationRecordPageV1 = {
     source: "manual_tablet";
     state: "current" | "superseded";
   })[];
+  totals?: {
+    good_quantity: number;
+    reject_quantity: number;
+  };
+};
+
+export type StationRecordTotalsV1 = {
+  good_quantity: number;
+  reject_quantity: number;
 };
 
 export type StationRecordV1 = {

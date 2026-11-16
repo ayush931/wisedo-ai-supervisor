@@ -54,7 +54,7 @@ func registerStationRecords(mux *http.ServeMux, db *store.Store, auth *identity.
 	})
 	mux.HandleFunc("GET "+base+"/records", func(w http.ResponseWriter, r *http.Request) {
 		p, tenant, site, ok := scope(w, r)
-		if !ok || !onlyQuery(w, r, "job_order_id", "limit", "cursor") {
+		if !ok || !onlyQuery(w, r, "job_order_id", "plan_id", "limit", "cursor") {
 			return
 		}
 		limit, ok := limitOf(w, r)
@@ -62,7 +62,7 @@ func registerStationRecords(mux *http.ServeMux, db *store.Store, auth *identity.
 			return
 		}
 		q := r.URL.Query()
-		page, err := service.List(r.Context(), actor(p), workstation.Scope{TenantID: tenant, SiteID: site}, r.PathValue("workstation"), q.Get("job_order_id"), limit, q.Get("cursor"))
+		page, err := service.List(r.Context(), actor(p), workstation.Scope{TenantID: tenant, SiteID: site}, r.PathValue("workstation"), q.Get("job_order_id"), q.Get("plan_id"), limit, q.Get("cursor"))
 		if err != nil {
 			shiftPlanError(w, err)
 			return
