@@ -139,10 +139,12 @@ export function parseSteps(text: string): Step[] {
 // Procedure shows the job's instruction document at the exact revision the job pins, and only
 // when its checksum matches; otherwise it says why and shows no text (rule 06).
 export function Procedure({ jobKey, documentId, revision, sha256 }: { jobKey: string; documentId: string; revision: number; sha256: string }) {
-    const { site } = useSession();
+    const { site, me } = useSession();
     const [doc, setDoc] = useState<EvidenceSourceV1 | null>(null);
     const [error, setError] = useState<unknown>(null);
-    const key = `supervisor.procedure.${jobKey}.${documentId}.${revision}`;
+    // Step progress is a tablet convenience, never a process fact: it belongs to the person
+    // signed in here, so another operator on the same browser starts with nothing done.
+    const key = `supervisor.procedure.${me.subject}.${jobKey}.${documentId}.${revision}`;
     const [done, setDone] = useState<number[]>(() => {
         try {
             const v = JSON.parse(read(key) ?? "[]");
@@ -152,6 +154,15 @@ export function Procedure({ jobKey, documentId, revision, sha256 }: { jobKey: st
         }
     });
     const [at, setAt] = useState<number | null>(null);
+    useEffect(() => {
+        try {
+            const v = JSON.parse(read(key) ?? "[]");
+            setDone(Array.isArray(v) ? v.filter((n) => Number.isInteger(n)) : []);
+        } catch {
+            setDone([]);
+        }
+        setAt(null);
+    }, [key]);
     useEffect(() => {
         let live = true;
         setDoc(null);
@@ -226,6 +237,9 @@ export function Procedure({ jobKey, documentId, revision, sha256 }: { jobKey: st
                 {head}
                 <Badge variant={done.length === steps.length ? "green" : "neutral"} label={`${done.length} of ${steps.length} done`} />
             </HStack>
+            <Text as="p" size="sm" color="secondary">
+                Step progress is saved on this tablet only, for the person signed in here.
+            </Text>
             <HStack as="ol" gap={2} wrap="wrap" aria-label="Steps">
                 {steps.map((s, i) => (
                     <li key={i}>

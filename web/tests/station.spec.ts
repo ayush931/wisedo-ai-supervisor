@@ -24,7 +24,15 @@ const record = (kind: string, id: string, extra: Record<string, unknown> = {}, p
     record: { schema_version: 1, kind, workstation_id: ws, job_order_id: job, job_order_revision: 1, event_at: NOW.toISOString(), ...extra },
 });
 
-async function stub(page: Page, o: { sha?: string; running?: boolean; source?: number; plan?: () => string } = {}) {
+async function stub(page: Page, o: {
+    sha?: string;
+    running?: boolean;
+    source?: number;
+    plan?: () => string;
+    subject?: () => string;
+    totals?: { good_quantity: number; reject_quantity: number };
+    recordPage?: (cursor: string | null) => { records: ReturnType<typeof record>[]; next_cursor?: string };
+} = {}) {
     const posts: any[] = [];
     const planOf = o.plan ?? (() => plan);
     await page.clock.setFixedTime(NOW);
@@ -32,13 +40,17 @@ async function stub(page: Page, o: { sha?: string; running?: boolean; source?: n
         const req = route.request();
         const url = new URL(req.url());
         const path = url.pathname.replace(`/v1/sites/${site}`, "");
-        if (url.pathname === "/v1/me") return route.fulfill({ json: { csrf_token: "stub", subject: "op", display_name: "Sanjay Patil", sites: [{ id: site, name: "Chakan Plant", role: "operator", tenant_id: site, agent_available: false }] } });
+        if (url.pathname === "/v1/me") return route.fulfill({ json: { csrf_token: "stub", subject: o.subject?.() ?? "op", display_name: "Sanjay Patil", sites: [{ id: site, name: "Chakan Plant", role: "operator", tenant_id: site, agent_available: false }] } });
         if (path === "/workstations") return route.fulfill({ json: { workstations: [{ workstation_id: ws, line_id: line, display_name: "Grinder 05", current_revision: 1 }] } });
         if (path === "/members") return route.fulfill({ json: { members: [] } });
         if (path === `/workstations/${ws}/current-job-order`)
             return route.fulfill({ json: { workstation_id: ws, job_order_id: job, line_id: line, plan_id: planOf(), plan_revision: 1, pinned_revision: 1, current_revision: 1, starts_at: "2026-10-30T08:30:00Z", ends_at: "2026-10-30T16:30:00Z", timezone: "Asia/Kolkata", state: "current", target_quantity: 120, order: { revision: 1, state: "current", order, created_at: NOW.toISOString(), canonical_payload_digest: "a".repeat(64), digest_schema_version: 1, submitted_by: actor } } });
-        if (path === `/workstations/${ws}/records` && req.method() === "GET")
-            return route.fulfill({ json: { records: o.running === false ? [] : [record("acknowledged", "r1", {}, planOf()), record("started", "r2", {}, planOf())] } });
+        if (path === `/workstations/${ws}/records` && req.method() === "GET") {
+            const pageData = o.recordPage
+                ? o.recordPage(url.searchParams.get("cursor"))
+                : { records: o.running === false ? [] : [record("acknowledged", "r1", {}, planOf()), record("started", "r2", {}, planOf())] };
+            return route.fulfill({ json: { ...pageData, ...(o.totals ? { totals: o.totals } : {}) } });
+        }
         if (path === `/workstations/${ws}/records`) {
             const body = req.postDataJSON();
             posts.push(body);
@@ -201,4 +213,52 @@ test("stubbed procedure progress starts fresh when the same job runs in a later 
     await page.reload();
     await expect(guide.getByText("0 of 3 done")).toBeVisible();
     await expect(guide.getByText("Step 1 of 3")).toBeVisible();
+});
+
+test("WIS-729 problem 2: a shortcut asks before recording a lifecycle change", async ({ page }) => {
+    const posts = await stub(page, { running: false });
+    await page.getByRole("heading", { name: "Grinder 05", level: 1 }).click();
+    await page.keyboard.press("s");
+    const dialog = page.getByRole("dialog", { name: "Acknowledge this job?" });
+    await expect(dialog).toBeVisible();
+    expect(posts).toHaveLength(0);
+    await dialog.getByRole("button", { name: "Cancel" }).click();
+    await expect(dialog).toBeHidden();
+    expect(posts).toHaveLength(0);
+
+    await page.getByRole("button", { name: "Acknowledge", exact: true }).click();
+    await expect(dialog).toBeVisible();
+    expect(posts).toHaveLength(0);
+    await dialog.getByRole("button", { name: "Confirm Acknowledge" }).click();
+    await expect(page.getByRole("status").filter({ hasText: "Recorded: Acknowledged" })).toBeVisible();
+    expect(posts).toHaveLength(1);
+    expect(posts[0]).toMatchObject({ kind: "acknowledged" });
+});
+
+test("WIS-729 problem 3: totals cover every page, not just the first 100 records", async ({ page }) => {
+    const first = Array.from({ length: 100 }, (_, i) => record("quantity", `q${i}`, { good_quantity: 1, reject_quantity: 0 }));
+    await stub(page, {
+        totals: { good_quantity: 105, reject_quantity: 1 },
+        recordPage: (cursor) =>
+            cursor ? { records: [record("quantity", "q100", { good_quantity: 5, reject_quantity: 1 })] } : { records: first, next_cursor: "page-2" },
+    });
+    const recorded = page.getByLabel("Recorded this shift");
+    await expect(recorded.locator(".kpi").filter({ hasText: /^Good/ }).locator("strong")).toHaveText("105");
+    await expect(recorded.locator(".kpi").filter({ hasText: /^Reject/ }).locator("strong")).toHaveText("1");
+    await expect(page.getByText(/Totals unknown/)).toHaveCount(0);
+});
+
+test("WIS-729 problem 4: procedure progress does not carry to another operator", async ({ page }) => {
+    let subject = "op";
+    await stub(page, { subject: () => subject });
+    const guide = page.getByRole("region", { name: "How to do this job" });
+    await guide.getByRole("button", { name: "Done, next step" }).click();
+    await expect(guide.getByText("1 of 3 done")).toBeVisible();
+
+    subject = "op2";
+    await page.reload();
+    await expect(guide.getByText("0 of 3 done")).toBeVisible();
+    await expect(guide.getByText("Step 1 of 3")).toBeVisible();
+    await expect(guide.getByRole("button", { name: /Step 1, done: Check the job card/ })).toHaveCount(0);
+    await expect(guide.getByText("Saved on this tablet only")).toBeVisible();
 });

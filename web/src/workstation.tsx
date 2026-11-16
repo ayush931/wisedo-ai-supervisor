@@ -13,6 +13,7 @@ import { Badge, type BadgeProps } from "@astryxdesign/core/Badge";
 import { Banner } from "@astryxdesign/core/Banner";
 import { Button } from "@astryxdesign/core/Button";
 import { Card } from "@astryxdesign/core/Card";
+import { Dialog, DialogHeader } from "@astryxdesign/core/Dialog";
 import { Drawer, DrawerHeader } from "@astryxdesign/core/Drawer";
 import { EmptyState } from "@astryxdesign/core/EmptyState";
 import { Field } from "@astryxdesign/core/Field";
@@ -174,6 +175,7 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
     const [refreshedAt, setRefreshedAt] = useState<Date | null>(null);
     const [composer, setComposer] = useState<Composer | null>(null);
     const [composerSeq, setComposerSeq] = useState(0);
+    const [lifecycleConfirm, setLifecycleConfirm] = useState<{ kind: Kind; label: string } | null>(null);
     const [busy, setBusy] = useState<string | null>(null);
     const [error, setError] = useState<unknown>(null);
     const [lastBody, setLastBody] = useState<StationRecordBodyV1 | null>(null);
@@ -219,7 +221,9 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
                 // A refusal in this refresh may already have cleared the binding: apply only to it.
                 if (live() && currentBindingRef.current?.planId === c.plan_id) setRun(r?.plan_id === c.plan_id ? r : null);
             });
-            const page = await request<StationRecordPageV1>(`${base}/records?job_order_id=${c.job_order_id}&limit=100`);
+            const page = await request<StationRecordPageV1>(
+                `${base}/records?job_order_id=${encodeURIComponent(c.job_order_id)}&plan_id=${encodeURIComponent(c.plan_id)}&limit=100`,
+            );
             if (live()) setRecords(page);
         } catch (e) {
             if (!live()) return;
@@ -245,7 +249,9 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
         setHistoryLoading(true);
         setHistoryError(null);
         try {
-            const nextPage = await request<StationRecordPageV1>(`${base}/records?job_order_id=${encodeURIComponent(jobOrderId)}&limit=100&cursor=${encodeURIComponent(cursor)}`);
+            const nextPage = await request<StationRecordPageV1>(
+                `${base}/records?job_order_id=${encodeURIComponent(jobOrderId)}&plan_id=${encodeURIComponent(planId)}&limit=100&cursor=${encodeURIComponent(cursor)}`,
+            );
             setHistoryPage((prior) => {
                 const priorPage = prior?.jobOrderId === jobOrderId && prior.planId === planId ? prior.page : page;
                 const binding = currentBindingRef.current;
@@ -290,7 +296,12 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
         [historyRecordsPage, current?.plan_id],
     );
     const complete = records !== null && !records.next_cursor;
+    // The server total covers the whole binding, so it is known even when the first page ends
+    // with a cursor. Older replies without totals keep the page-by-page fallback.
+    const serverTotals = records?.totals;
+    const totalsKnown = complete || !!serverTotals;
     const tally = useMemo(() => {
+        if (serverTotals) return { good: serverTotals.good_quantity, reject: serverTotals.reject_quantity, n: shiftRecords.length };
         let good = 0,
             reject = 0,
             n = 0;
@@ -301,7 +312,7 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
                 n++;
             }
         return { good, reject, n };
-    }, [shiftRecords]);
+    }, [serverTotals, shiftRecords]);
     const last = useMemo(() => {
         const life = shiftRecords
             .filter((r) => !r.record.corrects_record_id && LIFECYCLE.includes(r.record.kind))
@@ -359,6 +370,7 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
         ...extra,
     });
     const quick = (kind: Kind) => canSend && send(make(kind));
+    const askLifecycle = (kind: Kind, label: string) => canSend && setLifecycleConfirm({ kind, label });
     const open = (c: Composer) => {
         setError(null);
         setComposerSeq((n) => n + 1);
@@ -368,7 +380,7 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
     // Keyboard shortcuts for the tablet screen; ignored while typing.
     const shortcuts = useRef<Record<string, () => void>>({});
     shortcuts.current = {
-        s: () => (last === "" ? quick("acknowledged") : last === "acknowledged" ? quick("started") : halted && quick("resumed")),
+        s: () => (last === "" || last === "acknowledged" || halted) && askLifecycle(startKind, startLabel),
         p: () => running && canSend && open({ kind: "comment", record: "paused" }),
         b: () => running && canSend && open({ kind: "comment", record: "blocked" }),
         g: () => canSend && open({ kind: "good" }),
@@ -383,7 +395,7 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
             const t = e.target as HTMLElement;
-            if (e.ctrlKey || e.metaKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test(t.tagName) || t.closest("dialog, [role=radiogroup]"))
+            if (e.repeat || e.ctrlKey || e.metaKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test(t.tagName) || t.closest("dialog, [role=radiogroup]"))
                 return;
             const action = shortcuts.current[e.key.toLowerCase()];
             if (action) {
@@ -398,8 +410,8 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
     const order = current?.order?.order;
     const name = profile?.revisions[profile.current_revision - 1].profile.display_name ?? short(stationId);
     const tz = current?.timezone;
-    const remaining = complete && current ? current.target_quantity - tally.good : null;
-    const pct = complete && current ? Math.min(100, Math.round((tally.good / current.target_quantity) * 100)) : 0;
+    const remaining = totalsKnown && current ? current.target_quantity - tally.good : null;
+    const pct = totalsKnown && current ? Math.min(100, Math.round((tally.good / current.target_quantity) * 100)) : 0;
     const startLabel = last === "" ? "Acknowledge" : last === "acknowledged" ? "Start" : halted ? "Resume" : "Running";
     const startKind: Kind = last === "" ? "acknowledged" : last === "acknowledged" ? "started" : "resumed";
     const latest = shiftRecords.reduce<Rec | null>((a, r) => (a && compareInstant(a.received_at, r.received_at) > 0 ? a : r), null);
@@ -444,7 +456,7 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
                         kind={startKind}
                         primary
                         enabled={canSend && !done && (last === "" || last === "acknowledged" || halted)}
-                        onClick={() => quick(startKind)}
+                        onClick={() => askLifecycle(startKind, startLabel)}
                     />}
                     <Action label="Pause" hint="P" enabled={canSend && running} onClick={() => open({ kind: "comment", record: "paused" })} />
                     <Action label="Block" hint="B" enabled={canSend && running} onClick={() => open({ kind: "comment", record: "blocked" })} />
@@ -508,6 +520,35 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
                         onSubmit={send}
                         onCancel={() => setComposer(null)}
                     />
+                )}
+                {lifecycleConfirm && (
+                    <Dialog
+                        isOpen
+                        purpose="form"
+                        onOpenChange={(isOpen) => {
+                            if (!isOpen && !busy) setLifecycleConfirm(null);
+                        }}
+                    >
+                        <DialogHeader title={`${lifecycleConfirm.label} this job?`} />
+                        <VStack gap={3} padding={4}>
+                            <Text as="p">
+                                This records “{lifecycleConfirm.label}” with your name and the time. It cannot be corrected later.
+                            </Text>
+                            <HStack gap={2}>
+                                <Button
+                                    label={`Confirm ${lifecycleConfirm.label}`}
+                                    variant="primary"
+                                    isDisabled={!canSend || !!busy}
+                                    onClick={() => {
+                                        const confirmed = lifecycleConfirm;
+                                        setLifecycleConfirm(null);
+                                        quick(confirmed.kind);
+                                    }}
+                                />
+                                <Button label="Cancel" variant="secondary" isDisabled={!!busy} onClick={() => setLifecycleConfirm(null)} />
+                            </HStack>
+                        </VStack>
+                    </Dialog>
                 )}
             </VStack>
         </Card>
@@ -577,13 +618,13 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
                                     </VStack>
                                     <Text as="p" size="3xl" weight="bold" hasTabularNumbers className="big">
                                         <VisuallyHidden>Good parts recorded: </VisuallyHidden>
-                                        <Val v={complete ? tally.good : null} />
+                                        <Val v={totalsKnown ? tally.good : null} />
                                         <Text size="base" weight="normal" color="secondary">
                                             {" "}
                                             / {current.target_quantity} good parts
                                         </Text>
                                     </Text>
-                                    {complete && (
+                                    {totalsKnown && (
                                         <ProgressBar
                                             label="Good against target"
                                             isLabelHidden
@@ -594,12 +635,12 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
                                     )}
                                     <Grid columns={{ minWidth: 110 }} gap={2} role="group" aria-label="Recorded this shift">
                                         <Kpi label="Remaining" value={remaining === null ? null : Math.max(0, remaining)} lead />
-                                        <Kpi label="Good" value={complete ? tally.good : null} />
-                                        <Kpi label="Reject" value={complete ? tally.reject : null} />
+                                        <Kpi label="Good" value={totalsKnown ? tally.good : null} />
+                                        <Kpi label="Reject" value={totalsKnown ? tally.reject : null} />
                                         <Kpi label="Target" value={current.target_quantity} />
                                         <Kpi label="Target cycle (s)" value={current.target_cycle_time_seconds ?? null} />
                                     </Grid>
-                                    {!complete && records && (
+                                    {!totalsKnown && records && (
                                         <Text as="p" size="sm" color="secondary">
                                             Totals unknown: more records are available; open History to load them.
                                         </Text>
