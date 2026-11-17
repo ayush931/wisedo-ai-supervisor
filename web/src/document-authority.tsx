@@ -11,7 +11,7 @@ import { Text } from "@astryxdesign/core/Text";
 import { TextInput } from "@astryxdesign/core/TextInput";
 import { Token } from "@astryxdesign/core/Token";
 import { VStack } from "@astryxdesign/core/VStack";
-import { Problem, Time, short, useSession } from "./ui";
+import { Problem, Time, clearDraft, loadDraft, saveDraft, short, useSession } from "./ui";
 
 // The latest decision of a kind, or none yet. A 404 on a decision read of a readable source means
 // no decision has been recorded; any other failure stays an error, never "none".
@@ -38,10 +38,11 @@ export function SourceAuthority({ sourceID }: { sourceID: string }) {
     const { site } = useSession();
     const owner = site.role === "owner";
     const base = `/v1/sites/${site.id}/sources/${sourceID}`;
+    const draftKey = `doc-authority:${base}`;
     const [state, setState] = useState<State | null>(null);
     const [loadError, setLoadError] = useState<unknown>(null);
     const [error, setError] = useState<unknown>(null);
-    const [reason, setReason] = useState("");
+    const [reason, setReason] = useState(() => loadDraft<string>(draftKey) ?? "");
     const [busy, setBusy] = useState(false);
     const [done, setDone] = useState("");
     // WIS-625: designating a model-read (OCR) source needs the owner's explicit check; never implied.
@@ -49,6 +50,14 @@ export function SourceAuthority({ sourceID }: { sourceID: string }) {
     const [checkedFor, setCheckedFor] = useState<number | null>(null);
     const checked = state !== null && checkedFor === state.source.revision;
     const intents = useRef(new Intents());
+
+    useEffect(() => {
+        if (reason.trim()) {
+            saveDraft(draftKey, reason);
+        } else {
+            clearDraft(draftKey);
+        }
+    }, [reason, draftKey]);
 
     const load = useCallback(async () => {
         setLoadError(null);
@@ -94,6 +103,7 @@ export function SourceAuthority({ sourceID }: { sourceID: string }) {
                 const out = await mutate<EvidenceAuthorityV1>(intents.current, "authority", `${base}/authority-decisions`, body, authority?.current_revision ?? 0);
                 setDone(`${kind === "designate" ? "Marked authoritative" : "Authority withdrawn"}. Decision ${short(out.decision_id)} recorded.`);
             }
+            clearDraft(draftKey);
             setReason("");
             setCheckedFor(null);
             await load();

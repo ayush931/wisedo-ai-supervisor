@@ -368,6 +368,8 @@ export function lengthError(value: string, max: number): { type: "error"; messag
     return n > max ? { type: "error", message: `${n} characters; the limit is ${max}. Shorten it to submit.` } : undefined;
 }
 
+export { clearAllDrafts, clearDraft, loadDraft, saveDraft } from "./api";
+
 export type Station = { id: string; name: string; line_id: string; revision: number };
 const stationCache = new Map<string, Promise<Station[]>>();
 // loadStations follows next_cursor until absent and resolves only with every page. A failed page or

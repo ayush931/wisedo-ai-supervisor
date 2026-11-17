@@ -221,6 +221,14 @@ export function ProfileBuilder({ stationId }: { stationId: string }) {
     const dirty = draftJSON !== saved;
     const ready = loaded || missing;
 
+    // Issue 2: warn before tab close or browser navigation when there are unsaved edits.
+    useEffect(() => {
+        if (!dirty) return;
+        const handler = (e: BeforeUnloadEvent) => { e.preventDefault(); };
+        addEventListener("beforeunload", handler);
+        return () => removeEventListener("beforeunload", handler);
+    }, [dirty]);
+
     // Live server preview: debounced, last response wins, never persisted. Its 422 path is the
     // same live validation Save would get, so it lands on the same row.
     useEffect(() => {
@@ -614,7 +622,10 @@ export function ProfileBuilder({ stationId }: { stationId: string }) {
                         label="Discard"
                         variant="secondary"
                         isDisabled={!dirty || busy}
-                        onClick={() => (loaded ? adopt(loaded) : setRows([{ ...toRow({ name: "", label: "", kind: "text", required: false }), auto: true }]))}
+                        onClick={() => {
+                            if (!window.confirm("Discard all unsaved changes?")) return;
+                            loaded ? adopt(loaded) : setRows([{ ...toRow({ name: "", label: "", kind: "text", required: false }), auto: true }]);
+                        }}
                     />
                     <Button
                         id="pf-save"

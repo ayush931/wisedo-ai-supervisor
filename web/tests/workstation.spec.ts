@@ -37,6 +37,50 @@ test("operator records a good quantity with a durable receipt and sees it in his
     await history.getByRole("button", { name: "Close" }).click();
 });
 
+// WIS-729 problem 1: a second Enter while the first save is still in flight must not save twice.
+test("WIS-729 a double Enter during a slow request creates one record", async ({ page }) => {
+    await signIn(page, "operator-1");
+    await openSite(page);
+    await section(page, "Workstations");
+    await page.getByRole("link", { name: "press-01" }).click();
+    await expect(page.getByText("Current job order")).toBeVisible();
+
+    let posts = 0;
+    await page.route(/\/v1\/sites\/[^/]+\/workstations\/[^/]+\/records$/, async (route) => {
+        if (route.request().method() !== "POST") return route.fallback();
+        posts++;
+        const record = route.request().postDataJSON();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await route.fulfill({
+            status: 201,
+            contentType: "application/json",
+            body: JSON.stringify({
+                id: "00000000-0000-4000-8000-000000000729",
+                state: "current",
+                plan_id: "00000000-0000-4000-8000-000000000001",
+                plan_revision: 1,
+                profile_revision: 1,
+                event_at: record.event_at,
+                received_at: record.event_at,
+                record,
+                recorded_by: { issuer: "local", subject: "operator-1" },
+                source: "manual_tablet",
+                replayed: false,
+                late: false,
+                canonical_payload_digest: "0".repeat(64),
+                digest_schema_version: 1,
+            }),
+        });
+    });
+
+    await page.getByRole("button", { name: /\+ Good/ }).click();
+    const good = page.getByLabel("Good", { exact: true });
+    await good.press("Enter");
+    await good.press("Enter");
+    await expect(page.getByRole("status").filter({ hasText: /Recorded: Quantity/ })).toBeVisible();
+    expect(posts).toBe(1);
+});
+
 test("WIS-290 a supervisor sees the operator's name in station record history", async ({ page, browser }) => {
     // The directory learns a name at login; the operator signs in on their own device first.
     const operator = await browser.newContext();

@@ -180,6 +180,14 @@ export function RoutingEditor({ id }: { id?: string }) {
     const diagramId = useId();
     const dirty = !saved || !sameBody(draft, saved);
 
+    // Issue 2: warn before tab close or browser navigation when there are unsaved edits.
+    useEffect(() => {
+        if (!dirty) return;
+        const handler = (e: BeforeUnloadEvent) => { e.preventDefault(); };
+        addEventListener("beforeunload", handler);
+        return () => removeEventListener("beforeunload", handler);
+    }, [dirty]);
+
     function newStepKeys(count: number) {
         return Array.from({ length: count }, () => nextStepKey.current++);
     }
@@ -338,6 +346,7 @@ export function RoutingEditor({ id }: { id?: string }) {
     }
     function discard() {
         if (conflict) { useServer(); return; }
+        if (dirty && !window.confirm("Discard all unsaved changes?")) return;
         if (!id) { navigate(`/sites/${site.id}/routings`); return; }
         if (saved) {
             setStepKeys(newStepKeys(saved.steps.length));
