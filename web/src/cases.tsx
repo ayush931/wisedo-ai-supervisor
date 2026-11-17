@@ -248,7 +248,10 @@ export function CaseList() {
                                 {rows.map((c) => (
                                     <TableRow key={c.id}>
                                         <TableHeaderCell scope="row">
-                                            <Link to={`/sites/${site.id}/cases/${c.id}`}>Case {short(c.id)}</Link>
+                                            <Link to={`/sites/${site.id}/cases/${c.id}`}>
+                                                Case · <EntityName id={c.line_id} kind="Line" />
+                                            </Link>{" "}
+                                            <span className="identifier">{short(c.id)}</span>
                                         </TableHeaderCell>
                                         <TableCell><EntityName id={c.line_id} kind="Line" /></TableCell>
                                         <TableCell><EntityName id={c.order_id} kind="Order" /></TableCell>

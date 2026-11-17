@@ -8,12 +8,13 @@ import { HStack } from "@astryxdesign/core/HStack";
 import { Skeleton } from "@astryxdesign/core/Skeleton";
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "@astryxdesign/core/Table";
 import { Text } from "@astryxdesign/core/Text";
+import { createStaticSource, Typeahead, TypeaheadItem } from "@astryxdesign/core/Typeahead";
 import { VisuallyHidden } from "@astryxdesign/core/VisuallyHidden";
 import { VStack } from "@astryxdesign/core/VStack";
 import type { ConfigurationDraftPageV1, ConfigurationDraftV1 } from "../../contracts/typescript/oee";
 import { Intents, isConflict, mutate, request } from "./api";
 import { label } from "./labels";
-import { Actor, Problem, StationName, Status, Time, short, useSession } from "./ui";
+import { Actor, Problem, StationName, Status, Time, short, useSession, useStations } from "./ui";
 
 // tick sizes a native checkbox or radio; the legacy input rule gives every input a 44 px touch height.
 const tick = { minHeight: 0, width: 18, height: 18, padding: 0, margin: 0 } as const;
@@ -73,8 +74,12 @@ function withValues(body: unknown, values: Values): unknown {
 }
 
 const fieldName = (path: string) => path.slice(1).replaceAll("/", " › ").replaceAll("_", " ");
+type Choice = { id: string; name: string };
+type Choices = { line: readonly Choice[]; item: readonly Choice[] };
+type PickItem = { id: string; label: string; auxiliaryData: { meta: string } };
+const pick = (items: readonly PickItem[], id: string, fallback: string): PickItem => items.find((i) => i.id === id) ?? { id, label: fallback, auxiliaryData: { meta: short(id) } };
 
-export function ConfigurationDrafts({ names, onChanged, onOpenObject, initialOpen = "" }: { names: ReadonlyMap<string, string>; onChanged: () => void; onOpenObject: (kind: string, id: string) => void; initialOpen?: string }) {
+export function ConfigurationDrafts({ names, choices, onChanged, onOpenObject, initialOpen = "" }: { names: ReadonlyMap<string, string>; choices: Choices; onChanged: () => void; onOpenObject: (kind: string, id: string) => void; initialOpen?: string }) {
     const { site } = useSession();
     const [filter, setFilter] = useState<StatusFilter>("draft");
     const [rows, setRows] = useState<Summary[] | null>(null);
@@ -106,7 +111,7 @@ export function ConfigurationDrafts({ names, onChanged, onOpenObject, initialOpe
     }, [load, version]);
 
     if (open)
-        return <DraftDetail id={open} names={names} onClose={() => { setOpen(""); setVersion((v) => v + 1); }} onChanged={onChanged} onOpenObject={onOpenObject} />;
+        return <DraftDetail id={open} names={names} choices={choices} onClose={() => { setOpen(""); setVersion((v) => v + 1); }} onChanged={onChanged} onOpenObject={onOpenObject} />;
 
     return (
         <section aria-labelledby="drafts-title">

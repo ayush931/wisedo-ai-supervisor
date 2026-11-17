@@ -12,6 +12,7 @@ import type {
     QuestionPageV1,
 } from "../../contracts/typescript/oee";
 import { allPages, AmbiguousError, ApiError, Intents, classify, isConflict, mutate, request } from "./api";
+import { EntityName } from "./cases";
 import { label } from "./labels";
 import { draftLink } from "./master-data";
 import { ProposedFacts } from "./proposed-facts";
@@ -215,7 +216,10 @@ export function InterviewList() {
                             {rows.map((s) => (
                                 <TableRow key={s.session_id}>
                                     <TableHeaderCell scope="row">
-                                        <Link to={`/sites/${site.id}/interviews/${s.session_id}`}>Interview {short(s.session_id)}</Link>
+                                        <Link to={`/sites/${site.id}/interviews/${s.session_id}`}>
+                                            Interview · {s.process_id ? <EntityName id={s.process_id} kind="Process" /> : "Unbound"}
+                                        </Link>{" "}
+                                        <span className="identifier">{short(s.session_id)}</span>
                                     </TableHeaderCell>
                                     <TableCell>{s.role}</TableCell>
                                     <TableCell><Status code={s.status} /></TableCell>

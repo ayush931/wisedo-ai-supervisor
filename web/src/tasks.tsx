@@ -141,7 +141,10 @@ export function TaskList() {
                                 {shown.map((t) => (
                                     <TableRow key={t.id}>
                                         <TableHeaderCell scope="row">
-                                            <Link to={`/sites/${site.id}/tasks/${t.id}`}>Task {short(t.id)}</Link>
+                                            <Link to={`/sites/${site.id}/tasks/${t.id}`}>
+                                                Task · <EntityName id={t.line_id} kind="Line" />
+                                            </Link>{" "}
+                                            <span className="identifier">{short(t.id)}</span>
                                         </TableHeaderCell>
                                         <TableCell><TaskState state={t.state} /></TableCell>
                                         <TableCell><Actor a={{ subject: t.assignee_subject }} /></TableCell>

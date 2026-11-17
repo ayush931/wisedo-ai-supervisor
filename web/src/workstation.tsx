@@ -134,7 +134,7 @@ export function WorkstationList() {
                                 </TableCell>
                                 <TableCell>
                                     <Text size="sm" color="secondary">
-                                        <span title={w.line_id}>…{w.line_id.slice(-4)}</span>
+                                        <Name id={w.line_id} kind="line" />
                                     </Text>
                                 </TableCell>
                                 <TableCell>

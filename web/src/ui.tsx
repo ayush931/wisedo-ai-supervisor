@@ -450,18 +450,21 @@ function useName(sources: [string, (v: any) => string | undefined][]) {
     }, [key]); // sources is derived from key
     return name;
 }
-// Name shows a line, order or item by its best readable display name. With prefixed, "Line" or
-// "Order" is put in front unless the name already starts with it.
-export function Name({ id, kind, prefixed }: { id: string; kind: "line" | "order"; prefixed?: boolean }) {
+export function useEntityName(id: string, kind: "line" | "order"): string | null {
     const { site } = useSession();
     const base = `/v1/sites/${site.id}`;
-    const word = kind === "line" ? "Line" : "Order";
     const sources: [string, (v: any) => string | undefined][] = !uuid.test(id)
         ? []
         : kind === "line"
           ? [[`${base}/lines/${id}`, masterName], [`${base}/entities/${id}`, entityName]]
           : [[`${base}/entities/${id}`, entityName]];
-    const name = useName(sources);
+    return useName(sources);
+}
+// Name shows a line, order or item by its best readable display name. With prefixed, "Line" or
+// "Order" is put in front unless the name already starts with it.
+export function Name({ id, kind, prefixed }: { id: string; kind: "line" | "order"; prefixed?: boolean }) {
+    const word = kind === "line" ? "Line" : "Order";
+    const name = useEntityName(id, kind);
     // A non-UUID order reference is the customer's own text; show it as it is.
     const text = name ?? (uuid.test(id) ? `${word} ${short(id)}` : id);
     const shown = prefixed && !new RegExp(`^${word}\\b`, "i").test(text) ? `${word} ${text}` : text;

@@ -30,7 +30,7 @@ import { Skeleton } from "@astryxdesign/core/Skeleton";
 import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "@astryxdesign/core/Table";
 import { Text } from "@astryxdesign/core/Text";
 import { VStack } from "@astryxdesign/core/VStack";
-import { Dec, Details, Link, Problem, Readiness, Reasons, Refreshed, StationName, Status, Time, Val, Actor, canSupervise, short, useSession, useStations } from "./ui";
+import { Dec, Details, LineName, Link, Problem, Readiness, Reasons, Refreshed, StationName, Status, Time, Val, Actor, canSupervise, short, useEntityName, useSession, useStations } from "./ui";
 
 type Assignment = ShiftPlanBodyV1["assignments"][number];
 type Station = ShiftSummarySnapshotV1["summary"]["stations"][number];
@@ -157,7 +157,7 @@ export function ShiftList() {
                                 </TableCell>
                                 <TableCell>
                                     <Text size="sm" color="secondary">
-                                        <span title={p.line_id}>…{p.line_id.slice(-4)}</span>
+                                        <LineName id={p.line_id} />
                                     </Text>
                                 </TableCell>
                                 <TableCell>
@@ -296,7 +296,7 @@ export function ShiftPage({ shiftId }: { shiftId: string }) {
                 )}
                 <RunState run={run} tz={tz} />
                 <Text size="sm" color="secondary">
-                    Line …{plan.line_id.slice(-4)}
+                    <LineName id={plan.line_id} />
                 </Text>
             </HStack>
             {/* Numbers first. No summary means the recorded counts are unknown (—), never zero. */}
@@ -901,7 +901,7 @@ function ApproveDialog({ plan, me, busy, disabled, onClose, onApprove }: { plan:
             <VStack gap={3} padding={4}>
                 <MetadataList columns={2}>
                     <MetadataListItem label="Line">
-                        <span className="identifier">{plan.line_id}</span>
+                        <LineName id={plan.line_id} />
                     </MetadataListItem>
                     <MetadataListItem label="Shift">{formatInterval(rev.plan.starts_at, rev.plan.ends_at, tz)}</MetadataListItem>
                     <MetadataListItem label="Assignments">{rev.plan.assignments.length} workstations</MetadataListItem>
@@ -935,6 +935,11 @@ function ApproveDialog({ plan, me, busy, disabled, onClose, onApprove }: { plan:
 }
 
 type Row = { workstation_id: string; job_order_id: string; target_quantity: string; target_cycle: string; pinned?: number };
+
+function LineOption({ id }: { id: string }) {
+    const name = useEntityName(id, "line");
+    return <option value={id}>{name ?? short(id)}</option>;
+}
 
 function PlanForm({
     initial,
@@ -1150,9 +1155,7 @@ function PlanForm({
                     <select id="pf-line" value={line} onChange={(e) => setLine(e.target.value)}>
                         <option value="">Choose…</option>
                         {[...new Set([line, ...lines])].filter(Boolean).map((l) => (
-                            <option key={l} value={l}>
-                                {short(l)}
-                            </option>
+                            <LineOption key={l} id={l} />
                         ))}
                     </select>
                 </Field>

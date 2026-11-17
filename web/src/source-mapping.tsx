@@ -24,6 +24,7 @@ import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } f
 import { Text } from "@astryxdesign/core/Text";
 import { TextInput } from "@astryxdesign/core/TextInput";
 import { Token, type TokenColor } from "@astryxdesign/core/Token";
+import { createStaticSource, Typeahead, TypeaheadItem } from "@astryxdesign/core/Typeahead";
 import { VStack } from "@astryxdesign/core/VStack";
 import { Actor, canSupervise, Link, Problem, short, Time, useSession } from "./ui";
 
@@ -32,12 +33,18 @@ type Kind = Mapping["external_type"];
 type Summary = OperationalSourcePageV1["sources"][number];
 type Entity = KnowledgeEntityPageV1["entities"][number];
 type RowError = { field: keyof Mapping; text: string };
+const typeText: Record<Summary["type"], string> = {
+    csv: "CSV import",
+    event_api: "Event API feed",
+    json: "JSON import",
+    manual: "Manual entry",
+};
 
 const kinds: Kind[] = ["asset", "order"];
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 // Browsing is capped by allPages at 50 pages × 100 = 5,000 entities or sources. ponytail: a site
-// past that gets a visible "could not be loaded completely" error (never a partial list); mapping
-// by entity ID still works. A server-side search endpoint is the upgrade path.
+// past that gets a visible "could not be loaded completely" error (never a partial list). A
+// server-side search endpoint is the upgrade path.
 const q = (cursor?: string) => `?limit=100${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`;
 
 // rowPath reads a server member path such as "mappings[3].external_key".
@@ -150,7 +157,7 @@ export function SourceMappingPage({ sourceId }: { sourceId?: string }) {
                                         <TableRow key={s.source_id} data-source={s.source_id} aria-current={s.source_id === sourceId ? "true" : undefined}>
                                             <TableCell>
                                                 <Link to={`/sites/${site.id}/sources/${s.source_id}`} current={s.source_id === sourceId}>
-                                                    <span className="identifier">{short(s.source_id)}</span>
+                                                    {typeText[s.type]} <span className="identifier">{short(s.source_id)}</span>
                                                 </Link>
                                                 {!s.enabled && (
                                                     <Text size="sm" color="secondary">
@@ -229,6 +236,22 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
         document.getElementById(focusRef.current)?.focus();
         focusRef.current = "";
     });
+    const entityItems = useMemo(() => {
+        const byID = new Map<string, Entity>();
+        for (const e of entities?.values() ?? []) byID.set(e.entity_id, e);
+        for (const e of known.values()) if (!byID.has(e.entity_id)) byID.set(e.entity_id, e);
+        return [...byID.values()]
+            .filter((e) => e.type === "asset" || e.type === "order")
+            .map((e) => ({
+                id: e.entity_id,
+                label: e.display_name,
+                auxiliaryData: { type: e.type, revision: e.current_revision, meta: `${e.type} · ${short(e.entity_id)} · rev ${e.current_revision}` },
+            }));
+    }, [entities, known]);
+    const assetEntities = useMemo(() => entityItems.filter((i) => i.auxiliaryData.type === "asset"), [entityItems]);
+    const orderEntities = useMemo(() => entityItems.filter((i) => i.auxiliaryData.type === "order"), [entityItems]);
+    const assetSource = useMemo(() => createStaticSource(assetEntities, { keywords: (i) => [i.id, i.auxiliaryData.meta] }), [assetEntities]);
+    const orderSource = useMemo(() => createStaticSource(orderEntities, { keywords: (i) => [i.id, i.auxiliaryData.meta] }), [orderEntities]);
 
     if (loadError) return <Problem error={loadError} />;
     if (!detail || !base)
@@ -243,6 +266,20 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
     const retryable = saveError instanceof AmbiguousError || (saveError instanceof ApiError && classify(saveError.problem) === "retry");
     const entityOf = (id: string) => known.get(id) ?? entities?.get(id);
     const entityName = (id: string) => entityOf(id)?.display_name;
+    const entitySource = (kind: Kind) => (kind === "asset" ? assetSource : orderSource);
+    const selectedEntity = (r: Mapping) => {
+        if (!r.entity_id) return null;
+        const e = entityOf(r.entity_id);
+        return {
+            id: r.entity_id,
+            label: e?.display_name ?? `${entities ? "Unknown entity" : "Entity"} ${short(r.entity_id)}`,
+            auxiliaryData: {
+                type: r.external_type,
+                revision: e?.current_revision ?? r.entity_revision,
+                meta: `${r.external_type} · ${short(r.entity_id)}${e ? ` · rev ${e.current_revision}` : ""}`,
+            },
+        };
+    };
     const mapped = new Set(rows.map((r) => r.entity_id));
     const unmapped = entities ? [...entities.values()].filter((e) => (e.type === "asset" || e.type === "order") && !mapped.has(e.entity_id)) : [];
 
@@ -255,18 +292,6 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
             return next;
         });
         setSaved(null);
-    };
-    // resolve reads one entity by id (no full list needed) and pins its current revision.
-    const resolve = (i: number, id: string) => {
-        edit(i, { entity_id: id, entity_revision: entityOf(id)?.current_revision ?? 0 });
-        if (!uuid.test(id) || entityOf(id)) return;
-        request<Entity>(`/v1/sites/${site.id}/entities/${id}`).then(
-            (e) => {
-                setKnown((k) => new Map(k).set(id, e));
-                setRows((rs) => rs.map((r, j) => (j === i && r.entity_id === id ? { ...r, entity_revision: e.current_revision } : r)));
-            },
-            () => setErrors((es) => new Map(es).set(i, { field: "entity_id", text: "This entity was not found at this site." })),
-        );
     };
     const refresh = (id: string) =>
         request<Entity>(`/v1/sites/${site.id}/entities/${id}`).then((e) => setKnown((k) => new Map(k).set(id, e)), () => {});
@@ -347,7 +372,7 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
     return (
         <VStack as="section" aria-labelledby="sm-title" className="sm-editor" gap={2}>
             <Heading level={2} id="sm-title">
-                Source <span className="identifier">{short(source.source_id)}</span>
+                Source: {typeText[source.type]} <span className="identifier">{short(source.source_id)}</span>
             </Heading>
             <MetadataList columns={2}>
                 {facts.map(([k, v]) => (
@@ -364,8 +389,6 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
                 <VStack gap={2}>
                     <fieldset disabled={busy || !!reloadError} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
                         <VStack gap={2}>
-                            <datalist id="sm-entities-asset">{[...(entities?.values() ?? [])].filter((e) => e.type === "asset").map((e) => <option key={e.entity_id} value={e.entity_id} label={e.display_name} />)}</datalist>
-                            <datalist id="sm-entities-order">{[...(entities?.values() ?? [])].filter((e) => e.type === "order").map((e) => <option key={e.entity_id} value={e.entity_id} label={e.display_name} />)}</datalist>
                             <Table aria-label="Mappings" density="compact" verticalAlign="top">
                                 <TableHeader>
                                     <TableRow isHeaderRow>
@@ -427,25 +450,26 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
                                                 </TableCell>
                                                 <TableCell>
                                                     {writer ? (
-                                                        <TextInput
+                                                        <Typeahead
                                                             id={`sm-entity-${i}`}
-                                                            label={`Entity ID, row ${i + 1}`}
+                                                            label={`Entity, row ${i + 1}`}
                                                             isLabelHidden
-                                                            {...{ list: `sm-entities-${r.external_type}` }}
-                                                            value={r.entity_id}
+                                                            searchSource={entitySource(r.external_type)}
+                                                            value={selectedEntity(r)}
+                                                            onChange={(item) => { if (item) edit(i, { entity_id: item.id, entity_revision: item.auxiliaryData.revision }); }}
+                                                            hasEntriesOnFocus
+                                                            hasClear={false}
+                                                            maxMenuItems={8}
                                                             width="100%"
-                                                            hasSpellCheck={false}
-                                                            placeholder="Entity ID or pick"
-                                                            onChange={(v) => resolve(i, v.trim())}
-                                                            {...status("entity_id")}
+                                                            placeholder={`Search ${r.external_type}s by name`}
+                                                            status={isBad("entity_id") ? { type: "error" } : undefined}
+                                                            aria-describedby={isBad("entity_id") ? errId : undefined}
+                                                            renderItem={(item) => <TypeaheadItem item={item} description={item.auxiliaryData?.meta} />}
                                                         />
                                                     ) : null}
                                                     {r.entity_id && (
                                                         <Text size="sm" color="secondary" display="block">
-                                                            <span title={r.entity_id}>
-                                                                {entityName(r.entity_id) ? `${entityName(r.entity_id)} · ` : entities ? "Unknown entity " : ""}
-                                                                <span className="identifier">{short(r.entity_id)}</span>
-                                                            </span>
+                                                            <span className="identifier" title={r.entity_id}>{short(r.entity_id)}</span>
                                                         </Text>
                                                     )}
                                                     {message("entity")}
