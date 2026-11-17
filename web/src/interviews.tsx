@@ -27,7 +27,7 @@ import { Text } from "@astryxdesign/core/Text";
 import { TextArea } from "@astryxdesign/core/TextArea";
 import { Token } from "@astryxdesign/core/Token";
 import { VStack } from "@astryxdesign/core/VStack";
-import { Link, Problem, Reasons, Status, Time, Val, canSupervise, short, usePolling, useSession } from "./ui";
+import { Link, Problem, Reasons, Status, Time, Val, canSupervise, lengthError, short, usePolling, useSession } from "./ui";
 
 // WIS-271 interviews: a participant answers role questions, may ask the agent for follow-up
 // questions, and may ask it to draft candidate configuration. Every model-worded string is
@@ -415,12 +415,17 @@ function QuestionItem({ q, base, active, onSaved, onConflict }: { q: Question; b
                     {active && q.answer_state === "unanswered" && (
                         <form onSubmit={save}>
                             <VStack gap={1}>
-                                <TextArea label="Your answer" value={text} rows={3} onChange={(v) => setText(v.slice(0, 8000))} />
+                                <TextArea label="Your answer" value={text} rows={3} onChange={(v) => setText(v)} />
                                 <HStack justify="between" align="center" gap={2}>
                                     <Text size="sm" color="secondary" hasTabularNumbers>
                                         {length}/8000
                                     </Text>
-                                    <Button type="submit" variant="primary" label={busy ? "Saving…" : "Save answer"} isDisabled={busy || !online || !text.trim()} />
+                                    {lengthError(text, 8000) && (
+                                        <Text size="sm" role="alert" style={{ color: "var(--color-text-error)" }}>
+                                            {lengthError(text, 8000)!.message}
+                                        </Text>
+                                    )}
+                                    <Button type="submit" variant="primary" label={busy ? "Saving…" : "Save answer"} isDisabled={busy || !online || !text.trim() || !!lengthError(text, 8000)} />
                                 </HStack>
                                 <Problem error={error} />
                             </VStack>

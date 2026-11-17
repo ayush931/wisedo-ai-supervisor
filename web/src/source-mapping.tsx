@@ -25,7 +25,7 @@ import { Text } from "@astryxdesign/core/Text";
 import { TextInput } from "@astryxdesign/core/TextInput";
 import { Token, type TokenColor } from "@astryxdesign/core/Token";
 import { VStack } from "@astryxdesign/core/VStack";
-import { Actor, canSupervise, Link, Problem, short, Time, useSession } from "./ui";
+import { Actor, canSupervise, clearDraft, Link, loadDraft, Problem, saveDraft, short, Time, useSession } from "./ui";
 
 type Mapping = OperationalSourceMappingV1;
 type Kind = Mapping["external_type"];
@@ -203,14 +203,30 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
     const intents = useMemo(() => new Intents(), []);
     const focusRef = useRef<string>("");
     const conflictRef = useRef<HTMLHeadingElement>(null);
+    const draftKey = `source-mapping:${site.id}:${sourceId}`;
 
     const adopt = useCallback((d: OperationalSourceDetailV1) => {
         setDetail(d);
-        setBase({ mappingRevision: d.source.mapping_revision, rows: [...d.mappings] });
-        setRows([...d.mappings]);
+        const baseRows = [...d.mappings];
+        setBase({ mappingRevision: d.source.mapping_revision, rows: baseRows });
+        const draft = loadDraft<Mapping[]>(draftKey);
+        if (draft && draft.length > 0 && !sameRows(draft, baseRows)) {
+            setRows(draft);
+        } else {
+            setRows(baseRows);
+        }
         setErrors(new Map());
         setConflict(null);
-    }, []);
+    }, [draftKey]);
+
+    useEffect(() => {
+        if (!base) return;
+        if (!sameRows(rows, base.rows)) {
+            saveDraft(draftKey, rows);
+        } else {
+            clearDraft(draftKey);
+        }
+    }, [rows, base, draftKey]);
     useEffect(() => {
         request<OperationalSourceDetailV1>(path).then(adopt, setLoadError);
     }, [path, adopt]);
@@ -239,6 +255,14 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
         );
     const source = detail.source;
     const dirty = !sameRows(rows, base.rows);
+
+    // Issue 2: warn before tab close or browser navigation when there are unsaved edits.
+    useEffect(() => {
+        if (!dirty) return;
+        const handler = (e: BeforeUnloadEvent) => { e.preventDefault(); };
+        addEventListener("beforeunload", handler);
+        return () => removeEventListener("beforeunload", handler);
+    }, [dirty]);
     const approved = source.review?.verdict === "approved" && source.review_eligible;
     const retryable = saveError instanceof AmbiguousError || (saveError instanceof ApiError && classify(saveError.problem) === "retry");
     const entityOf = (id: string) => known.get(id) ?? entities?.get(id);
@@ -302,6 +326,7 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
             const key = intents.key(`mappings:${sourceId}`, { body, ifMatch });
             const out = await request<OperationalSourceV1>(`${path}/mappings`, "POST", { key, body, ifMatch });
             intents.done(`mappings:${sourceId}`);
+            clearDraft(draftKey);
             setSaved(out);
             onSaved();
             // The save is committed. A failed re-read must never turn into a retry offer.
@@ -523,7 +548,7 @@ function MappingEditor({ sourceId, onSaved }: { sourceId: string; onSaved: () =>
                                     <Compare title={`Server mapping revision ${conflict.source.mapping_revision}`} rows={conflict.mappings} other={rows} name={entityName} />
                                 </Grid>
                                 <HStack gap={1} wrap="wrap">
-                                    <Button label="Use server version" variant="secondary" onClick={() => adopt(conflict)} />
+                                    <Button label="Use server version" variant="secondary" onClick={() => { clearDraft(draftKey); adopt(conflict); }} />
                                     <Button
                                         label={`Keep mine on mapping revision ${conflict.source.mapping_revision}`}
                                         variant="secondary"

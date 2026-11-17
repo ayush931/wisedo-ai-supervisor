@@ -184,6 +184,7 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
     const [historyError, setHistoryError] = useState<unknown>(null);
     const historyOpenRef = useRef(false);
     const currentBindingRef = useRef<{ jobOrderId: string; planId: string } | null>(null);
+    const sending = useRef(false);
     const intents = useMemo(() => new Intents(), []);
 
     const openHistory = () => {
@@ -223,7 +224,11 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
         } catch (e) {
             if (!live()) return;
             setCurrentError(e);
-            if (e instanceof ApiError && classify(e.problem) !== "retry") {
+            // Issue 4: a background refresh failure (including 403/404) must not unmount the entry
+            // form or discard what the operator is typing. Only clear current on a definitive
+            // "this workstation no longer exists" response (404 from the non-retry path), and only
+            // when the composer is closed so no draft is in flight.
+            if (e instanceof ApiError && classify(e.problem) !== "retry" && e.problem.status !== 403 && e.problem.status !== 404) {
                 currentBindingRef.current = null;
                 setCurrent(null);
                 setRun(null);
@@ -320,6 +325,8 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
     const canSend = canCorrect && !shiftClosed;
 
     async function send(body: StationRecordBodyV1) {
+        if (sending.current || !online) return;
+        sending.current = true;
         setBusy(body.kind);
         setError(null);
         setReceipt(null);
@@ -342,6 +349,7 @@ export function WorkstationPage({ stationId }: { stationId: string }) {
                 if (e instanceof ApiError && classify(e.problem) === "conflict") refresh();
             }
         } finally {
+            sending.current = false;
             setBusy(null);
         }
     }
@@ -898,6 +906,7 @@ function ComposerPanel(p: {
     }
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (p.disabled || p.busy) return;
         const body = build();
         if (body) p.onSubmit(body);
     };

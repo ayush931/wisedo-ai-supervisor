@@ -96,6 +96,7 @@ function JobOrderForm({ catalog, job, saved, cancel }: { catalog: Catalog; job?:
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<unknown>(null);
     const [validation, setValidation] = useState("");
+    const [conflictRevision, setConflictRevision] = useState<number | null>(null);
     const intents = useMemo(() => new Intents(), []);
     const route = catalog.routes.find(r => r.id === body.routing_id);
     const patch = (value: Partial<JobOrderBodyV1>) => setBody(b => ({ ...b, ...value }));
@@ -113,14 +114,23 @@ function JobOrderForm({ catalog, job, saved, cancel }: { catalog: Catalog; job?:
             if (!payload.priority) delete payload.priority;
             const url = `/v1/sites/${site.id}/job-orders${job ? `/${job.id}/revisions` : ""}`;
             saved(await mutate<JobOrderV1>(intents, job ? "revise-job" : "create-job", url, payload, job?.current_revision));
-        } catch (e) { setError(e); } finally { setBusy(false); }
+        } catch (e) {
+            setError(e);
+            // Issue 3: on a 409 conflict, fetch the latest revision in the background so the user
+            // can compare and re-apply; keep all typed values (body is unchanged).
+            if (e instanceof ApiError && e.problem.code === "REVISION_CONFLICT" && job) {
+                request<JobOrderV1>(`/v1/sites/${site.id}/job-orders/${job.id}`)
+                    .then((latest) => setConflictRevision(latest.current_revision))
+                    .catch(() => {});
+            }
+        } finally { setBusy(false); }
     }
     const id = useId();
     return <form className="composer" onSubmit={submit}>
         <VStack gap={3}>
         <Heading level={2}>{job ? "Revise job order" : "Create job order"}</Heading>
         <Problem error={error instanceof ApiError && error.problem.code === "REVISION_CONFLICT" ? null : error} />
-        {error instanceof ApiError && error.problem.code === "REVISION_CONFLICT" && <div role="alert"><Banner status="warning" title="This job order changed. Cancel and reopen it to load the current revision before saving." /></div>}
+        {error instanceof ApiError && error.problem.code === "REVISION_CONFLICT" && <div role="alert"><Banner status="warning" title={conflictRevision !== null ? `This job order was updated to revision ${conflictRevision} while you were editing. Your values are kept — review and save again to apply them on the latest revision.` : "This job order changed while you were editing. Your values are kept — save again to apply them."} /></div>}
         {validation && <div role="alert"><Banner status="error" title={validation} /></div>}
         <fieldset disabled={busy || !online} className="plan-fields"><legend>Operation and routing</legend>
             <HStack gap={3} wrap="wrap" align="end">

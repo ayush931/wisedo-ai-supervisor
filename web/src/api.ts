@@ -115,6 +115,41 @@ export async function parseProblem(response: Response): Promise<ProblemDetailsV1
     }
 }
 
+// Session-scoped form drafts: keep typed input through re-authentication (428). Never store credentials.
+const DRAFT_PREFIX = "supervisor.draft.";
+
+export function loadDraft<T>(key: string): T | null {
+    try {
+        const item = sessionStorage.getItem(`${DRAFT_PREFIX}${key}`);
+        return item ? (JSON.parse(item) as T) : null;
+    } catch {
+        return null;
+    }
+}
+
+export function saveDraft<T>(key: string, data: T): void {
+    try {
+        sessionStorage.setItem(`${DRAFT_PREFIX}${key}`, JSON.stringify(data));
+    } catch {}
+}
+
+export function clearDraft(key: string): void {
+    try {
+        sessionStorage.removeItem(`${DRAFT_PREFIX}${key}`);
+    } catch {}
+}
+
+export function clearAllDrafts(): void {
+    try {
+        const toRemove: string[] = [];
+        for (let i = 0; i < sessionStorage.length; i++) {
+            const k = sessionStorage.key(i);
+            if (k?.startsWith(DRAFT_PREFIX)) toRemove.push(k);
+        }
+        for (const k of toRemove) sessionStorage.removeItem(k);
+    } catch {}
+}
+
 let csrf = "";
 let onSignedOut: () => void = () => {};
 export function configureSession(token: string, signedOut: () => void) {

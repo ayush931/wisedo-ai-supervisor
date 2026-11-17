@@ -12,7 +12,7 @@ import { VStack } from "@astryxdesign/core/VStack";
 import type { EvidenceSpanV1, KnowledgeDiscoveryInventoryPageV1, KnowledgeGraphV1, KnowledgeInventoryV1, KnowledgeReadV1, KnowledgeRouteSummaryV1, KnowledgeSnapshotV1 } from "../../contracts/typescript/oee";
 import { AmbiguousError, ApiError, Intents, allPages, classify, mutate, request } from "./api";
 import { entityTypes, literalText, predicates } from "./proposed-facts";
-import { Announce, Problem, Time, canSupervise, short, useSession } from "./ui";
+import { Announce, Problem, Time, canSupervise, clearDraft, loadDraft, saveDraft, short, useSession } from "./ui";
 
 type Graph = NonNullable<KnowledgeReadV1["graph"]>;
 type Claim = Graph["claims"][number];
@@ -110,13 +110,22 @@ export function ProcessGraph() {
 // a retry after a lost connection replays instead of sealing a second snapshot.
 function PublishSnapshot({ onPublished }: { onPublished: () => void }) {
     const { site } = useSession();
+    const draftKey = `snapshot:${site.id}`;
     const [inventory, setInventory] = useState<number | null>(null);
-    const [reason, setReason] = useState("");
+    const [reason, setReason] = useState(() => loadDraft<string>(draftKey) ?? "");
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<unknown>(null);
     const [done, setDone] = useState<KnowledgeSnapshotV1 | null>(null);
     const intents = useRef(new Intents());
     const pending = useRef<{ reason: string; revision: number; id: string } | null>(null);
+
+    useEffect(() => {
+        if (reason.trim()) {
+            saveDraft(draftKey, reason);
+        } else {
+            clearDraft(draftKey);
+        }
+    }, [reason, draftKey]);
     const loadInventory = useCallback(async () => {
         try {
             setInventory((await request<KnowledgeInventoryV1>(`/v1/sites/${site.id}/knowledge-inventory`)).revision);
@@ -144,6 +153,7 @@ function PublishSnapshot({ onPublished }: { onPublished: () => void }) {
         try {
             const out = await mutate<KnowledgeSnapshotV1>(intents.current, "snapshot", `/v1/sites/${site.id}/process-snapshots`, { snapshot_id: intent.id, reason: text }, inventory);
             pending.current = null;
+            clearDraft(draftKey);
             setDone(out);
             setReason("");
             onPublished();

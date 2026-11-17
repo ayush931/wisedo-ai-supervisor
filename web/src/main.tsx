@@ -20,7 +20,7 @@ import { useMediaQuery } from "@astryxdesign/core/hooks";
 import { CalendarClock, LayoutDashboard, MonitorCog, Settings2, ShieldCheck } from "lucide-react";
 import { ApiError, configureSession, formatInterval, Intents, loadShiftPlans, match, request, type Me, type Site } from "./api";
 import type { ShiftPlanPageV1 } from "../../contracts/typescript/oee";
-import { Link, NavigateContext, Problem, RouterAnchor, SessionContext, StationName, canSupervise, useOnline, useSession, useStations, type Session } from "./ui";
+import { Link, NavigateContext, Problem, RouterAnchor, SessionContext, StationName, canSupervise, clearAllDrafts, useOnline, useSession, useStations, type Session } from "./ui";
 import { ApprovalsPage, Today } from "./today";
 import { MyStation } from "./station";
 import { WorkstationList, WorkstationPage } from "./workstation";
@@ -142,6 +142,7 @@ function App() {
         request<Me>("/v1/me")
             .then((value) => {
                 configureSession(value.csrf_token, () => {
+                    clearAllDrafts();
                     setMe(null);
                     setSignedOutNotice("Your session ended. Sign in again; nothing was resubmitted.");
                     navigate("/login");
@@ -181,6 +182,7 @@ function App() {
     // WIS-713: the app shows a person as signed out only once the server confirmed it. A failed
     // sign out (CSRF 403, 503, lost connection) leaves the session valid, so it stays visible.
     async function logout() {
+        clearAllDrafts();
         setLogoutError(null);
         let result: { end_session_url?: string } | undefined;
         try {

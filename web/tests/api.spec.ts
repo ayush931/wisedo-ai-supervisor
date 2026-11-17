@@ -1,6 +1,6 @@
 // Pure client rules (no browser, no backend): error mapping and idempotency-key reuse.
 import { test, expect } from "@playwright/test";
-import { actorLabel, compareInstant, duplicateNames, loadDirectory, roundDecimal, classify, Intents, zonedISO, toLocalInput, formatIn, match, formatInterval, formatTime, fieldOf, sameBody, allPages, mutate, AmbiguousError } from "../src/api";
+import { actorLabel, compareInstant, duplicateNames, loadDirectory, roundDecimal, classify, Intents, zonedISO, toLocalInput, formatIn, match, formatInterval, formatTime, fieldOf, sameBody, allPages, mutate, AmbiguousError, clearAllDrafts, clearDraft, loadDraft, saveDraft } from "../src/api";
 import { label } from "../src/labels";
 
 test("master data follows cursors and rejects repeated cursors and the page cap", async () => {
@@ -215,4 +215,29 @@ test("WIS-290 review: a member directory that fails on any page is unknown, not 
     // More pages than the bound is also incomplete.
     const endless = await loadDirectory(async (cursor) => ({ members: [{ subject: cursor || "first", display_name: "x" }], next_cursor: cursor + "n" }));
     expect(endless.size).toBe(0);
+});
+
+test("WIS-730 session drafts save, rehydrate, and clear without retaining credentials", () => {
+    const store = new Map<string, string>();
+    const mockStorage = {
+        getItem: (k: string) => store.get(k) ?? null,
+        setItem: (k: string, v: string) => store.set(k, v),
+        removeItem: (k: string) => store.delete(k),
+        clear: () => store.clear(),
+        get length() { return store.size; },
+        key: (i: number) => Array.from(store.keys())[i] ?? null,
+    };
+    Object.defineProperty(globalThis, "sessionStorage", { value: mockStorage, configurable: true, writable: true });
+
+    saveDraft("test-form", { reason: "Need inspection" });
+    expect(loadDraft<{ reason: string }>("test-form")).toEqual({ reason: "Need inspection" });
+
+    clearDraft("test-form");
+    expect(loadDraft("test-form")).toBeNull();
+
+    saveDraft("draft1", { val: 1 });
+    saveDraft("draft2", { val: 2 });
+    clearAllDrafts();
+    expect(loadDraft("draft1")).toBeNull();
+    expect(loadDraft("draft2")).toBeNull();
 });

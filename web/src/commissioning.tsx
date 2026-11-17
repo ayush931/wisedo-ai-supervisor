@@ -25,7 +25,7 @@ import type {
     KnowledgeEntityV1,
 } from "../../contracts/typescript/oee";
 import { Intents, allPages, isConflict, mutate, request } from "./api";
-import { Problem, Val, short, useSession } from "./ui";
+import { Problem, Val, clearDraft, loadDraft, saveDraft, short, useSession } from "./ui";
 
 // tick sizes a native checkbox or radio; the legacy input rule gives every input a 44 px touch height.
 const tick = { minHeight: 0, width: 18, height: 18, padding: 0, margin: 0 } as const;
@@ -484,13 +484,22 @@ function StartChecklist({
     intents: Intents;
     reload: () => Promise<void>;
 }) {
-    const [processID, setProcessID] = useState("");
-    const [areaID, setAreaID] = useState("");
-    const [reason, setReason] = useState("");
+    const draftKey = `checklist:${base}`;
+    const [processID, setProcessID] = useState(() => loadDraft<{ processID: string; areaID: string; reason: string }>(draftKey)?.processID ?? "");
+    const [areaID, setAreaID] = useState(() => loadDraft<{ processID: string; areaID: string; reason: string }>(draftKey)?.areaID ?? "");
+    const [reason, setReason] = useState(() => loadDraft<{ processID: string; areaID: string; reason: string }>(draftKey)?.reason ?? "");
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<unknown>(null);
     const [done, setDone] = useState("");
     const pending = useRef<PendingInventory | null>(null);
+
+    useEffect(() => {
+        if (processID || areaID || reason.trim()) {
+            saveDraft(draftKey, { processID, areaID, reason });
+        } else {
+            clearDraft(draftKey);
+        }
+    }, [processID, areaID, reason, draftKey]);
     const process = processes.find((p) => p.entity_id === processID);
     const area = areas.find((a) => a.entity_id === areaID);
     const started = inventories.some(
@@ -529,6 +538,7 @@ function StartChecklist({
                 0,
             );
             pending.current = null;
+            clearDraft(draftKey);
             setReason("");
             setDone(
                 `Value-stream checklist started for "${process.display_name}" with ${v.requirements.length} questions to cover.`,

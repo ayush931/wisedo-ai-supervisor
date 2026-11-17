@@ -967,6 +967,7 @@ function PlanForm({
         })) ?? [{ workstation_id: "", job_order_id: "", target_quantity: "", target_cycle: "" }],
     );
     const [errors, setErrors] = useState<{ id: string; message: string }[]>([]);
+    const errorBannerRef = useRef<HTMLDivElement>(null);
     const [error, setError] = useState<unknown>(null);
     const [busy, setBusy] = useState(false);
     const [suggesting, setSuggesting] = useState(false);
@@ -1103,7 +1104,11 @@ function PlanForm({
             });
         });
         setErrors(errs);
-        if (errs.length) return;
+        if (errs.length) {
+            // Focus the error banner once after submit, not on every re-render.
+            setTimeout(() => errorBannerRef.current?.focus(), 0);
+            return;
+        }
         setBusy(true);
         setError(null);
         try {
@@ -1121,7 +1126,7 @@ function PlanForm({
         <form onSubmit={onSubmit} noValidate aria-label={initial ? "Revise plan" : "Create plan"}>
             <VStack gap={3}>
             {errors.length > 0 && (
-                <div role="alert" tabIndex={-1} ref={(el) => el?.focus()}>
+                <div role="alert" tabIndex={-1} ref={errorBannerRef}>
                     <Banner status="error" collapsible={false} title={`Fix ${errors.length} field${errors.length === 1 ? "" : "s"}`}>
                         <ul className="consequences">
                             {errors.map((e, i) => (
